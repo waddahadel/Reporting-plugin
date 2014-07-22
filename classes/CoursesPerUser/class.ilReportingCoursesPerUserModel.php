@@ -42,7 +42,7 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
             if (count($refIds)) {
                 $sql .= ' AND usr_data.time_limit_owner IN (' . implode(',', $refIds) .')';
             } else {
-                $sql .= 'AND usr_data.time_limit_owner IN (0)';
+                $sql .= ' AND usr_data.time_limit_owner IN (0)';
             }
         } elseif ($this->pl->getConfigObject()->getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
 	        //TODO: check if this is performant enough.

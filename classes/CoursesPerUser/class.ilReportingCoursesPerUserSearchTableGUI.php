@@ -24,12 +24,12 @@ class ilReportingCoursesPerUserSearchTableGUI extends ilReportingSearchTableGUI 
 	 * @return array
 	 */
 	public function getSelectableColumns() {
-		$cols['lastname'] = array( 'txt' => $this->pl->txt('lastname'));
-		$cols['firstname'] = array( 'txt' => $this->pl->txt('firstname'));
-		$cols['email'] = array( 'txt' => $this->pl->txt('email'));
-        $cols['department'] = array( 'txt' => $this->pl->txt('department'));
-        $cols['country'] = array( 'txt' => $this->pl->txt('country'));
-        $cols['active'] = array('txt' => $this->pl->txt('active'), 'formatter' => ilReportingFormatter::FORMAT_INT_YES_NO);
+		$cols['lastname'] = array( 'txt' => $this->pl->txt('lastname'), 'default' => true);
+		$cols['firstname'] = array( 'txt' => $this->pl->txt('firstname'), 'default' => true);
+		$cols['email'] = array( 'txt' => $this->pl->txt('email'), 'default' => true);
+        $cols['department'] = array( 'txt' => $this->pl->txt('department'), 'default' => true);
+        $cols['country'] = array( 'txt' => $this->pl->txt('country'), 'default' => true);
+        $cols['active'] = array('txt' => $this->pl->txt('active'), 'default' => true, 'formatter' => ilReportingFormatter::FORMAT_INT_YES_NO);
 		return $cols;
 	}
 
