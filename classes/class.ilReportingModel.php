@@ -46,7 +46,7 @@ abstract class ilReportingModel {
             $refIds[] = $rec['time_limit_owner'];
         }
         foreach ($refIds as $k => $refId) {
-            if (!$this->access->checkAccess('cat_administrate_users', '', $refId)) {
+            if (!$this->access->checkAccess('cat_read_users', '', $refId)) {
                 unset($refIds[$k]);
             }
         }
