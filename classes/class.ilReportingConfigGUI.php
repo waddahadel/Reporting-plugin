@@ -1,6 +1,7 @@
 <?php
 require_once('./Services/Component/classes/class.ilPluginConfigGUI.php');
 require_once('class.ilReportingConfig.php');
+require_once('./Services/Component/classes/class.ilComponent.php');
 
 /**
  * Reporting Configuration
@@ -172,9 +173,11 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 		$option->setInfo($this->pl->txt('restricted_by_local_readability_description'));
 		$item->addOption($option);
 
-		$option = new ilRadioOption($this->pl->txt('restricted_by_org_units'), ilReportingConfig::RESTRICTED_BY_ORG_UNITS);
-		$option->setInfo($this->pl->txt('restricted_by_org_units_description'));
-		$item->addOption($option);
+		if (ilComponent::isVersionGreaterString(ILIAS_VERSION_NUMERIC, '4.4.0')) {
+            $option = new ilRadioOption($this->pl->txt('restricted_by_org_units'), ilReportingConfig::RESTRICTED_BY_ORG_UNITS);
+            $option->setInfo($this->pl->txt('restricted_by_org_units_description'));
+            $item->addOption($option);
+        }
 
 		$form->addItem($item);
 	}

@@ -85,8 +85,7 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
         require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu/classes/Menu/class.ctrlmmMenu.php');
         require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu/classes/Entry/class.ctrlmmEntry.php');
 
-        ctrlmmEntry::includeAllEntryTypes();
-
+        ctrlmmMenu::includeAllTypes();
         $entries_cpu = ctrlmmEntry::getEntriesByCmdClass('ilReportingCoursesPerUserGUI');
         $entries_upc = ctrlmmEntry::getEntriesByCmdClass('ilReportingUsersPerCourseGUI');
         $entries_upt = ctrlmmEntry::getEntriesByCmdClass('ilReportingUsersPerTestGUI');
