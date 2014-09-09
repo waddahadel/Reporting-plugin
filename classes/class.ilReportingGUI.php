@@ -11,7 +11,7 @@ require_once('./Modules/Course/classes/class.ilCourseParticipant.php');
  * @author            Stefan Wanzenried <sw@studer-raimann.ch>
  * @version           $Id:
  *
- * @ilCtrl_IsCalledBy ilReportingGUI: ilRouterGUI
+ * @ilCtrl_IsCalledBy ilReportingGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 abstract class ilReportingGUI {
 
@@ -70,7 +70,13 @@ abstract class ilReportingGUI {
 	}
 
 	public function executeCommand() {
-		$next_class = $this->ctrl->getNextClass($this);
+
+        // needed for ILIAS >= 4.5
+        if(!(ilReportingPlugin::getBaseClass() == 'ilRouterGUI'))
+            $this->tpl->getStandardTemplate();
+
+
+        $next_class = $this->ctrl->getNextClass($this);
 		switch ($next_class) {
 			case '':
 				$cmd = $this->ctrl->getCmd();
@@ -93,6 +99,10 @@ abstract class ilReportingGUI {
 				$this->ctrl->forwardCommand($gui);
 				break;
 		}
+
+        // needed for ILIAS >= 4.5
+        if(!(ilReportingPlugin::getBaseClass() == 'ilRouterGUI'))
+            $this->tpl->show();
 
 		return true;
     }

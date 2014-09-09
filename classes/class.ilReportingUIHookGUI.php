@@ -39,7 +39,7 @@ class ilReportingUIHookGUI extends ilUIHookPluginGUI {
         // Display error message in Administration if precondition is not valid
         if (!ilReportingPlugin::checkPreconditions() AND $_GET['ref_id'] == 9) {
             if(get_class($tpl) == 'ilTemplate') {
-                ilUtil::sendFailure('Reporting plugin needs CtrlMainMenu (https://svn.ilias.de/svn/ilias/branches/sr/CtrlMainMenu) and ilRouterGUI (https://svn.ilias.de/svn/ilias/branches/sr/Router)');
+                ilUtil::sendFailure('Reporting plugin needs CtrlMainMenu (https://svn.ilias.de/svn/ilias/branches/sr/CtrlMainMenu) and either ilRouterGUI (https://svn.ilias.de/svn/ilias/branches/sr/Router) OR ILIAS >= 4.5');
             }
         }
     }
@@ -57,12 +57,12 @@ class ilReportingUIHookGUI extends ilUIHookPluginGUI {
 	                $refId = array_values($arr_refId);
                     if ($this->access->checkAccess("edit_learning_progress", "", $refId[0],"",$crsID)) {
 		                $this->ctrl->setParameterByClass('ilReportingUsersPerCourseGUI', 'rep_crs_ref_id', $refId[0]);
-	                    $uri = $this->ctrl->getLinkTargetByClass(array('ilRouterGUI', 'ilReportingUsersPerCourseGUI'), 'report');
+	                    $uri = $this->ctrl->getLinkTargetByClass(array(ilReportingPlugin::getBaseClass(), 'ilReportingUsersPerCourseGUI'), 'report');
 	                    // Write the correct course ID into the session - this is used by the report table
 	                    $_SESSION[ilReportingGUI::SESSION_KEY_IDS] = array($crsID);
 	                    /** @var  $ilTabsGUI */
 	                    $ilTabsGUI = $a_par['tabs'];
-		                $ilTabsGUI->addTarget($this->pl->txt('reports'), $uri, "reports", array('ilRouterGUI', 'ilReportingUsersPerCourseGUI'), "", false,true);
+		                $ilTabsGUI->addTarget($this->pl->txt('reports'), $uri, "reports", array(ilReportingPlugin::getBaseClass(), 'ilReportingUsersPerCourseGUI'), "", false,true);
 	                }
                 }
             }

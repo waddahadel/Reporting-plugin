@@ -12,6 +12,13 @@ require_once('class.ilReportingConfig.php');
  */
 class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 
+    /**
+     * @var string
+     * This will be ilRouterGUI for ILIAS <= 4.4 if the corresponding plugin is installed
+     * and ilUIPluginRouterGUI for ILIAS >= 4.5
+     */
+    protected static $baseClass;
+
 	/**
 	 * @return string
 	 */
@@ -72,8 +79,35 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
         global $ilCtrl, $ilPluginAdmin;
         $existCtrlMainMenu = $ilPluginAdmin->exists(IL_COMP_SERVICE, 'UIComponent', 'uihk', 'CtrlMainMenu');
         $isActiveCtrlMainMenu = $ilPluginAdmin->isActive(IL_COMP_SERVICE, 'UIComponent', 'uihk', 'CtrlMainMenu');
-        $existRouterGUI = (!is_null($ilCtrl->lookupClassPath('ilRouterGUI')));
+        //The ilRouterGUI is used in ILIAS <= 4.4
+        $existRouterGUI = self::getBaseClass() != false;
         return ($existCtrlMainMenu && $isActiveCtrlMainMenu && $existRouterGUI);
+    }
+
+    /**
+     * @var string
+     *
+     * In what class the command/ctrl chain should start for this plugin.
+     *
+     * This will return ilRouterGUI for ILIAS <= 4.4 if the corresponding plugin is installed
+     * and ilUIPluginRouterGUI for ILIAS >= 4.5 and false otherwise.
+     *
+     * @return string
+     */
+    public static function getBaseClass() {
+        if(self::$baseClass !== null)
+            return self::$baseClass;
+
+        global $ilCtrl;
+        if($ilCtrl->lookupClassPath('ilUIPluginRouterGUI')) {
+            self::$baseClass = 'ilUIPluginRouterGUI';
+        } elseif($ilCtrl->lookupClassPath('ilRouterGUI')) {
+            self::$baseClass = 'ilRouterGUI';
+        } else {
+            self::$baseClass = false;
+        }
+
+        return self::$baseClass;
     }
 
     /**
@@ -114,15 +148,15 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 
             $trans = array("$langUser" => 'Courses per User');
             $trans = array_merge($trans, array('de' => 'Kurse pro Benutzer', 'en' => 'Courses per User'));
-            self::createMainMenuEntry($trans, 'ilRouterGUI,ilReportingCoursesPerUserGUI', $dropdown->getId());
+            self::createMainMenuEntry($trans, self::getBaseClass().',ilReportingCoursesPerUserGUI', $dropdown->getId());
 
             $trans = array("$langUser" => 'Users per Course');
             $trans = array_merge($trans, array('de' => 'Benutzer pro Kurs', 'en' => 'Users per Course'));
-            self::createMainMenuEntry($trans, 'ilRouterGUI,ilReportingUsersPerCourseGUI', $dropdown->getId());
+            self::createMainMenuEntry($trans, self::getBaseClass().',ilReportingUsersPerCourseGUI', $dropdown->getId());
 
             $trans = array("$langUser" => 'Users per Test');
             $trans = array_merge($trans, array('de' => 'Benutzer pro Test', 'en' => 'Users per Test'));
-            self::createMainMenuEntry($trans, 'ilRouterGUI,ilReportingUsersPerTestGUI', $dropdown->getId());
+            self::createMainMenuEntry($trans, self::getBaseClass().',ilReportingUsersPerTestGUI', $dropdown->getId());
         }
 
         if (!$additional_reports_created) {
@@ -134,11 +168,11 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 
             $trans = array("langUser" => 'Courses per User, detailed');
             $trans = array_merge($trans, array('de' => 'Kurse pro Benuzter, detailliert', 'en' => 'Courses per User, detailed'));
-            self::createMainMenuEntry($trans, 'ilRouterGUI,ilReportingCoursesPerUserLPGUI', $dropdown_id);
+            self::createMainMenuEntry($trans, self::getBaseClass().',ilReportingCoursesPerUserLPGUI', $dropdown_id);
 
             $trans = array("langUser" => 'Users per Course, detailed');
             $trans = array_merge($trans, array('de' => 'Benutzer pro Kurs, detailliert', 'en' => 'Users per Course, detailed'));
-            self::createMainMenuEntry($trans, 'ilRouterGUI,ilReportingUsersPerCourseLPGUI', $dropdown_id);
+            self::createMainMenuEntry($trans, self::getBaseClass().',ilReportingUsersPerCourseLPGUI', $dropdown_id);
         }
     }
 
