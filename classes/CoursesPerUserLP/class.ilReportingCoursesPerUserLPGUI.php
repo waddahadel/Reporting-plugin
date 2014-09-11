@@ -10,7 +10,7 @@ require_once('class.ilReportingCoursesPerUserLPReportTableGUI.php');
  * @author            Stefan Wanzenried <sw@studer-raimann.ch>
  * @version           $Id:
  *
- * @ilCtrl_IsCalledBy ilReportingCoursesPerUserLPGUI: ilRouterGUI
+ * @ilCtrl_IsCalledBy ilReportingCoursesPerUserLPGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 class ilReportingCoursesPerUserLPGUI extends ilReportingGUI {
 
