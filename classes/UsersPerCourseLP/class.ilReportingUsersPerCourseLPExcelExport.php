@@ -51,7 +51,7 @@ class ilReportingUsersPerCourseLPExcelExport extends ilReportingExcelExport {
                 $this->write($worksheet, $row, 3, $user['department']);
                 $active = $user['active'] ? $this->pl->txt('yes') : $this->pl->txt('no');
                 $this->write($worksheet, $row, 4, $active);
-                $this->write($worksheet, $row, 5, $this->pl->txt('status' . $user['user_status']));
+                $this->write($worksheet, $row, 5, $this->pl->txt('status' . (int) $user['user_status']));
                 $date = ($user['status_changed']) ? date(self::DATE_FORMAT, strtotime($user['status_changed'])) : "";
                 $this->write($worksheet, $row, 6, $date);
             }

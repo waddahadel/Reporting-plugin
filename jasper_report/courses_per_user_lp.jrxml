@@ -146,7 +146,7 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="22"/>
+			<band height="18"/>
 		</groupFooter>
 	</group>
 	<group name="courses">
@@ -244,7 +244,7 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="24" splitType="Stretch"/>
+		<band height="5" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="34" splitType="Stretch">

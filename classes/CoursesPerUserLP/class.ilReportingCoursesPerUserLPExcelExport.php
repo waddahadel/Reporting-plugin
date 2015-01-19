@@ -51,7 +51,7 @@ class ilReportingCoursesPerUserLPExcelExport extends ilReportingExcelExport {
             foreach ($users as $course) {
                 $this->write($worksheet, ++$row, 0, $course['title']);
                 $this->write($worksheet, $row, 1, $course['path']);
-                $this->write($worksheet, $row, 2, $this->pl->txt('status'.$course['user_status']));
+                $this->write($worksheet, $row, 2, $this->pl->txt('status' . (int) $course['user_status']));
                 $date = ($course['status_changed']) ? date(self::DATE_FORMAT, strtotime($course['status_changed'])) : "";
                 $this->write($worksheet, $row, 3, $date);
             }
