@@ -79,7 +79,7 @@ abstract class ilReportingGUI {
         $next_class = $this->ctrl->getNextClass($this);
 		switch ($next_class) {
 			case '':
-				$cmd = $this->ctrl->getCmd();
+				$cmd = $this->ctrl->getCmd('search');
                 if (! in_array($cmd, get_class_methods($this))) {
                     $this->{$this->getStandardCmd()}();
 					if (DEBUG) {
