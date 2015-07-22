@@ -31,55 +31,71 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 
     public function getReportData(array $ids, array $filters) {
 	    $sql  = "SELECT * FROM (
-	             SELECT CONCAT_WS('_',usr.lastname,usr.firstname,usr.usr_id) AS sort_user,
-	             usr.usr_id AS id, usr.active, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path, ref.ref_id, obj.obj_id,
-	             usr.firstname, usr.lastname, usr.country, usr.department, ut.status_changed, ut.status AS user_status, children.obj_id AS object_id,
-	             children.title AS object_title, children_ut.percentage AS object_percentage, children_ut.status AS object_status, children.type AS object_type,
-	             children_ut.status_changed AS object_status_changed
-	             FROM object_data as obj
-	             INNER JOIN object_reference AS ref ON (ref.obj_id = obj.obj_id)
-	             INNER JOIN object_data AS crs_member_role ON crs_member_role.title LIKE CONCAT('il_crs_member_', ref.ref_id)
-				 INNER JOIN rbac_ua ON rbac_ua.rol_id = crs_member_role.obj_id
-				 INNER JOIN usr_data AS usr ON (usr.usr_id = rbac_ua.usr_id)
-				 INNER JOIN tree AS t1 ON (ref.ref_id = t1.child)
-				 INNER JOIN object_reference ref2 ON (ref2.ref_id = t1.parent)
-				 INNER JOIN object_data AS p ON (ref2.obj_id = p.obj_id)
-				 LEFT JOIN tree AS t2 ON (ref2.ref_id = t2.child)
-				 LEFT JOIN object_reference AS ref3 ON (ref3.ref_id = t2.parent)
-				 LEFT JOIN object_data AS gp ON (ref3.obj_id = gp.obj_id)
-				 LEFT JOIN ut_lp_marks AS ut ON (ut.obj_id = obj.obj_id AND ut.usr_id = usr.usr_id)
+                     /* Load objects with LP under a specified course */
+                     SELECT CONCAT_WS('_',usr.lastname,usr.firstname,usr.usr_id) AS sort_user,
+                         usr.usr_id AS id, usr.active, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path, ref.ref_id, obj.obj_id,
+                         usr.firstname, usr.lastname, usr.country, usr.department, ut.status_changed, ut.status AS user_status, children.obj_id AS object_id,
+                         children.title AS object_title, children_ut.percentage AS object_percentage, children_ut.status AS object_status, children.type AS object_type,
+                         children_ut.status_changed AS object_status_changed
+                         FROM object_data as obj
 
-				 LEFT JOIN tree AS children_tree ON (children_tree.parent = ref.ref_id)
-                 LEFT JOIN object_reference AS children_reference ON (children_reference.ref_id = children_tree.child)
-                 LEFT JOIN object_data AS children ON (children_reference.obj_id = children.obj_id)
-                 LEFT JOIN ut_lp_marks AS children_ut ON (children_ut.obj_id = children.obj_id AND children_ut.usr_id = usr.usr_id)
-                 LEFT JOIN ut_lp_collections AS children_ut_coll ON (children_ut_coll.obj_id = obj.obj_id AND children_ut_coll.item_id = children_reference.ref_id)
+                         /* Get all users with permission on course*/
+                         INNER JOIN object_reference AS ref ON (ref.obj_id = obj.obj_id)
+                         INNER JOIN object_data AS crs_member_role ON crs_member_role.title LIKE CONCAT('il_crs_member_', ref.ref_id)
+                         INNER JOIN rbac_ua ON rbac_ua.rol_id = crs_member_role.obj_id
+                         INNER JOIN usr_data AS usr ON (usr.usr_id = rbac_ua.usr_id)
 
-                 WHERE obj.type = " . $this->db->quote('crs', 'text') . " AND ref.deleted IS NULL
-                 AND children.type != 'rolf'
-                 AND children_ut_coll.active = 1 ";
+                         /* Get path of course */
+                         INNER JOIN tree AS t1 ON (ref.ref_id = t1.child)
+                         INNER JOIN object_reference ref2 ON (ref2.ref_id = t1.parent)
+                         INNER JOIN object_data AS p ON (ref2.obj_id = p.obj_id)
+                         LEFT JOIN tree AS t2 ON (ref2.ref_id = t2.child)
+                         LEFT JOIN object_reference AS ref3 ON (ref3.ref_id = t2.parent)
+                         LEFT JOIN object_data AS gp ON (ref3.obj_id = gp.obj_id)
+
+                         /* User lp status */
+                         LEFT JOIN ut_lp_marks AS ut ON (ut.obj_id = obj.obj_id AND ut.usr_id = usr.usr_id)
+
+                         /* Get objects with lp under course. Go 3 levels deep */
+                         LEFT JOIN tree AS children_level1 ON (children_level1.parent = ref.ref_id)
+                         LEFT JOIN tree AS children_level2 ON (children_level2.parent = children_level1.child)
+                         LEFT JOIN tree AS children_level3 ON (children_level3.parent = children_level2.child)
+                         LEFT JOIN object_reference AS children_reference ON (children_reference.ref_id = children_level1.child OR children_reference.ref_id = children_level2.child OR children_reference.ref_id = children_level3.child)
+                         LEFT JOIN object_data AS children ON (children_reference.obj_id = children.obj_id)
+                         LEFT JOIN ut_lp_marks AS children_ut ON (children_ut.obj_id = children.obj_id AND children_ut.usr_id = usr.usr_id)
+                         LEFT JOIN ut_lp_collections AS children_ut_coll ON (children_ut_coll.obj_id = obj.obj_id AND children_ut_coll.item_id = children_reference.ref_id)
+
+                         WHERE obj.type = " . $this->db->quote('crs', 'text') . " AND ref.deleted IS NULL
+                         AND children.type != 'rolf'
+                         AND children_ut_coll.active = 1 ";
 
         $sql .= $this->buildWhereString($ids, $filters);
 
         $sql .= "UNION
+                    /* Union with structure of User and course name */
+                    SELECT CONCAT_WS('_',usr.lastname,usr.firstname,usr.usr_id) AS sort_user,
+                        usr.usr_id AS id, usr.active, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path, ref.ref_id, obj.obj_id,
+                        usr.firstname, usr.lastname, usr.country, usr.department, ut.status_changed, ut.status AS user_status,
+                        NULL AS object_id, NULL AS object_title, NULL AS object_percentage, NULL AS object_status, NULL AS object_type, NULL as object_status_changed
+                        FROM object_data as obj
 
-                SELECT CONCAT_WS('_',usr.lastname,usr.firstname,usr.usr_id) AS sort_user,
-                usr.usr_id AS id, usr.active, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path, ref.ref_id, obj.obj_id,
-                usr.firstname, usr.lastname, usr.country, usr.department, ut.status_changed, ut.status AS user_status,
-                NULL AS object_id, NULL AS object_title, NULL AS object_percentage, NULL AS object_status, NULL AS object_type, NULL as object_status_changed
-                FROM object_data as obj
-                INNER JOIN object_reference AS ref ON (ref.obj_id = obj.obj_id)
-                INNER JOIN object_data AS crs_member_role ON crs_member_role.title LIKE CONCAT('il_crs_member_', ref.ref_id)
-                INNER JOIN rbac_ua ON rbac_ua.rol_id = crs_member_role.obj_id
-                INNER JOIN usr_data AS usr ON (usr.usr_id = rbac_ua.usr_id)
-                INNER JOIN tree AS t1 ON (ref.ref_id = t1.child)
-                INNER JOIN object_reference ref2 ON (ref2.ref_id = t1.parent)
-                INNER JOIN object_data AS p ON (ref2.obj_id = p.obj_id)
-                LEFT JOIN tree AS t2 ON (ref2.ref_id = t2.child)
-                LEFT JOIN object_reference AS ref3 ON (ref3.ref_id = t2.parent)
-                LEFT JOIN object_data AS gp ON (ref3.obj_id = gp.obj_id)
-                LEFT JOIN ut_lp_marks AS ut ON (ut.obj_id = obj.obj_id AND ut.usr_id = usr.usr_id)
-                WHERE obj.type = " . $this->db->quote('crs', 'text') . " AND ref.deleted IS NULL ";
+                        /* Get all users with permission on course */
+                        INNER JOIN object_reference AS ref ON (ref.obj_id = obj.obj_id)
+                        INNER JOIN object_data AS crs_member_role ON crs_member_role.title LIKE CONCAT('il_crs_member_', ref.ref_id)
+                        INNER JOIN rbac_ua ON rbac_ua.rol_id = crs_member_role.obj_id
+                        INNER JOIN usr_data AS usr ON (usr.usr_id = rbac_ua.usr_id)
+
+                        /* Get path of course */
+                        INNER JOIN tree AS t1 ON (ref.ref_id = t1.child)
+                        INNER JOIN object_reference ref2 ON (ref2.ref_id = t1.parent)
+                        INNER JOIN object_data AS p ON (ref2.obj_id = p.obj_id)
+                        LEFT JOIN tree AS t2 ON (ref2.ref_id = t2.child)
+                        LEFT JOIN object_reference AS ref3 ON (ref3.ref_id = t2.parent)
+                        LEFT JOIN object_data AS gp ON (ref3.obj_id = gp.obj_id)
+
+                        /* User lp status */
+                        LEFT JOIN ut_lp_marks AS ut ON (ut.obj_id = obj.obj_id AND ut.usr_id = usr.usr_id)
+                        WHERE obj.type = " . $this->db->quote('crs', 'text') . " AND ref.deleted IS NULL ";
 
         $sql .= $this->buildWhereString($ids, $filters);
         $sql .= ") AS a ORDER BY sort_user, obj_id, object_title";
