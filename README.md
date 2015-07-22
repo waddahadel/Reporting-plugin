@@ -8,19 +8,26 @@ Available reports:
 - Users per Course
 - Users per Test
 
-IMPORTANT NOTES
----------------
+##IMPORTANT NOTES
 This plugin has dependencies on other plugins and services which must be installed
 before the Reporting plugin:
-- [CtrlMainMenu Plugin](https://github.com/studer-raimann/CtrlMainMenu)
-- [ilRouterGUI Service](https://github.com/studer-raimann/RouterService)
-- [JasperReport Library](https://github.com/studer-raimann/JasperReport) (optional, only needed in order to create PDF reports)
+* [CtrlMainMenu Plugin](https://github.com/studer-raimann/CtrlMainMenu)
+
+ILIAS < 5.x (NOT needed for ILIAS 5.x)
+* [ilRouterGUI Service](https://github.com/studer-raimann/RouterService)
+
+Optionally, to create PDF reports
+* [JasperReport Library](https://github.com/studer-raimann/JasperReport)
 
 Please read the install instructions in the documentation here:
 http://www.ilias.de/docu/goto_docu_wiki_1357_Reporting_Plugin.html
 
-###Update to v. 1.0.5
-If you update the plugin to this version, make sure also to update the CtrlMainMenu plugin and the Jasper Report library
+### Update from ILIAS 4.x to 5.x
+Version `1.2.0` of this plugin adds support for `ILIAS 5.x`. If you updated your ILIAS installation from version `4.x` to `5.x` and this plugin was installed before, the mainmenu entries for the reports probably don't work correct anymore. This is due to the Router Service which is now part of the ILIAS core. To fix it, navigate to `Administration > Plugins > CtrlMainMenu` and configure the entries. Click on "Edit Entries" on the dropdown entry "Reports". Edit each entry and make the following changes:
+
+Replace each occurence of `ilRouterGUI` with `ilUIPluginRouterGUI` under the setting "GUI classes, comma separated". E.g. `ilRouterGUI,ilReportingCoursesPerUserGUI` becomes `ilUIPluginRouterGUI,ilReportingCoursesPerUserGUI`
+
+Make sure that the links are working correctly after saving the entries.
 
 Installation
 ------------

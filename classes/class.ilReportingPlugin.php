@@ -5,7 +5,6 @@ require_once('class.ilReportingConfig.php');
 /**
  * Reporting Plugin
  *
- * @author  Alex Killing <alex.killing@gmx.de>
  * @author  Stefan Wanzenried <sw@studer-raimann.ch>
  * @version $Id$
  *
