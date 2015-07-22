@@ -13,7 +13,7 @@ This plugin has dependencies on other plugins and services which must be install
 before the Reporting plugin:
 * [CtrlMainMenu Plugin](https://github.com/studer-raimann/CtrlMainMenu)
 
-ILIAS < 5.x
+ILIAS < 5.x (NOT needed for ILIAS 5.x)
 * [ilRouterGUI Service](https://github.com/studer-raimann/RouterService)
 
 Optionally, to create PDF reports
