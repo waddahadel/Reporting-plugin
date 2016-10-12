@@ -1,0 +1,88 @@
+reports#:#Rapportage
+role#:#Rol
+yes#:#Ja
+no#:#Nee
+
+report_courses_per_user#:#Cursussen per Gebruiker
+report_selected_courses_per_userCursussen voor geselecteerde gebruikers
+report_all_courses_per_user#:#Cursussen voor alle gebruikers
+report_users_per_course#:#Gebruikers per Cursus
+report_all_users_per_course#:#Gebruikers voor alle Cursussen
+report_selected_users_per_course#:#Gebruikers voor geselecteerde Cursussen
+report_users_per_test#:#Gebruikers per Test
+report_all_users_per_test#:#Gebruikers voor alle Toetsen
+report_selected_users_per_test#:#Gebruikers voor geselecteerde Toets
+
+generated#:#is gegenereerd.
+export_csv#:#Download als CSV
+export_excel#:#Download als Excel
+export_pdf#:#Download als PDF
+back#:#Back to Selectie
+back_to_course#:#Terug naar Cursuse
+report_generated#:#Een PDF rapport is gedownload
+employee_list#:#Lijst van werknemeers
+course#:#Cursus
+
+title#:#Titel
+lastname#:#Achternaam
+firstname#:#Voornaam
+email#:#E-Mail
+usr_id#:#Gebruikers-ID
+course_id#:#Cursus-ID
+login#:#Gebruikersnaam
+user_status#:#Status
+status_changed#:#Laatste statusverandering
+status_changed_from#:#Laatste status gewijzigd van
+status_changed_to#:#Laatste status gewijzigd naar
+country#:#Land
+department#:#Afdeling
+path#:#Pad
+incl_inactive_users#:#incl. inactieve gebruikers
+active#:#Actief
+inactive#:#Inactieve
+general_status#:#Algemene Status
+
+object_title#:#Titel
+object_percentage#:#Percentage
+object_status#:#Status
+object_type#:#Type
+object_status_changed#:#Laatste statusverandering
+show_objects_in_course#:#Toon voortgang van objecten in cursus
+assessment_title#:#Titel van toets
+
+status2#:#Geslaagd
+status1#:#Bezig
+status0#:#Niet begonnen
+status3#:#Mislukt
+
+date_from#:#Start
+date_from_unix#:#Start
+date_to#:#Einde
+date_to_unix#:#Einde
+all#:#Alle
+export_custom_excel#:#Download geformatteerde Excel
+permission_denied#:#J ehebt geen rechten voor dit rapport
+plugin_not_activated#:#Reportage plugin is niet actief
+
+courses_per_user#:#Cursussen per Gebruiker
+users_per_course#:#Gebruikers per Cursus
+users_per_test#:#Gebruikers per Toets
+search_users#:#Zoek Gebruikers
+search_courses#:#Zoek Cursussen
+search_tests#:#Zoek Toetsen
+
+configuration#:#Configuratie
+header_image#:#PDF Rapportage - Header Image
+header_image_info#:#Pas naar PDF Logo. <br><b>JasperReport Library is vereist!</b>
+restricted_user_access#:#Beperk Toegang
+no_restriction#:#Geen beperkingen
+restricted_by_local_readability#:#Beperk tot lokaal lezen
+restricted_by_local_readability_description#:#Toegang is toegewezen aan de rolpermissie "Leestoegang tot Lokaal gebruikersaccount".
+restricted_by_org_units#:#Beperk toegang gebaseerd op organisatorisch eenheden
+restricted_by_org_units_description#:#Toegang is afhankelijk van de rechten van de organisatorische eenheid permissue "Toon leervoortgang".
+jasper_reports_templates_path#:#PDF Rapporten - Pad templates
+jasper_reports_templates_path_info#:#Pad naar map waar de Jasper Rapporten templates worden opgeeslagen. <br><b>JasperReport Library vereist!</b>
+conf_saved#:#Configuratie opgeslagen
+
+date_of_report#:#Rapportdatum
+owner_of_report#:#Eigenaar van rapport
