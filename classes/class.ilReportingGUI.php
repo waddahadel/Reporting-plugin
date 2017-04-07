@@ -50,7 +50,6 @@ abstract class ilReportingGUI {
 
     public function __construct() {
 		global $tpl, $ilCtrl, $ilTabs, $ilUser, $ilPluginAdmin,$ilAccess;
-
         $this->tpl = $tpl;
         $this->pl = new ilReportingPlugin();
         $this->pl->updateLanguages();
@@ -58,6 +57,7 @@ abstract class ilReportingGUI {
         $this->tabs = $ilTabs;
         $this->ilPluginAdmin = $ilPluginAdmin;
 	    $this->access = $ilAccess;
+
         if (!$this->pl->isActive()) {
             ilUtil::sendFailure($this->pl->txt("plugin_not_activated"), true);
             $this->ctrl->redirectByClass('ilpersonaldesktopgui','jumpToSelectedItems');
@@ -74,7 +74,6 @@ abstract class ilReportingGUI {
         // needed for ILIAS >= 4.5
         if(!(ilReportingPlugin::getBaseClass() == 'ilRouterGUI'))
             $this->tpl->getStandardTemplate();
-
 
         $next_class = $this->ctrl->getNextClass($this);
 		switch ($next_class) {
