@@ -1,6 +1,6 @@
 <?php
-require_once('./Services/Excel/classes/class.ilExcelUtils.php');
-require_once('./Services/Excel/classes/class.ilExcelWriterAdapter.php');
+//require_once('./Services/Excel/classes/class.ilExcelUtils.php');
+//require_once('./Services/Excel/classes/class.ilExcelWriterAdapter.php');
 require_once('class.ilReportingPlugin.php');
 
 /**

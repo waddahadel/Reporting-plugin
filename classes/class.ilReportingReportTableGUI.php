@@ -118,10 +118,10 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
         $item->setOptions($states);
         $this->addFilterItemWithValue($item);
         $item = new ilDateTimeInputGUI($this->pl->txt('status_changed_from'), 'status_changed_from');
-        $item->setMode(ilDateTimeInputGUI::MODE_INPUT);
+        //$item->setMode(ilDateTimeInputGUI::MODE_INPUT);
         $this->addFilterItemWithValue($item);
         $item = new ilDateTimeInputGUI($this->pl->txt('status_changed_to'), 'status_changed_to');
-        $item->setMode(ilDateTimeInputGUI::MODE_INPUT);
+        //$item->setMode(ilDateTimeInputGUI::MODE_INPUT);
         $this->addFilterItemWithValue($item);
     }
 
