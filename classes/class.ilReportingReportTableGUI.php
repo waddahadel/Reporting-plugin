@@ -256,13 +256,14 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
         $col = 0;
 
         foreach ($this->getColumns() as $key => $column) {
+            $formatter = isset($column['formatter']) ? $column['formatter'] : null;
+            $value = $this->formatter->format($a_set[$key], $formatter);
+
             if(is_array($a_set[$key]))
             {
                 $value = implode(', ', $a_set[$key]);
             }
-            $a_excel->setCell($a_row, $col++, $a_set[$key]);
-
-
+            $a_excel->setCell($a_row, $col++, $value);
         }
     }
 

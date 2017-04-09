@@ -99,7 +99,8 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
     protected function fillHeaderExcel(ilExcel $a_excel, &$a_row)
     {
         $col = 0;
-        foreach ($this->getColumns() as $column)
+        $all_columns = array_merge($this->getColumns(), $this->getAdditionalColumns());
+        foreach ($all_columns as $column)
         {
             $title = strip_tags($column["txt"]);
             if($title)
@@ -122,16 +123,18 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
      */
     protected function fillRowExcel(ilExcel $a_excel, &$a_row, $a_set)
     {
-        $col = 0;
+        parent::fillRowExcel($a_excel, $a_row, $a_set);
 
-        foreach ($this->getColumns() as $key => $column) {
-            if(is_array($a_set[$key]))
-            {
-                $value = implode(', ', $a_set[$key]);
+        if (count($a_set['_objects'])) {
+            foreach ($a_set['_objects'] as $object) {
+                $col = count($this->getColumns());
+                $a_row++;
+                foreach ($this->getAdditionalColumns() as $k => $v) {
+                    $formatter = isset($v['formatter']) ? $v['formatter'] : null;
+                    $value = $this->formatter->format($object[$k], $formatter);
+                    $a_excel->setCell($a_row, $col++, $value);
+                }
             }
-            $a_excel->setCell($a_row, $col++, $a_set[$key]);
-
-
         }
     }
 
