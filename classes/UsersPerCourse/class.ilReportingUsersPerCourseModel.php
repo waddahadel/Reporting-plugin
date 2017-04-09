@@ -40,13 +40,12 @@ class ilReportingUsersPerCourseModel extends ilReportingModel {
         ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
 
         $sql  = "SELECT obj.obj_id AS id, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path,
-                 usr.firstname, usr.lastname, usr.active,  GROUP_CONCAT(orgu_as.path SEPARATOR ', ') AS org_units, usr.country, usr.department, ut.status_changed,
+                 usr.firstname, usr.lastname, usr.active,  (SELECT GROUP_CONCAT(orgu_as.path SEPARATOR ', ') from orgu_usr_assignements AS orgu_as WHERE orgu_as.user_id = usr.usr_id) AS org_units, usr.country, usr.department, ut.status_changed,
                  ut.status AS user_status FROM object_data as obj
 				 INNER JOIN object_reference AS ref ON (ref.obj_id = obj.obj_id)
                  INNER JOIN object_data AS crs_member_role ON crs_member_role.title LIKE CONCAT('il_crs_member_', ref.ref_id)
 				 INNER JOIN rbac_ua ON rbac_ua.rol_id = crs_member_role.obj_id
 				 INNER JOIN usr_data AS usr ON (usr.usr_id = rbac_ua.usr_id)
-				 LEFT JOIN orgu_usr_assignements as orgu_as on orgu_as.user_id = usr.usr_id
                  INNER JOIN tree AS t1 ON (ref.ref_id = t1.child)
                  INNER JOIN object_reference ref2 ON (ref2.ref_id = t1.parent)
                  INNER JOIN object_data AS p ON (ref2.obj_id = p.obj_id)
