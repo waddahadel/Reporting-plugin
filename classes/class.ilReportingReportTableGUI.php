@@ -220,26 +220,51 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
     }
 
 
-	/**
-	 * @param object $a_worksheet
-	 * @param int    $a_row
-	 * @param array  $a_set
-	 */
-	protected function fillRowExcel($a_worksheet, &$a_row, $a_set) {
-		$col = 0;
-        foreach ($this->getColumns() as $k => $v) {
-            if (!in_array($k, $this->getIgnoredCols())) {
-                if (isset($a_set[$k])) {
-                    $formatter = isset($v['formatter']) ? $v['formatter'] : null;
-                    $value = $this->formatter->format($a_set[$k], $formatter);
-                } else {
-                    $value = '';
-                }
-                $a_worksheet->writeString($a_row, $col, $value);
-                $col++;
+    /**
+     * Excel Version of Fill Header. Likely to
+     * be overwritten by derived class.
+     *
+     * @param	ilExcel	$a_excel	excel wrapper
+     * @param	int		$a_row		row counter
+     */
+    protected function fillHeaderExcel(ilExcel $a_excel, &$a_row)
+    {
+        $col = 0;
+        foreach ($this->getColumns() as $column)
+        {
+            $title = strip_tags($column["txt"]);
+            if($title)
+            {
+                $a_excel->setCell($a_row, $col++, $title);
             }
         }
-	}
+        $a_excel->setBold("A".$a_row.":".$a_excel->getColumnCoord($col-1).$a_row);
+    }
+
+
+
+    /**
+     * Excel Version of Fill Row. Most likely to
+     * be overwritten by derived class.
+     *
+     * @param	ilExcel	$a_excel	excel wrapper
+     * @param	int		$a_row		row counter
+     * @param	array	$a_set		data array
+     */
+    protected function fillRowExcel(ilExcel $a_excel, &$a_row, $a_set)
+    {
+        $col = 0;
+
+        foreach ($this->getColumns() as $key => $column) {
+            if(is_array($a_set[$key]))
+            {
+                $value = implode(', ', $a_set[$key]);
+            }
+            $a_excel->setCell($a_row, $col++, $a_set[$key]);
+
+
+        }
+    }
 
 
 	/**

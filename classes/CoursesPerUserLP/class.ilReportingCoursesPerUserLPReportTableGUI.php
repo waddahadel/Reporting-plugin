@@ -88,24 +88,48 @@ class ilReportingCoursesPerUserLPReportTableGUI extends ilReportingReportTableGU
 
 
     /**
-     * @param object $a_worksheet
-     * @param int    $a_row
-     * @param array  $a_set
+     * Excel Version of Fill Header. Likely to
+     * be overwritten by derived class.
+     *
+     * @param	ilExcel	$a_excel	excel wrapper
+     * @param	int		$a_row		row counter
      */
-    protected function fillRowExcel($a_worksheet, &$a_row, $a_set) {
-        parent::fillRowExcel($a_worksheet, $a_row, $a_set);
-        // Display each object in course as row
-        if (count($a_set['_objects'])) {
-            foreach ($a_set['_objects'] as $object) {
-                $col = count($this->getColumns());
-                $a_row++;
-                foreach ($this->getAdditionalColumns() as $k => $v) {
-                    $formatter = isset($v['formatter']) ? $v['formatter'] : null;
-                    $value = $this->formatter->format($object[$k], $formatter);
-                    $a_worksheet->writeString($a_row, $col, $value);
-                    $col++;
-                }
+    protected function fillHeaderExcel(ilExcel $a_excel, &$a_row)
+    {
+        $col = 0;
+        foreach ($this->getColumns() as $column)
+        {
+            $title = strip_tags($column["txt"]);
+            if($title)
+            {
+                $a_excel->setCell($a_row, $col++, $title);
             }
+        }
+        $a_excel->setBold("A".$a_row.":".$a_excel->getColumnCoord($col-1).$a_row);
+    }
+
+
+
+    /**
+     * Excel Version of Fill Row. Most likely to
+     * be overwritten by derived class.
+     *
+     * @param	ilExcel	$a_excel	excel wrapper
+     * @param	int		$a_row		row counter
+     * @param	array	$a_set		data array
+     */
+    protected function fillRowExcel(ilExcel $a_excel, &$a_row, $a_set)
+    {
+        $col = 0;
+
+        foreach ($this->getColumns() as $key => $column) {
+            if(is_array($a_set[$key]))
+            {
+                $value = implode(', ', $a_set[$key]);
+            }
+            $a_excel->setCell($a_row, $col++, $a_set[$key]);
+
+
         }
     }
 
@@ -147,26 +171,6 @@ class ilReportingCoursesPerUserLPReportTableGUI extends ilReportingReportTableGU
             $a_csv->addColumn($column['txt']);
         }
         $a_csv->addRow();
-    }
-
-
-    /**
-     * Excel Version of Fill Row. Likely to
-     * be overwritten by derived class.
-     *
-     * @param $worksheet
-     * @param   int $a_row row counter
-     * @internal param object $a_worksheet current sheet
-     */
-    protected function fillHeaderExcel($worksheet, &$a_row)
-    {
-        $col = 0;
-        $all_columns = array_merge($this->getColumns(), $this->getAdditionalColumns());
-        foreach ($all_columns as $column) {
-            $worksheet->write($a_row, $col, $column['txt']);
-            $col++;
-        }
-        $a_row++;
     }
 
 
