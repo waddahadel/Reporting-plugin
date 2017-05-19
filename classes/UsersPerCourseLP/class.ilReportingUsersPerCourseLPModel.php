@@ -30,11 +30,14 @@ class ilReportingUsersPerCourseLPModel extends ilReportingModel {
     }
 
     public function getReportData(array $ids, array $filters) {
+        ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
+        ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements('orgu_usr_assignements_2');
+
 	    $sql  = "SELECT * FROM (
                      /* Load objects with LP under a specified course */
                      SELECT CONCAT_WS('_',obj.title,obj.obj_id) AS sort_user,
                          obj.obj_id AS id, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path, ref.ref_id, obj.obj_id,
-                         usr.usr_id, usr.active, usr.firstname, usr.lastname, usr.country, usr.department, ut.status_changed, ut.status AS user_status, children.obj_id AS object_id,
+                         usr.usr_id, (SELECT GROUP_CONCAT(orgu_as.path SEPARATOR ', ') from orgu_usr_assignements AS orgu_as WHERE orgu_as.user_id = usr.usr_id) AS org_units, usr.active, usr.firstname, usr.lastname, usr.country, usr.department, ut.status_changed, ut.status AS user_status, children.obj_id AS object_id,
                          children.title AS object_title, children_ut.percentage AS object_percentage, children_ut.status AS object_status, children.type AS object_type,
                          children_ut.status_changed AS object_status_changed
                          FROM object_data as obj
@@ -75,7 +78,7 @@ class ilReportingUsersPerCourseLPModel extends ilReportingModel {
                     /* Union with structure of User and course name */
                     SELECT CONCAT_WS('_',obj.title,obj.obj_id) AS sort_user,
                         obj.obj_id AS id, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path, ref.ref_id, obj.obj_id,
-                        usr.usr_id, usr.active, usr.firstname, usr.lastname, usr.country, usr.department, ut.status_changed, ut.status AS user_status,
+                        usr.usr_id, (SELECT GROUP_CONCAT(orgu_as.path SEPARATOR ', ') from orgu_usr_assignements_2 AS orgu_as WHERE orgu_as.user_id = usr.usr_id) AS org_units, usr.active, usr.firstname, usr.lastname, usr.country, usr.department, ut.status_changed, ut.status AS user_status,
                         NULL AS object_id, NULL AS object_title, NULL AS object_percentage, NULL AS object_status, NULL AS object_type, NULL as object_status_changed
                         FROM object_data as obj
 

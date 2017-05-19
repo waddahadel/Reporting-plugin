@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(dirname(__FILE__)) . '/class.ilReportingModel.php');
+require_once "./Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php";
 
 /**
  * Class ilReportingCoursesPerUserModel
@@ -21,8 +22,14 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
      * @return array
      */
     public function getSearchData(array $filters) {
-        $sql  = 'SELECT usr_data.usr_id AS id, usr_data.* FROM usr_data
-                 WHERE usr_data.usr_id > 0 AND usr_data.login <> "anonymous"';
+
+        ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
+
+        $sql  = "SELECT usr_data.usr_id AS id, usr_data.*, (SELECT GROUP_CONCAT(orgu_as.path SEPARATOR ', ') from orgu_usr_assignements AS orgu_as WHERE orgu_as.user_id = usr_data.usr_id) AS org_units 
+                 FROM usr_data                 
+                 WHERE usr_data.usr_id > 0 AND usr_data.login <> 'anonymous'";
+
+
 	    if ($filters['firstname']) {
 		    $sql  .= ' AND usr_data.firstname LIKE ' . $this->db->quote('%' . str_replace('*', '%', $filters['firstname']) . '%', 'text');
 	    }
@@ -32,10 +39,11 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
 	    if ($filters['email']) {
 		    $sql  .= ' AND usr_data.email LIKE ' . $this->db->quote('%' . str_replace('*', '%', $filters['email']) . '%', 'text');
 	    }
-	    if ($filters['country']) {
+	    /*if ($filters['country']) {
 		    $sql  .= ' AND usr_data.country LIKE ' . $this->db->quote('%' . str_replace('*', '%', $filters['country']) . '%', 'text');
-	    }
+	    }*/
         $sql .= ($filters['include_inactive']) ? ' AND usr_data.active IN(1,0)' : ' AND usr_data.active = 1';
+
 
         if ($this->pl->getConfigObject()->getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
             $refIds = $this->getRefIdsWhereUserCanAdministrateUsers();
@@ -49,14 +57,19 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
 	        $users = $this->pl->getRestrictedByOrgUnitsUsers();
 	        $sql .= count($users)?' AND usr_data.usr_id IN('.implode(',', $users).')':' AND FALSE';
         }
+
         return $this->buildRecords($sql);
     }
 
     public function getReportData(array $ids, array $filters) {
 		global $ilUser;
 
-	    $sql  = "SELECT usr.usr_id AS id, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path,
-	             usr.firstname, usr.lastname, usr.active, usr.country, usr.department, ut.status_changed, ut.status AS user_status
+
+        ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
+
+
+        $sql  = "SELECT usr.usr_id AS id, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path,
+	             usr.firstname, usr.lastname, usr.active, usr.country, usr.department, ut.status_changed, ut.status AS user_status, (SELECT GROUP_CONCAT(orgu_as.path SEPARATOR ', ') from orgu_usr_assignements AS orgu_as WHERE orgu_as.user_id = usr.usr_id) AS org_units 
 	             FROM object_data as obj
 	             INNER JOIN object_reference AS ref ON (ref.obj_id = obj.obj_id)
 	             INNER JOIN object_data AS crs_member_role ON crs_member_role.title LIKE CONCAT('il_crs_member_', ref.ref_id)
@@ -100,7 +113,6 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
             }
         }
         $sql .= " ORDER BY usr.usr_id, usr.lastname, usr.firstname";
-//        echo $sql; die();
         return $this->buildRecords($sql);
     }
 

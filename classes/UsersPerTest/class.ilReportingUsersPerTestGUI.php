@@ -72,11 +72,12 @@ class ilReportingUsersPerTestGUI extends ilReportingGUI {
     }
 
     public function getAvailableExports() {
-        $exports = array(
+        /*$exports = array(
             self::EXPORT_EXCEL_FORMATTED => 'export_custom_excel',
         );
         if ($this->isActiveJasperReports()) $exports[self::EXPORT_PDF] = 'export_pdf';
-        return $exports;
+        return $exports;*/
+        return array();
     }
 
 }
