@@ -18,56 +18,62 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class ilReportingUIHookGUI extends ilUIHookPluginGUI {
 
-    /** @var  ilCtrl */
-    protected $ctrl;
-
-    /** @var  ilTabsGUI */
-    protected $tabs;
-
-    /** @var  ilReportingPlugin */
-    protected $pl;
-
+	/** @var  ilCtrl */
+	protected $ctrl;
+	/** @var  ilTabsGUI */
+	protected $tabs;
+	/** @var  ilReportingPlugin */
+	protected $pl;
 	/** @var  ilAccessHandler */
 	protected $access;
+
 
 	function __construct() {
 		global $ilCtrl, $ilTabs, $tpl, $ilAccess;
 		$this->ctrl = $ilCtrl;
-        $this->tabs = $ilTabs;
-        $this->pl = new ilReportingPlugin();
+		$this->tabs = $ilTabs;
+		$this->pl = new ilReportingPlugin();
 		$this->access = $ilAccess;
-        // Display error message in Administration if precondition is not valid
-        if (!ilReportingPlugin::checkPreconditions() AND $_GET['ref_id'] == 9) {
-            if(get_class($tpl) == 'ilTemplate') {
-                ilUtil::sendFailure('Reporting plugin needs CtrlMainMenu (https://svn.ilias.de/svn/ilias/branches/sr/CtrlMainMenu) and either ilRouterGUI (https://svn.ilias.de/svn/ilias/branches/sr/Router) OR ILIAS >= 4.5');
-            }
-        }
-    }
+		// Display error message in Administration if precondition is not valid
+		if (!ilReportingPlugin::checkPreconditions() AND $_GET['ref_id'] == 9) {
+			if (get_class($tpl) == 'ilTemplate') {
+				ilUtil::sendFailure('Reporting plugin needs CtrlMainMenu (https://svn.ilias.de/svn/ilias/branches/sr/CtrlMainMenu) and either ilRouterGUI (https://svn.ilias.de/svn/ilias/branches/sr/Router) OR ILIAS >= 4.5');
+			}
+		}
+	}
 
-    /**
-     * Add a new tab 'reports' for courses which shows the report table for all the members of a course
-     */
-    public function modifyGUI($a_comp, $a_part, $a_par = array()) {
-        if ($a_part == 'tabs') {
-            if ($this->ctrl->getContextObjType() == 'crs') {
-                $crsID = $this->ctrl->getContextObjId();
-                if ($crsID) {
+
+	/**
+	 * Add a new tab 'reports' for courses which shows the report table for all the members of a
+	 * course
+	 */
+	public function modifyGUI($a_comp, $a_part, $a_par = array()) {
+		if ($a_part == 'tabs') {
+			if ($this->ctrl->getContextObjType() == 'crs') {
+				$crsID = $this->ctrl->getContextObjId();
+				if ($crsID) {
 					$arr_refId = ilObject2::_getAllReferences($crsID);
-	                //check Permission "edit learning progress"
-	                $refId = array_values($arr_refId);
-                    if ($this->access->checkAccess("edit_learning_progress", "", $refId[0],"",$crsID)) {
-		                $this->ctrl->setParameterByClass('ilReportingUsersPerCourseGUI', 'rep_crs_ref_id', $refId[0]);
-	                    $uri = $this->ctrl->getLinkTargetByClass(array(ilReportingPlugin::getBaseClass(), 'ilReportingUsersPerCourseGUI'), 'report');
-	                    // Write the correct course ID into the session - this is used by the report table
-	                    $_SESSION[ilReportingGUI::SESSION_KEY_IDS] = array($crsID);
-	                    /** @var  $ilTabsGUI */
-	                    $ilTabsGUI = $a_par['tabs'];
-		                $ilTabsGUI->addTarget($this->pl->txt('reports'), $uri, "reports", array(ilReportingPlugin::getBaseClass(), 'ilReportingUsersPerCourseGUI'), "", false,true);
-	                }
-                }
-            }
-        }
-    }
+					//check Permission "edit learning progress"
+					$refId = array_values($arr_refId);
+					if ($this->access->checkAccess("edit_learning_progress", "", $refId[0], "", $crsID)) {
+						$this->ctrl->setParameterByClass('ilReportingUsersPerCourseGUI', 'rep_crs_ref_id', $refId[0]);
+						$uri = $this->ctrl->getLinkTargetByClass(array(
+							ilReportingPlugin::getBaseClass(),
+							'ilReportingUsersPerCourseGUI',
+						), 'report');
+						// Write the correct course ID into the session - this is used by the report table
+						$_SESSION[ilReportingGUI::SESSION_KEY_IDS] = array( $crsID );
+						/** @var  $ilTabsGUI */
+						$ilTabsGUI = $a_par['tabs'];
+						$ilTabsGUI->addTarget($this->pl->txt('reports'), $uri, "reports", array(
+							ilReportingPlugin::getBaseClass(),
+							'ilReportingUsersPerCourseGUI',
+						), "", false, true);
+					}
+				}
+			}
+		}
+	}
 }
 
 ?>
