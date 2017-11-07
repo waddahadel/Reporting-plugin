@@ -81,14 +81,16 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 
 
 	/**
-	 * @return bool
+	 * @inheritdoc
 	 */
-	public function numericOrdering() {
+	public function numericOrdering($a_field) {
 		return true;
 	}
 
-
-	public function setExportFormats() {
+	/**
+	 * @inheritdoc
+	 */
+	public function setExportFormats(array $formats) {
 		parent::setExportFormats(array( self::EXPORT_EXCEL, self::EXPORT_CSV ));
 		foreach ($this->parent_object->getAvailableExports() as $k => $format) {
 			$this->export_formats[$k] = $this->pl->getPrefix() . '_' . $format;
