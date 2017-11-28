@@ -45,9 +45,9 @@ Sind Sie interessiert an einer [Plugin-Patenschaft](https://studer-raimann.ch/pr
 
 ### Contact
 studer + raimann ag  
-Farbweg 9
-3400 Burgdorf
-Switzerland 
+Farbweg 9  
+3400 Burgdorf  
+Switzerland
 
 info@studer-raimann.ch  
 www.studer-raimann.ch  
