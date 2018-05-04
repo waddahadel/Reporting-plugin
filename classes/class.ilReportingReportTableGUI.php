@@ -71,13 +71,86 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 		$this->setEnableTitle(true);
 		$this->setTopCommands(true);
 		$this->setShowRowsSelector(true);
-		$this->initColumns();
-		$this->initToolbar();
-		$this->parent_object = $a_parent_obj;
-		$this->setExportFormats();
-		$this->setDisableFilterHiding(true);
-		$this->initFilter();
-	}
+        $this->initColumns();
+        $this->initToolbar();
+        $this->parent_object = $a_parent_obj;
+        $this->setExportFormats(array());
+        $this->setDisableFilterHiding(true);
+        $this->initFilter();
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function numericOrdering($a_field) {
+        return true;
+    }
+
+
+    public function setExportFormats(array $formats) {
+        parent::setExportFormats(array(self::EXPORT_EXCEL, self::EXPORT_CSV));
+        foreach ($this->parent_object->getAvailableExports() as $k => $format) {
+            $this->export_formats[$k] = $this->pl->getPrefix() . '_' . $format;
+        }
+    }
+
+
+    /**
+     * Add filters for status and status changed
+     */
+    public function initFilter() {
+        $item = new ilSelectInputGUI($this->pl->txt('user_status'), 'status');
+        $states = array('' => '');
+        for ($i=1;$i<=4;$i++) {
+            $k = $i-1;
+            $states[$i] = $this->pl->txt("status$k");
+        }
+        $item->setOptions($states);
+        $this->addFilterItemWithValue($item);
+        $item = new ilDateTimeInputGUI($this->pl->txt('status_changed_from'), 'status_changed_from');
+        //$item->setMode(ilDateTimeInputGUI::MODE_INPUT);
+        $this->addFilterItemWithValue($item);
+        $item = new ilDateTimeInputGUI($this->pl->txt('status_changed_to'), 'status_changed_to');
+        //$item->setMode(ilDateTimeInputGUI::MODE_INPUT);
+        $this->addFilterItemWithValue($item);
+    }
+
+
+    /**
+     * @param array $a_set
+     */
+    public function fillRow($a_set) {
+        $this->tpl->setVariable('ID', $a_set['id']);
+        foreach ($this->getColumns() as $k => $v) {
+            if (isset($a_set[$k])) {
+                if (! in_array($k, $this->getIgnoredCols())) {
+                    if (in_array($k, $this->getDateCols())) {
+                        $value = date($this->getDateFormat(), strtotime($a_set[$k]));
+                    } else {
+                        $formatter = isset($v['formatter']) ? $v['formatter'] : null;
+                        $value = $this->formatter->format($a_set[$k], $formatter);
+                    }
+                    $this->tpl->setCurrentBlock('td');
+                    $this->tpl->setVariable('VALUE', $value);
+                    $this->tpl->parseCurrentBlock();
+                }
+            } else {
+                $this->tpl->setCurrentBlock('td');
+                $this->tpl->setVariable('VALUE', '&nbsp;');
+                $this->tpl->parseCurrentBlock();
+            }
+        }
+    }
+
+
+    /**
+     * Method each subclass must implement to handle custom exports
+     *
+     * @param int $format Format constant from ilReportingGUI EXPORT_EXCEL_FORMATTED|EXPORT_PDF
+     * @param bool $send
+     */
+    public abstract function exportDataCustom($format, $send = false);
 
 
 	/**
