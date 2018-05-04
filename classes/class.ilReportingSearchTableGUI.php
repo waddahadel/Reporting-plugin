@@ -15,70 +15,66 @@ require_once('class.ilReportingFormatter.php');
  */
 abstract class ilReportingSearchTableGUI extends ilTable2GUI {
 
-    protected $filter_names = array();
+	protected $filter_names = array();
+	/**
+	 * @var ilReportingPlugin
+	 */
+	protected $pl;
+	/**
+	 * @var ilCtrl
+	 */
+	protected $ctrl;
+	/**
+	 * @var \ilToolbarGUI
+	 */
+	protected $toolbar;
+	/**
+	 * @var string
+	 */
+	protected $filter_cmd = 'applyFilterSearch';
+	/**
+	 * @var string
+	 */
+	protected $reset_cmd = 'resetFilterSearch';
+	/**
+	 * @var ilReportingFormatter
+	 */
+	protected $formatter;
 
-    /**
-     * @var ilReportingPlugin
-     */
-    protected $pl;
-
-    /**
-     * @var ilCtrl
-     */
-    protected $ctrl;
-
-    /**
-     * @var \ilToolbarGUI
-     */
-    protected $toolbar;
-
-    /**
-     * @var string
-     */
-    protected $filter_cmd = 'applyFilterSearch';
-
-    /**
-     * @var string
-     */
-    protected $reset_cmd = 'resetFilterSearch';
-
-    /**
-     * @var ilReportingFormatter
-     */
-    protected $formatter;
 
 	/**
 	 * @param ilReportingGUI $a_parent_obj
-	 * @param string               $a_parent_cmd
+	 * @param string         $a_parent_cmd
 	 */
 	function __construct(ilReportingGUI $a_parent_obj, $a_parent_cmd) {
-        global $ilCtrl, $ilToolbar;
-        $this->pl = new ilReportingPlugin();
-        $this->ctrl = $ilCtrl;
-        $this->toolbar = $ilToolbar;
-        $this->setId($this->ctrl->getCmdClass());
-        $this->setPrefix('pre');
-        $this->formatter = ilReportingFormatter::getInstance();
-        parent::__construct($a_parent_obj, $a_parent_cmd);
-        $this->setRowTemplate('tpl.template_row.checkboxes.html', $this->pl->getDirectory());
-        $this->setEnableHeader(true);
+		global $ilCtrl, $ilToolbar;
+		$this->pl = new ilReportingPlugin();
+		$this->ctrl = $ilCtrl;
+		$this->toolbar = $ilToolbar;
+		$this->setId($this->ctrl->getCmdClass());
+		$this->setPrefix('pre');
+		$this->formatter = ilReportingFormatter::getInstance();
+		parent::__construct($a_parent_obj, $a_parent_cmd);
+		$this->setRowTemplate('tpl.template_row.checkboxes.html', $this->pl->getDirectory());
+		$this->setEnableHeader(true);
 		$this->setEnableTitle(true);
 		$this->setTopCommands(true);
-        $this->setShowRowsSelector(true);
-        $this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
+		$this->setShowRowsSelector(true);
+		$this->setFormAction($this->ctrl->getFormAction($a_parent_obj));
 		$this->initFilter();
-        $this->setDisableFilterHiding(true);
-        // Setup columns
-        $this->addColumn("", "", "1", true);
-        $this->setSelectAllCheckbox("id[]");
-        foreach ($this->getSelectableColumns() as $k => $v) {
+		$this->setDisableFilterHiding(true);
+		// Setup columns
+		$this->addColumn("", "", "1", true);
+		$this->setSelectAllCheckbox("id[]");
+		foreach ($this->getSelectableColumns() as $k => $v) {
 			if ($this->isColumnSelected($k)) {
-                $this->addColumn($v['txt'], $k, 'auto');
+				$this->addColumn($v['txt'], $k, 'auto');
 			}
 		}
 	}
 
-    /**
+
+	/**
 	 * @param      $item
 	 * @param bool $optional
 	 */
@@ -95,9 +91,9 @@ abstract class ilReportingSearchTableGUI extends ilTable2GUI {
 			case 'ilCheckboxInputGUI':
 				$value = $item->getChecked();
 				break;
-            case 'ilDateTimeInputGUI':
-                $value = $item->getDate();
-                break;
+			case 'ilDateTimeInputGUI':
+				$value = $item->getDate();
+				break;
 			default:
 				$value = $item->getValue();
 				break;
@@ -106,9 +102,10 @@ abstract class ilReportingSearchTableGUI extends ilTable2GUI {
 	}
 
 
-    public function getFilterNames() {
-        return $this->filter_names;
-    }
+	public function getFilterNames() {
+		return $this->filter_names;
+	}
+
 
 	/**
 	 * @param array $a_set
@@ -120,8 +117,8 @@ abstract class ilReportingSearchTableGUI extends ilTable2GUI {
 				if ($a_set[$k] != '') {
 					$this->tpl->setCurrentBlock('td');
 					$formatter = (isset($v['formatter'])) ? $v['formatter'] : null;
-                    $value = $this->formatter->format($a_set[$k], $formatter);
-                    $this->tpl->setVariable('VALUE', $value);
+					$value = $this->formatter->format($a_set[$k], $formatter);
+					$this->tpl->setVariable('VALUE', $value);
 					$this->tpl->parseCurrentBlock();
 				} else {
 					$this->tpl->setCurrentBlock('td');
@@ -131,7 +128,6 @@ abstract class ilReportingSearchTableGUI extends ilTable2GUI {
 			}
 		}
 	}
-
 }
 
 ?>

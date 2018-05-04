@@ -1,8 +1,8 @@
 <?php
 require_once(dirname(dirname(__FILE__)) . '/class.ilReportingModel.php');
-require_once(dirname(dirname(__FILE__)) . '/CoursesPerUser/class.ilReportingCoursesPerUserModel.php');
+require_once(dirname(dirname(__FILE__))
+             . '/CoursesPerUser/class.ilReportingCoursesPerUserModel.php');
 require_once("Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php");
-
 
 /**
  * Class ilReportingCoursesPerUserLPModel
@@ -13,30 +13,36 @@ require_once("Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php");
  */
 class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 
-    protected $modelCoursesPerUser;
-
-    public function __construct() {
-        parent::__construct();
-        $this->modelCoursesPerUser = new ilReportingCoursesPerUserModel();
-	    $this->pl = new ilReportingPlugin();
-    }
-
-    /**
-     * Search users
-     * @param array $filters
-     * @return array
-     */
-    public function getSearchData(array $filters) {
-        return $this->modelCoursesPerUser->getSearchData($filters);
-    }
-
-    public function getReportData(array $ids, array $filters) {
+	protected $modelCoursesPerUser;
 
 
-        ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
-        ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements('orgu_usr_assignements_2');
+	public function __construct() {
+		parent::__construct();
+		$this->modelCoursesPerUser = new ilReportingCoursesPerUserModel();
+		$this->pl = new ilReportingPlugin();
+	}
 
-	    $sql  = "SELECT * FROM (
+
+	/**
+	 * Search users
+	 *
+	 * @param array $filters
+	 *
+	 * @return array
+	 */
+	public function getSearchData(array $filters) {
+		return $this->modelCoursesPerUser->getSearchData($filters);
+	}
+
+
+	public function getReportData(array $ids, array $filters) {
+
+
+		ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
+		ilObjOrgUnitTree::_getInstance()
+		                ->buildTempTableWithUsrAssignements('orgu_usr_assignements_2');
+
+		$sql = "SELECT * FROM (
                      /* Load objects with LP under a specified course */
                      SELECT CONCAT_WS('_',usr.lastname,usr.firstname,usr.usr_id) AS sort_user,
                          usr.usr_id AS id, usr.active, (SELECT GROUP_CONCAT(orgu_as.path SEPARATOR ', ') from orgu_usr_assignements AS orgu_as WHERE orgu_as.user_id = usr.usr_id) AS org_units, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path, ref.ref_id, obj.obj_id,
@@ -75,9 +81,9 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
                          AND children.type != 'rolf'
                          AND children_ut_coll.active = 1 ";
 
-        $sql .= $this->buildWhereString($ids, $filters);
+		$sql .= $this->buildWhereString($ids, $filters);
 
-        $sql .= "UNION
+		$sql .= "UNION
                     /* Union with structure of User and course name */
                     SELECT CONCAT_WS('_',usr.lastname,usr.firstname,usr.usr_id) AS sort_user,
                         usr.usr_id AS id, usr.active,  (SELECT GROUP_CONCAT(orgu_as.path SEPARATOR ', ') from orgu_usr_assignements_2 AS orgu_as WHERE orgu_as.user_id = usr.usr_id) AS org_units, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path, ref.ref_id, obj.obj_id,
@@ -102,76 +108,82 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 
                         /* User lp status */
                         LEFT JOIN ut_lp_marks AS ut ON (ut.obj_id = obj.obj_id AND ut.usr_id = usr.usr_id)
-                        WHERE obj.type = " . $this->db->quote('crs', 'text') . " AND ref.deleted IS NULL ";
+                        WHERE obj.type = " . $this->db->quote('crs', 'text')
+		        . " AND ref.deleted IS NULL ";
 
-        $sql .= $this->buildWhereString($ids, $filters);
-        $sql .= ") AS a ORDER BY sort_user, obj_id, object_title";
+		$sql .= $this->buildWhereString($ids, $filters);
+		$sql .= ") AS a ORDER BY sort_user, obj_id, object_title";
 
-        $return = array();
-        $objects = array();
-        $data = $this->buildRecords($sql);
+		$return = array();
+		$objects = array();
+		$data = $this->buildRecords($sql);
 
-        /**
-         * The following code adds to each record (course) the sub-objects, e.g. tests
-         * as array. The sub objects are inside the key '_objects'
-         */
+		/**
+		 * The following code adds to each record (course) the sub-objects, e.g. tests
+		 * as array. The sub objects are inside the key '_objects'
+		 */
 
-        foreach ($data as $k => $v) {
-            if (is_null($v['object_title'])) {
-                if ($k != 0) {
-                    $return[count($return)-1]['_objects'] = $objects;
-                }
-                $return[] = $v;
-                $objects = array();
-            } else {
-                $objects[] = array_slice($v, -6);
-            }
-        }
-        $return[count($return)-1]['_objects'] = $objects;
-//        echo $sql; die();
-//        echo "<pre>" . print_r($return, 1) . "</pre>";die();
-        return $return;
-    }
+		foreach ($data as $k => $v) {
+			if (is_null($v['object_title'])) {
+				if ($k != 0) {
+					$return[count($return) - 1]['_objects'] = $objects;
+				}
+				$return[] = $v;
+				$objects = array();
+			} else {
+				$objects[] = array_slice($v, - 6);
+			}
+		}
+		$return[count($return) - 1]['_objects'] = $objects;
+		//        echo $sql; die();
+		//        echo "<pre>" . print_r($return, 1) . "</pre>";die();
+		return $return;
+	}
 
 
-    /**
-     * Build WHERE part of query with filters
-     *
-     * @param array $ids
-     * @param array $filters
-     * @return string SQL
-     */
-    private function buildWhereString(array $ids, array $filters) {
-        $sql = '';
-        if (count($ids)) {
-            $sql .= "AND usr.usr_id IN (" . implode(',', $ids) . ") ";
-        }
-        if ($this->pl->getConfigObject()->getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
-            $refIds = $this->getRefIdsWhereUserCanAdministrateUsers();
-            if (count($refIds)) {
-                $sql .= ' AND usr.time_limit_owner IN (' . implode(',', $refIds) .')';
-            } else {
-                $sql .= 'AND usr.time_limit_owner IN (0)';
-            }
-        }elseif ($this->pl->getConfigObject()->getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
-	        //TODO: check if this is performant enough.
-	        $users = $this->pl->getRestrictedByOrgUnitsUsers();
-	        $sql .= count($users)?' AND usr.usr_id IN('.implode(',', $users).') ':' AND FALSE ';
-        }
-        if (count($filters)) {
-            if ($filters['status'] != '') {
-                $sql .= ' AND ut.status = ' . $this->db->quote(($filters['status']-1), 'text');
-            }
-            if ($date = $filters['status_changed_from']) {
-                $sql .= ' AND ut.status_changed >= ' . $this->db->quote($date, 'date');
-            }
-            if ($date = $filters['status_changed_to']) {
-                /** @var $date ilDateTime */
-                $date->increment(ilDateTime::DAY, 1);
-                $sql .= ' AND ut.status_changed <= ' . $this->db->quote($date, 'date');
-                $date->increment(ilDateTime::DAY, -1);
-            }
-        }
-        return $sql;
-    }
+	/**
+	 * Build WHERE part of query with filters
+	 *
+	 * @param array $ids
+	 * @param array $filters
+	 *
+	 * @return string SQL
+	 */
+	private function buildWhereString(array $ids, array $filters) {
+		$sql = '';
+		if (count($ids)) {
+			$sql .= "AND usr.usr_id IN (" . implode(',', $ids) . ") ";
+		}
+		if ($this->pl->getConfigObject()->getValue('restricted_user_access')
+		    == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
+			$refIds = $this->getRefIdsWhereUserCanAdministrateUsers();
+			if (count($refIds)) {
+				$sql .= ' AND usr.time_limit_owner IN (' . implode(',', $refIds) . ')';
+			} else {
+				$sql .= 'AND usr.time_limit_owner IN (0)';
+			}
+		} elseif ($this->pl->getConfigObject()->getValue('restricted_user_access')
+		          == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
+			//TODO: check if this is performant enough.
+			$users = $this->pl->getRestrictedByOrgUnitsUsers();
+			$sql .= count($users) ? ' AND usr.usr_id IN(' . implode(',', $users)
+			                        . ') ' : ' AND FALSE ';
+		}
+		if (count($filters)) {
+			if ($filters['status'] != '') {
+				$sql .= ' AND ut.status = ' . $this->db->quote(($filters['status'] - 1), 'text');
+			}
+			if ($date = $filters['status_changed_from']) {
+				$sql .= ' AND ut.status_changed >= ' . $this->db->quote($date, 'date');
+			}
+			if ($date = $filters['status_changed_to']) {
+				/** @var $date ilDateTime */
+				$date->increment(ilDateTime::DAY, 1);
+				$sql .= ' AND ut.status_changed <= ' . $this->db->quote($date, 'date');
+				$date->increment(ilDateTime::DAY, - 1);
+			}
+		}
+
+		return $sql;
+	}
 }

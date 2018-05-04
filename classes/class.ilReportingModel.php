@@ -10,61 +10,68 @@ require_once('./Services/Calendar/classes/class.ilDateTime.php');
  */
 abstract class ilReportingModel {
 
-    /** @var  ilDB */
-    protected $db;
+	/** @var  ilDB */
+	protected $db;
+	/** @var \ilReportingPlugin */
+	protected $pl;
+	/** @var  ilObjUser */
+	protected $user;
+	/** @var  ilAccess */
+	protected $access;
 
-    /** @var \ilReportingPlugin  */
-    protected $pl;
 
-    /** @var  ilObjUser */
-    protected $user;
+	public function __construct() {
+		global $ilDB, $ilUser, $ilAccess;
+		$this->db = $ilDB;
+		$this->pl = new ilReportingPlugin();
+		$this->user = $ilUser;
+		$this->access = $ilAccess;
+	}
 
-    /** @var  ilAccess */
-    protected $access;
 
-    public function __construct() {
-        global $ilDB, $ilUser, $ilAccess;
-        $this->db = $ilDB;
-        $this->pl = new ilReportingPlugin();
-        $this->user = $ilUser;
-        $this->access = $ilAccess;
-    }
+	abstract public function getSearchData(array $filters);
 
-    abstract public function getSearchData(array $filters);
 
-    abstract public function getReportData(array $ids, array $filters);
+	abstract public function getReportData(array $ids, array $filters);
 
-    /**
-     * Return all the ref-ids (of Categories) where the current user can administrate users
-     * @return array
-     */
-    protected function getRefIdsWhereUserCanAdministrateUsers() {
-        $sql = 'SELECT DISTINCT time_limit_owner FROM usr_data';
-        $set = $this->db->query($sql);
-        $refIds = array();
-        while ($rec = $this->db->fetchAssoc($set)) {
-            $refIds[] = $rec['time_limit_owner'];
-        }
-        foreach ($refIds as $k => $refId) {
-            if (!$this->access->checkAccess('read_users', '', $refId)) {
-                unset($refIds[$k]);
-            }
-        }
-        return $refIds;
-    }
 
-    /**
-     * Build records from SQL Query string
-     * @param $sql SQL String
-     * @return array
-     */
-    protected function buildRecords($sql) {
-	    $sql = preg_replace('/[ ]{2,}|[\t]|[\n]/', ' ', trim($sql));
-        $result = $this->db->query($sql);
-        $return = array();
-        while ($rec = $this->db->fetchAssoc($result)) {
-            $return[] = $rec;
-        }
-        return $return;
-    }
+	/**
+	 * Return all the ref-ids (of Categories) where the current user can administrate users
+	 *
+	 * @return array
+	 */
+	protected function getRefIdsWhereUserCanAdministrateUsers() {
+		$sql = 'SELECT DISTINCT time_limit_owner FROM usr_data';
+		$set = $this->db->query($sql);
+		$refIds = array();
+		while ($rec = $this->db->fetchAssoc($set)) {
+			$refIds[] = $rec['time_limit_owner'];
+		}
+		foreach ($refIds as $k => $refId) {
+			if (!$this->access->checkAccess('read_users', '', $refId)) {
+				unset($refIds[$k]);
+			}
+		}
+
+		return $refIds;
+	}
+
+
+	/**
+	 * Build records from SQL Query string
+	 *
+	 * @param $sql SQL String
+	 *
+	 * @return array
+	 */
+	protected function buildRecords($sql) {
+		$sql = preg_replace('/[ ]{2,}|[\t]|[\n]/', ' ', trim($sql));
+		$result = $this->db->query($sql);
+		$return = array();
+		while ($rec = $this->db->fetchAssoc($result)) {
+			$return[] = $rec;
+		}
+
+		return $return;
+	}
 } 

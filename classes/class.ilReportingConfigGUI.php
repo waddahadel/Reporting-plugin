@@ -14,14 +14,12 @@ require_once('./Services/Component/classes/class.ilComponent.php');
  */
 class ilReportingConfigGUI extends ilPluginConfigGUI {
 
-	/** @var \ilReportingConfig  */
-    protected $object;
-
-    /** @var array  */
-    protected $fields = array();
-
-	/** @var string  */
-    protected $table_name = '';
+	/** @var \ilReportingConfig */
+	protected $object;
+	/** @var array */
+	protected $fields = array();
+	/** @var string */
+	protected $table_name = '';
 
 
 	function __construct() {
@@ -68,6 +66,7 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 		}
 	}
 
+
 	/**
 	 * Configure screen
 	 */
@@ -77,55 +76,62 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 		$this->tpl->setContent($this->form->getHTML());
 	}
 
-    /**
-     * Save config
-     */
-    public function save() {
-        global $tpl, $ilCtrl;
-        $this->initConfigurationForm();
-        if ($this->form->checkInput()) {
-            foreach ($this->getFields() as $key => $item) {
-                $this->object->setValue($key, $this->form->getInput($key));
-                if (is_array($item['subelements'])) {
-                    foreach ($item['subelements'] as $subkey => $subitem) {
-                        $this->object->setValue($key . '_' . $subkey, $this->form->getInput($key . '_' . $subkey));
-                    }
-                }
-            }
-	        $this->saveAdditionalFields();
-            ilUtil::sendSuccess($this->pl->txt('conf_saved'), true);
-            $ilCtrl->redirect($this, 'configure');
-        } else {
-            $this->form->setValuesByPost();
-            $tpl->setContent($this->form->getHtml());
-        }
-    }
 
-	protected function saveAdditionalFields(){
+	/**
+	 * Save config
+	 */
+	public function save() {
+		global $tpl, $ilCtrl;
+		$this->initConfigurationForm();
+		if ($this->form->checkInput()) {
+			foreach ($this->getFields() as $key => $item) {
+				$this->object->setValue($key, $this->form->getInput($key));
+				if (is_array($item['subelements'])) {
+					foreach ($item['subelements'] as $subkey => $subitem) {
+						$this->object->setValue($key . '_' . $subkey, $this->form->getInput($key
+						                                                                    . '_'
+						                                                                    . $subkey));
+					}
+				}
+			}
+			$this->saveAdditionalFields();
+			ilUtil::sendSuccess($this->pl->txt('conf_saved'), true);
+			$ilCtrl->redirect($this, 'configure');
+		} else {
+			$this->form->setValuesByPost();
+			$tpl->setContent($this->form->getHtml());
+		}
+	}
+
+
+	protected function saveAdditionalFields() {
 		$this->object->setValue('restricted_user_access', $this->form->getInput('restricted_user_access'));
 	}
 
-    /**
-     * Set form values
-     */
-    protected function setFormValues() {
-        foreach ($this->getFields() as $key => $item) {
-            $values[$key] = $this->object->getValue($key);
-            if (is_array($item['subelements'])) {
-                foreach ($item['subelements'] as $subkey => $subitem) {
-                    $values[$key . '_' . $subkey] = $this->object->getValue($key . '_' . $subkey);
-                }
-            }
-        }
-	    $this->setAdditionalFormValues($values);
-        $this->form->setValuesByArray($values);
-    }
 
-	protected function setAdditionalFormValues(&$values){
+	/**
+	 * Set form values
+	 */
+	protected function setFormValues() {
+		foreach ($this->getFields() as $key => $item) {
+			$values[$key] = $this->object->getValue($key);
+			if (is_array($item['subelements'])) {
+				foreach ($item['subelements'] as $subkey => $subitem) {
+					$values[$key . '_' . $subkey] = $this->object->getValue($key . '_' . $subkey);
+				}
+			}
+		}
+		$this->setAdditionalFormValues($values);
+		$this->form->setValuesByArray($values);
+	}
+
+
+	protected function setAdditionalFormValues(&$values) {
 		$values['restricted_user_access'] = $this->object->getValue('restricted_user_access');
 	}
 
-    /**
+
+	/**
 	 * @return ilPropertyFormGUI
 	 */
 	protected function initConfigurationForm() {
@@ -142,7 +148,9 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 			}
 			if (is_array($item['subelements'])) {
 				foreach ($item['subelements'] as $subkey => $subitem) {
-					$subfield = new $subitem['type']($this->pl->txt($key . '_' . $subkey), $key . '_' . $subkey);
+					$subfield = new $subitem['type']($this->pl->txt($key . '_' . $subkey), $key
+					                                                                       . '_'
+					                                                                       . $subkey);
 					if ($subitem['info']) {
 						$subfield->setInfo($this->pl->txt($key . '_info'));
 					}
@@ -158,12 +166,13 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 		return $this->form;
 	}
 
+
 	/**
 	 * For additional form elements which are not easily configurable.
 	 *
 	 * @param ilPropertyFormGUI $form
 	 */
-	protected function initCustomConfigForm(&$form){
+	protected function initCustomConfigForm(&$form) {
 		$item = new ilRadioGroupInputGUI($this->pl->txt('restricted_user_access'), 'restricted_user_access');
 
 		$option = new ilRadioOption($this->pl->txt('no_restriction'), ilReportingConfig::RESTRICTED_NONE);
@@ -174,31 +183,34 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 		$item->addOption($option);
 
 		if (ilComponent::isVersionGreaterString(ILIAS_VERSION_NUMERIC, '4.4.0')) {
-            $option = new ilRadioOption($this->pl->txt('restricted_by_org_units'), ilReportingConfig::RESTRICTED_BY_ORG_UNITS);
-            $option->setInfo($this->pl->txt('restricted_by_org_units_description'));
-            $item->addOption($option);
-        }
+			$option = new ilRadioOption($this->pl->txt('restricted_by_org_units'), ilReportingConfig::RESTRICTED_BY_ORG_UNITS);
+			$option->setInfo($this->pl->txt('restricted_by_org_units_description'));
+			$item->addOption($option);
+		}
 
 		$form->addItem($item);
 	}
 
-    /**
-     * Return the configuration fields
-     * @return array
-     */
-    protected function getFields() {
-        $this->fields = array(
-            'jasper_reports_templates_path' => array(
-                'type' => 'ilTextInputGUI',
-                'info' => true,
-            ),
-            'header_image' => array(
-                'type' => 'ilTextInputGUI',
-				'info' => true,
-            ),
-        );
-        return $this->fields;
-    }
 
+	/**
+	 * Return the configuration fields
+	 *
+	 * @return array
+	 */
+	protected function getFields() {
+		$this->fields = array(
+			'jasper_reports_templates_path' => array(
+				'type' => 'ilTextInputGUI',
+				'info' => true,
+			),
+			'header_image'                  => array(
+				'type' => 'ilTextInputGUI',
+				'info' => true,
+			),
+		);
+
+		return $this->fields;
+	}
 }
+
 ?>

@@ -13,7 +13,6 @@ class ilReportingConfig {
 	const RESTRICTED_NONE = 0;
 	const RESTRICTED_BY_LOCAL_READABILITY = 1;
 	const RESTRICTED_BY_ORG_UNITS = 2;
-
 	/**
 	 * @var string
 	 */
@@ -59,7 +58,7 @@ class ilReportingConfig {
 
 				return true;
 			} else {
-				return NULL;
+				return null;
 			}
 		}
 	}
@@ -71,32 +70,32 @@ class ilReportingConfig {
 	 */
 	public function setValue($key, $value) {
 		global $ilDB;
-		if (! is_string($this->getValue($key))) {
+		if (!is_string($this->getValue($key))) {
 			$ilDB->insert($this->getTableName(), array(
-				"config_key" => array(
+				"config_key"   => array(
 					"text",
-					$key
+					$key,
 				),
 				"config_value" => array(
 					"text",
-					$value
-				)
+					$value,
+				),
 			));
 		} else {
 			$ilDB->update($this->getTableName(), array(
-				"config_key" => array(
+				"config_key"   => array(
 					"text",
-					$key
+					$key,
 				),
 				"config_value" => array(
 					"text",
-					$value
-				)
+					$value,
+				),
 			), array(
 				"config_key" => array(
 					"text",
-					$key
-				)
+					$key,
+				),
 			));
 		}
 	}
@@ -109,8 +108,8 @@ class ilReportingConfig {
 	 */
 	public function getValue($key) {
 		global $ilDB;
-		$result = $ilDB->query(
-			"SELECT config_value FROM " . $this->getTableName() . " WHERE config_key = " . $ilDB->quote($key, "text"));
+		$result = $ilDB->query("SELECT config_value FROM " . $this->getTableName()
+		                       . " WHERE config_key = " . $ilDB->quote($key, "text"));
 		if ($result->numRows() == 0) {
 			return false;
 		}
@@ -125,16 +124,16 @@ class ilReportingConfig {
 	 */
 	public function initDB() {
 		global $ilDB;
-		if (! $ilDB->tableExists($this->getTableName())) {
+		if (!$ilDB->tableExists($this->getTableName())) {
 			$fields = array(
-				'config_key' => array(
-					'type' => 'text',
-					'length' => 128,
-					'notnull' => true
+				'config_key'   => array(
+					'type'    => 'text',
+					'length'  => 128,
+					'notnull' => true,
 				),
 				'config_value' => array(
-					'type' => 'clob',
-					'notnull' => false
+					'type'    => 'clob',
+					'notnull' => false,
 				),
 			);
 			$ilDB->createTable($this->getTableName(), $fields);
