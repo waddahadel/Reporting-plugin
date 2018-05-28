@@ -1,7 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingReportTableGUI.php');
-require_once('class.ilReportingUsersPerCourseLPPdfExport.php');
-require_once('class.ilReportingUsersPerCourseLPExcelExport.php');
 
 /**
  * Report table for the report CoursesPerUser
@@ -29,8 +26,7 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
 				$export->execute();
 				break;
 			case ilReportingGUI::EXPORT_EXCEL_FORMATTED:
-				$export = new ilReportingUsersPerCourseLPExcelExport('users_per_course_'
-				                                                     . date('Y-m-d'));
+				$export = new ilReportingUsersPerCourseLPExcelExport('users_per_course_' . date('Y-m-d'));
 				$export->execute($this->getData());
 				break;
 		}
@@ -64,7 +60,7 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
 					$a_csv->addColumn('');
 				}
 				foreach ($this->getAdditionalColumns() as $k => $v) {
-					$formatter = isset($v['formatter']) ? $v['formatter'] : null;
+					$formatter = isset($v['formatter']) ? $v['formatter'] : NULL;
 					$value = $this->formatter->format($object[$k], $formatter);
 					$a_csv->addColumn($value);
 				}
@@ -79,21 +75,22 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
 	 */
 	protected function getAdditionalColumns() {
 		return array(
-			'object_title'          => array( 'txt' => $this->pl->txt('object_title') ),
-			'object_percentage'     => array(
-				'txt'       => $this->pl->txt('object_percentage'),
+			'object_title' => array( 'txt' => $this->pl->txt('object_title') ),
+			'object_percentage' => array(
+				'txt' => $this->pl->txt('object_percentage'),
 				'formatter' => ilReportingFormatter::FORMAT_STR_PERCENTAGE,
 			),
-			'object_status'         => array(
-				'txt'       => $this->pl->txt('object_status'),
+			'object_status' => array(
+				'txt' => $this->pl->txt('object_status'),
 				'formatter' => ilReportingFormatter::FORMAT_INT_STATUS,
 			),
-			'object_type'           => array(
-				'txt'       => $this->pl->txt('object_percentage'),
+			'object_type' => array(
+				'txt' => $this->pl->txt('object_percentage'),
 				'formatter' => ilReportingFormatter::FORMAT_STR_OBJECT_TYPE,
 			),
-			'object_status_changed' => array( 'txt'       => $this->pl->txt('object_status_changed'),
-			                                  'formatter' => ilReportingFormatter::FORMAT_STR_DATE,
+			'object_status_changed' => array(
+				'txt' => $this->pl->txt('object_status_changed'),
+				'formatter' => ilReportingFormatter::FORMAT_STR_DATE,
 			),
 		);
 	}
@@ -135,7 +132,7 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
 				$col = count($this->getColumns());
 				$a_row ++;
 				foreach ($this->getAdditionalColumns() as $k => $v) {
-					$formatter = isset($v['formatter']) ? $v['formatter'] : null;
+					$formatter = isset($v['formatter']) ? $v['formatter'] : NULL;
 					$value = $this->formatter->format($object[$k], $formatter);
 					$a_excel->setCell($a_row, $col ++, $value);
 				}
@@ -182,7 +179,7 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
 		foreach ($objects as $object) {
 			$table->setCurrentBlock('rows');
 			foreach ($this->getAdditionalColumns() as $k => $v) {
-				$formatter = isset($v['formatter']) ? $v['formatter'] : null;
+				$formatter = isset($v['formatter']) ? $v['formatter'] : NULL;
 				$value = $this->formatter->format($object[$k], $formatter);
 				$table->setVariable(strtoupper($k), $value);
 			}
@@ -235,9 +232,12 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
 	protected function initToolbar() {
 		if (isset($_GET['from'])) {
 			$class = $_GET['from'];
-			$url = $this->ctrl->getLinkTargetByClass($class, 'report');
+			$url = $this->ctrl->getLinkTargetByClass($class, ilReportingGUI::CMD_REPORT);
 			$txt = $this->pl->txt('back');
-			$this->toolbar->addButton('<b>&lt; ' . $txt . '</b>', $url);
+			$button = ilLinkButton::getInstance();
+			$button->setCaption('<b>&lt; ' . $txt . '</b>', false);
+			$button->setUrl($url);
+			$this->toolbar->addButtonInstance($button);
 		} else {
 			parent::initToolbar();
 		}

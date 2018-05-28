@@ -1,7 +1,4 @@
 <?php
-require_once('class.ilReportingPlugin.php');
-require_once('./Services/Utilities/classes/class.ilCSVWriter.php');
-require_once('class.ilReportingFormatter.php');
 
 /**
  * Class ilReportingPdfExport
@@ -61,11 +58,10 @@ abstract class ilReportingPdfExport {
 
 
 	public function __construct() {
-		global $ilUser;
-		$this->pl = new ilReportingPlugin();
-		$this->templates_path = $this->pl->getConfigObject()
-		                                 ->getValue('jasper_reports_templates_path');
-		$this->user = $ilUser;
+		global $DIC;
+		$this->pl = ilReportingPlugin::getInstance();
+		$this->templates_path = ilReportingConfig::getValue('jasper_reports_templates_path');
+		$this->user = $DIC->user();
 		$this->formatter = ilReportingFormatter::getInstance();
 	}
 
@@ -75,8 +71,7 @@ abstract class ilReportingPdfExport {
 	 */
 	public function execute() {
 		$csv_file = $this->buildCSVFile();
-		$report = new JasperReport($this->templates_path
-		                           . $this->template_filename, $this->output_filename);
+		$report = new JasperReport($this->templates_path . $this->template_filename, $this->output_filename);
 		$report->setDataSource(JasperReport::DATASOURCE_CSV);
 		$report->setCsvFieldDelimiter(';');
 		$report->setCsvFile($csv_file);
@@ -102,19 +97,19 @@ abstract class ilReportingPdfExport {
 	 */
 	protected function getPdfReportParameters() {
 		$params = array(
-			'firstname'      => $this->pl->txt('firstname'),
-			'lastname'       => $this->pl->txt('lastname'),
-			'department'     => $this->pl->txt('department'),
-			'country'        => $this->pl->txt('country'),
+			'firstname' => $this->pl->txt('firstname'),
+			'lastname' => $this->pl->txt('lastname'),
+			'department' => $this->pl->txt('department'),
+			'country' => $this->pl->txt('country'),
 			'status_changed' => $this->pl->txt('status_changed'),
-			'user_status'    => $this->pl->txt('user_status'),
-			'title'          => $this->pl->txt('title'),
-			'path'           => $this->pl->txt('path'),
-			'owner_report'   => $this->pl->txt('owner_of_report'),
-			'owner_name'     => $this->user->getPresentationTitle(),
+			'user_status' => $this->pl->txt('user_status'),
+			'title' => $this->pl->txt('title'),
+			'path' => $this->pl->txt('path'),
+			'owner_report' => $this->pl->txt('owner_of_report'),
+			'owner_name' => $this->user->getPresentationTitle(),
 		);
 		// Check if a header image is specified
-		$img = $this->pl->getConfigObject()->getValue('header_image');
+		$img = ilReportingConfig::getValue('header_image');
 		if ($img && is_file($img)) {
 			$params['header_image'] = $img;
 		}
@@ -142,7 +137,7 @@ abstract class ilReportingPdfExport {
 				$csv->addColumn($data[$field]);
 			}
 			foreach ($this->getCsvColumns() as $k => $v) {
-				$formatter = isset($v['formatter']) ? $v['formatter'] : null;
+				$formatter = isset($v['formatter']) ? $v['formatter'] : NULL;
 				$value = $this->formatter->format($data[$k], $formatter);
 				$csv->addColumn(strip_tags($value));
 			}

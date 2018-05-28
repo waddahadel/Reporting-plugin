@@ -1,10 +1,4 @@
 <?php
-require_once('./Services/Table/classes/class.ilTable2GUI.php');
-require_once('./Services/Form/classes/class.ilTextInputGUI.php');
-require_once('./Services/Form/classes/class.ilCheckboxInputGUI.php');
-require_once('./Services/Form/classes/class.ilSelectInputGUI.php');
-require_once('./Services/Form/classes/class.ilDateTimeInputGUI.php');
-require_once('class.ilReportingFormatter.php');
 
 /**
  * TableGUI ilReportingSearchTableGUI
@@ -31,11 +25,11 @@ abstract class ilReportingSearchTableGUI extends ilTable2GUI {
 	/**
 	 * @var string
 	 */
-	protected $filter_cmd = 'applyFilterSearch';
+	protected $filter_cmd = ilReportingGUI::CMD_APPLY_FILTER_SEARCH;
 	/**
 	 * @var string
 	 */
-	protected $reset_cmd = 'resetFilterSearch';
+	protected $reset_cmd = ilReportingGUI::CMD_RESET_FILTER_SEARCH;
 	/**
 	 * @var ilReportingFormatter
 	 */
@@ -47,10 +41,10 @@ abstract class ilReportingSearchTableGUI extends ilTable2GUI {
 	 * @param string         $a_parent_cmd
 	 */
 	function __construct(ilReportingGUI $a_parent_obj, $a_parent_cmd) {
-		global $ilCtrl, $ilToolbar;
-		$this->pl = new ilReportingPlugin();
-		$this->ctrl = $ilCtrl;
-		$this->toolbar = $ilToolbar;
+		global $DIC;
+		$this->pl = ilReportingPlugin::getInstance();
+		$this->ctrl = $DIC->ctrl();
+		$this->toolbar = $DIC->toolbar();
 		$this->setId($this->ctrl->getCmdClass());
 		$this->setPrefix('pre');
 		$this->formatter = ilReportingFormatter::getInstance();
@@ -116,7 +110,7 @@ abstract class ilReportingSearchTableGUI extends ilTable2GUI {
 			if ($this->isColumnSelected($k)) {
 				if ($a_set[$k] != '') {
 					$this->tpl->setCurrentBlock('td');
-					$formatter = (isset($v['formatter'])) ? $v['formatter'] : null;
+					$formatter = (isset($v['formatter'])) ? $v['formatter'] : NULL;
 					$value = $this->formatter->format($a_set[$k], $formatter);
 					$this->tpl->setVariable('VALUE', $value);
 					$this->tpl->parseCurrentBlock();

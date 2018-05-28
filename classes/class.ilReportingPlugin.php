@@ -1,6 +1,5 @@
 <?php
-include_once('./Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php');
-require_once('class.ilReportingConfig.php');
+require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
  * Reporting Plugin
@@ -11,51 +10,63 @@ require_once('class.ilReportingConfig.php');
  */
 class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 
+	const PLUGIN_ID = 'reporting';
+	const PLUGIN_NAME = 'Reporting';
 	/**
-	 * @var string
-	 * This will be ilRouterGUI for ILIAS <= 4.4 if the corresponding plugin is installed
-	 * and ilUIPluginRouterGUI for ILIAS >= 4.5
+	 * @var ilReportingPlugin
 	 */
-	protected static $baseClass;
+	protected static $instance;
+
+
+	/**
+	 * @return ilReportingPlugin
+	 */
+	public static function getInstance() {
+		if (!isset(self::$instance)) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
+
+	/**
+	 * @var ilDB
+	 */
+	protected $db;
+
+
+	/**
+	 *
+	 */
+	public function __construct() {
+		parent::__construct();
+
+		global $DIC;
+
+		$this->db = $DIC->database();
+	}
 
 
 	/**
 	 * @return string
 	 */
 	public function getPluginName() {
-		return 'Reporting';
-	}
-
-
-	/**
-	 * @return ilReportingConfig
-	 */
-	public function getConfigObject() {
-		return new ilReportingConfig($this->getConfigTableName());
-	}
-
-
-	/**
-	 * @return string
-	 */
-	public function getConfigTableName() {
-		return $this->getSlotId() . substr(strtolower($this->getPluginName()), 0, 20
-		                                                                          - strlen($this->getSlotId()))
-		       . '_c';
+		return self::PLUGIN_NAME;
 	}
 
 
 	/**
 	 * Only activate plugin if CtrlMainMenu and ilRouterGUI are installed and active
 	 *
-	 * @return bool|void
+	 * @return bool
 	 * @throws ilPluginException
 	 */
 	protected function beforeActivation() {
 		if (!self::checkPreconditions()) {
-			ilUtil::sendFailure("Cannot activate plugin: Make sure that you have installed the CtrlMainMenu plugin and RouterGUI. Please read the documentation: http://www.ilias.de/docu/goto_docu_wiki_1357_Reporting_Plugin.html", true);
+			ilUtil::sendFailure("Cannot activate plugin: Make sure that you have installed the CtrlMainMenu plugin. Please read the documentation: http://www.ilias.de/docu/goto_docu_wiki_1357_Reporting_Plugin.html", true);
 
-			//throw new ilPluginException("Cannot activate plugin: Make sure that you have installed the CtrlMainMenu plugin and RouterGUI. Please read the documentation: http://www.ilias.de/docu/goto_docu_wiki_1357_Reporting_Plugin.html");
+			//throw new ilPluginException("Cannot activate plugin: Make sure that you have installed the CtrlMainMenu plugin. Please read the documentation: http://www.ilias.de/docu/goto_docu_wiki_1357_Reporting_Plugin.html");
 			return false;
 		}
 
@@ -72,6 +83,9 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 	}
 
 
+	/**
+	 * @return string
+	 */
 	public static function getRootDir() {
 		return dirname(dirname(__FILE__)) . '/';
 	}
@@ -83,63 +97,31 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 	 * @return bool
 	 */
 	public static function checkPreconditions() {
-		/**
-		 * @var $ilCtrl        ilCtrl
-		 * @var $ilPluginAdmin ilPluginAdmin
-		 */
-		global $ilCtrl, $ilPluginAdmin;
+		global $DIC;
+		$ilPluginAdmin = $DIC["ilPluginAdmin"];
 		$existCtrlMainMenu = $ilPluginAdmin->exists(IL_COMP_SERVICE, 'UIComponent', 'uihk', 'CtrlMainMenu');
 		$isActiveCtrlMainMenu = $ilPluginAdmin->isActive(IL_COMP_SERVICE, 'UIComponent', 'uihk', 'CtrlMainMenu');
-		//The ilRouterGUI is used in ILIAS <= 4.4
-		$existRouterGUI = self::getBaseClass() != false;
 
-		return ($existCtrlMainMenu && $isActiveCtrlMainMenu && $existRouterGUI);
-	}
-
-
-	/**
-	 * @var string
-	 *
-	 * In what class the command/ctrl chain should start for this plugin.
-	 *
-	 * This will return ilRouterGUI for ILIAS <= 4.4 if the corresponding plugin is installed
-	 * and ilUIPluginRouterGUI for ILIAS >= 4.5 and false otherwise.
-	 *
-	 * @return string
-	 */
-	public static function getBaseClass() {
-		if (self::$baseClass !== null) {
-			return self::$baseClass;
-		}
-
-		global $ilCtrl;
-		if ($ilCtrl->lookupClassPath('ilUIPluginRouterGUI')) {
-			self::$baseClass = 'ilUIPluginRouterGUI';
-		} elseif ($ilCtrl->lookupClassPath('ilRouterGUI')) {
-			self::$baseClass = 'ilRouterGUI';
-		} else {
-			self::$baseClass = false;
-		}
-
-		return self::$baseClass;
+		return ($existCtrlMainMenu && $isActiveCtrlMainMenu);
 	}
 
 
 	/**
 	 * Create the main menu entries of the reporting plugin.
 	 * Abort if they were already created before...
-	 *
 	 */
 	public static function createReportMainMenuEntries() {
 		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu/classes/Menu/class.ctrlmmMenu.php');
 		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu/classes/Entry/class.ctrlmmEntry.php');
+		global $DIC;
+		$ilUser = $DIC->user();
 
 		ctrlmmMenu::includeAllTypes();
-		$entries_cpu = ctrlmmEntry::getEntriesByCmdClass('ilReportingCoursesPerUserGUI');
-		$entries_upc = ctrlmmEntry::getEntriesByCmdClass('ilReportingUsersPerCourseGUI');
-		$entries_upt = ctrlmmEntry::getEntriesByCmdClass('ilReportingUsersPerTestGUI');
-		$entries_cpu_lp = ctrlmmEntry::getEntriesByCmdClass('ilReportingCoursesPerUserLPGUI');
-		$entries_upc_lp = ctrlmmEntry::getEntriesByCmdClass('ilReportingUsersPerCourseLPGUI');
+		$entries_cpu = ctrlmmEntry::getEntriesByCmdClass(ilReportingCoursesPerUserGUI::class);
+		$entries_upc = ctrlmmEntry::getEntriesByCmdClass(ilReportingUsersPerCourseGUI::class);
+		$entries_upt = ctrlmmEntry::getEntriesByCmdClass(ilReportingUsersPerTestGUI::class);
+		$entries_cpu_lp = ctrlmmEntry::getEntriesByCmdClass(ilReportingCoursesPerUserLPGUI::class);
+		$entries_upc_lp = ctrlmmEntry::getEntriesByCmdClass(ilReportingUsersPerCourseLPGUI::class);
 
 		$main_reports_created = false;
 		$additional_reports_created = false;
@@ -152,7 +134,6 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 			$additional_reports_created = true;
 		}
 
-		global $ilUser;
 		$langUser = $ilUser->getLanguage();
 
 		if (!$main_reports_created) {
@@ -168,29 +149,26 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 				'de' => 'Kurse pro Benutzer',
 				'en' => 'Courses per User',
 			));
-			self::createMainMenuEntry($trans, self::getBaseClass()
-			                                  . ',ilReportingCoursesPerUserGUI', $dropdown->getId());
+			self::createMainMenuEntry($trans, ilUIPluginRouterGUI::class . ',' . ilReportingCoursesPerUserGUI::class, $dropdown->getId());
 
 			$trans = array( "$langUser" => 'Users per Course' );
 			$trans = array_merge($trans, array(
 				'de' => 'Benutzer pro Kurs',
 				'en' => 'Users per Course',
 			));
-			self::createMainMenuEntry($trans, self::getBaseClass()
-			                                  . ',ilReportingUsersPerCourseGUI', $dropdown->getId());
+			self::createMainMenuEntry($trans, ilUIPluginRouterGUI::class . ',' . ilReportingUsersPerCourseGUI::class, $dropdown->getId());
 
 			$trans = array( "$langUser" => 'Users per Test' );
 			$trans = array_merge($trans, array(
 				'de' => 'Benutzer pro Test',
 				'en' => 'Users per Test',
 			));
-			self::createMainMenuEntry($trans, self::getBaseClass()
-			                                  . ',ilReportingUsersPerTestGUI', $dropdown->getId());
+			self::createMainMenuEntry($trans, ilUIPluginRouterGUI::class . ',' . ilReportingUsersPerTestGUI::class, $dropdown->getId());
 		}
 
 		if (!$additional_reports_created) {
 			// Find dropdown ID
-			$entries_cpu = ctrlmmEntry::getEntriesByCmdClass('ilReportingCoursesPerUserGUI');
+			$entries_cpu = ctrlmmEntry::getEntriesByCmdClass(ilReportingCoursesPerUserGUI::class);
 			/** @var ctrlmmEntry $entry */
 			$entry = $entries_cpu[0];
 			$dropdown_id = $entry->getParent();
@@ -200,16 +178,14 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 				'de' => 'Kurse pro Benuzter, detailliert',
 				'en' => 'Courses per User, detailed',
 			));
-			self::createMainMenuEntry($trans, self::getBaseClass()
-			                                  . ',ilReportingCoursesPerUserLPGUI', $dropdown_id);
+			self::createMainMenuEntry($trans, ilUIPluginRouterGUI::class . ',' . ilReportingCoursesPerUserLPGUI::class, $dropdown_id);
 
 			$trans = array( "langUser" => 'Users per Course, detailed' );
 			$trans = array_merge($trans, array(
 				'de' => 'Benutzer pro Kurs, detailliert',
 				'en' => 'Users per Course, detailed',
 			));
-			self::createMainMenuEntry($trans, self::getBaseClass()
-			                                  . ',ilReportingUsersPerCourseLPGUI', $dropdown_id);
+			self::createMainMenuEntry($trans, ilUIPluginRouterGUI::class . ',' . ilReportingUsersPerCourseLPGUI::class, $dropdown_id);
 		}
 	}
 
@@ -219,13 +195,13 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 	 *
 	 * @param array $trans
 	 * @param       $gui_class
-	 * @param       $dropdown_id
+	 * @param int   $dropdown_id
 	 */
 	private static function createMainMenuEntry(array $trans, $gui_class, $dropdown_id) {
 		$entry = new ctrlmmEntryCtrl();
 		$entry->setTranslations($trans);
 		$entry->setGuiClass($gui_class);
-		$entry->setCmd('search');
+		$entry->setCmd(ilReportingGUI::CMD_SEARCH);
 		$entry->setPermissionType(ctrlmmMenu::PERM_ROLE);
 		$entry->setPermission('["2"]');
 		$entry->setParent($dropdown_id);
@@ -234,11 +210,26 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 
 
 	/**
+	 *
+	 */
+	public static function removeReportMainMenuEntries() {
+		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu/classes/Menu/class.ctrlmmMenu.php');
+		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu/classes/Entry/class.ctrlmmEntry.php');
+
+		foreach (array_merge(ctrlmmEntry::getEntriesByCmdClass(ilReportingCoursesPerUserGUI::class), ctrlmmEntry::getEntriesByCmdClass(ilReportingUsersPerCourseGUI::class), ctrlmmEntry::getEntriesByCmdClass(ilReportingUsersPerTestGUI::class), ctrlmmEntry::getEntriesByCmdClass(ilReportingCoursesPerUserLPGUI::class), ctrlmmEntry::getEntriesByCmdClass(ilReportingUsersPerCourseLPGUI::class)) as $entry) {
+			/**
+			 * @var ctrlmmEntry $entry
+			 */
+			$entry->delete();
+		}
+	}
+
+
+	/**
 	 * @return int[] All users that the current user has access to concerning the permissions
 	 *               view_learning_progress[_rec]
 	 */
 	public function getRestrictedByOrgUnitsUsers() {
-		require_once('./Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php');
 		$orgunits = ilObjOrgUnitTree::_getInstance();
 		$users = array();
 
@@ -256,6 +247,20 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 
 		return $users;
 	}
-}
 
-?>
+
+	/**
+	 * @return bool
+	 */
+	protected function beforeUninstall() {
+		$this->db->dropTable(ilReportingConfig::TABLE_NAME, false);
+
+		// TODO Remove any folders?
+
+		if (self::checkPreconditions()) {
+			self::removeReportMainMenuEntries();
+		}
+
+		return true;
+	}
+}

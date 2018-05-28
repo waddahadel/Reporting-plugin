@@ -1,7 +1,6 @@
 <?php
-require_once('./Services/Component/classes/class.ilPluginConfigGUI.php');
-require_once('class.ilReportingConfig.php');
-require_once('./Services/Component/classes/class.ilComponent.php');
+
+require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
  * Reporting Configuration
@@ -14,42 +13,39 @@ require_once('./Services/Component/classes/class.ilComponent.php');
  */
 class ilReportingConfigGUI extends ilPluginConfigGUI {
 
-	/** @var \ilReportingConfig */
-	protected $object;
+	const CMD_CONFIGURE = 'configure';
+	const CMD_SAVE = 'save';
 	/** @var array */
 	protected $fields = array();
-	/** @var string */
-	protected $table_name = '';
+	/**
+	 * @var ilReportingPlugin
+	 */
+	protected $pl;
+	/**
+	 * @var ilCtrl
+	 */
+	protected $ctrl;
+	/**
+	 * @var ilTemplate
+	 */
+	protected $tpl;
+	/**
+	 * @var ilTabsGUI
+	 */
+	protected $tabs;
+	/**
+	 * @var ilPropertyFormGUI
+	 */
+	protected $form;
 
 
 	function __construct() {
-		global $ilCtrl, $tpl, $ilTabs;
-		/**
-		 * @var $ilCtrl ilCtrl
-		 * @var $tpl    ilTemplate
-		 * @var $ilTabs ilTabsGUI
-		 */
-		$this->ctrl = $ilCtrl;
-		$this->tpl = $tpl;
-		$this->tabs = $ilTabs;
-		$this->pl = new ilReportingPlugin();
-		$this->object = new ilReportingConfig($this->pl->getConfigTableName());
-	}
+		global $DIC;
 
-
-	/**
-	 * @return string
-	 */
-	public function getTableName() {
-		return $this->table_name;
-	}
-
-
-	/**
-	 * @return ilReportingConfig
-	 */
-	public function getObject() {
-		return $this->object;
+		$this->ctrl = $DIC->ctrl();
+		$this->tpl = $DIC->ui()->mainTemplate();
+		$this->tabs = $DIC->tabs();
+		$this->pl = ilReportingPlugin::getInstance();
 	}
 
 
@@ -58,9 +54,8 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 	 */
 	public function performCommand($cmd) {
 		switch ($cmd) {
-			case 'configure':
-			case 'save':
-			case 'svn':
+			case self::CMD_CONFIGURE:
+			case self::CMD_SAVE:
 				$this->$cmd();
 				break;
 		}
@@ -81,31 +76,28 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 	 * Save config
 	 */
 	public function save() {
-		global $tpl, $ilCtrl;
 		$this->initConfigurationForm();
 		if ($this->form->checkInput()) {
 			foreach ($this->getFields() as $key => $item) {
-				$this->object->setValue($key, $this->form->getInput($key));
+				ilReportingConfig::setValue($key, $this->form->getInput($key));
 				if (is_array($item['subelements'])) {
 					foreach ($item['subelements'] as $subkey => $subitem) {
-						$this->object->setValue($key . '_' . $subkey, $this->form->getInput($key
-						                                                                    . '_'
-						                                                                    . $subkey));
+						ilReportingConfig::setValue($key . '_' . $subkey, $this->form->getInput($key . '_' . $subkey));
 					}
 				}
 			}
 			$this->saveAdditionalFields();
 			ilUtil::sendSuccess($this->pl->txt('conf_saved'), true);
-			$ilCtrl->redirect($this, 'configure');
+			$this->ctrl->redirect($this, self::CMD_CONFIGURE);
 		} else {
 			$this->form->setValuesByPost();
-			$tpl->setContent($this->form->getHtml());
+			$this->tpl->setContent($this->form->getHtml());
 		}
 	}
 
 
 	protected function saveAdditionalFields() {
-		$this->object->setValue('restricted_user_access', $this->form->getInput('restricted_user_access'));
+		ilReportingConfig::setValue('restricted_user_access', $this->form->getInput('restricted_user_access'));
 	}
 
 
@@ -114,10 +106,10 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 	 */
 	protected function setFormValues() {
 		foreach ($this->getFields() as $key => $item) {
-			$values[$key] = $this->object->getValue($key);
+			$values[$key] = ilReportingConfig::getValue($key);
 			if (is_array($item['subelements'])) {
 				foreach ($item['subelements'] as $subkey => $subitem) {
-					$values[$key . '_' . $subkey] = $this->object->getValue($key . '_' . $subkey);
+					$values[$key . '_' . $subkey] = ilReportingConfig::getValue($key . '_' . $subkey);
 				}
 			}
 		}
@@ -127,7 +119,7 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 
 
 	protected function setAdditionalFormValues(&$values) {
-		$values['restricted_user_access'] = $this->object->getValue('restricted_user_access');
+		$values['restricted_user_access'] = ilReportingConfig::getValue('restricted_user_access');
 	}
 
 
@@ -135,8 +127,6 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 	 * @return ilPropertyFormGUI
 	 */
 	protected function initConfigurationForm() {
-		global $lng, $ilCtrl;
-		include_once('Services/Form/classes/class.ilPropertyFormGUI.php');
 		$this->form = new ilPropertyFormGUI();
 
 		$this->initCustomConfigForm($this->form);
@@ -148,9 +138,7 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 			}
 			if (is_array($item['subelements'])) {
 				foreach ($item['subelements'] as $subkey => $subitem) {
-					$subfield = new $subitem['type']($this->pl->txt($key . '_' . $subkey), $key
-					                                                                       . '_'
-					                                                                       . $subkey);
+					$subfield = new $subitem['type']($this->pl->txt($key . '_' . $subkey), $key . '_' . $subkey);
 					if ($subitem['info']) {
 						$subfield->setInfo($this->pl->txt($key . '_info'));
 					}
@@ -159,9 +147,9 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 			}
 			$this->form->addItem($field);
 		}
-		$this->form->addCommandButton('save', $lng->txt('save'));
+		$this->form->addCommandButton(self::CMD_SAVE, $this->pl->txt('save'));
 		$this->form->setTitle($this->pl->txt('configuration'));
-		$this->form->setFormAction($ilCtrl->getFormAction($this));
+		$this->form->setFormAction($this->ctrl->getFormAction($this));
 
 		return $this->form;
 	}
@@ -182,11 +170,9 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 		$option->setInfo($this->pl->txt('restricted_by_local_readability_description'));
 		$item->addOption($option);
 
-		if (ilComponent::isVersionGreaterString(ILIAS_VERSION_NUMERIC, '4.4.0')) {
-			$option = new ilRadioOption($this->pl->txt('restricted_by_org_units'), ilReportingConfig::RESTRICTED_BY_ORG_UNITS);
-			$option->setInfo($this->pl->txt('restricted_by_org_units_description'));
-			$item->addOption($option);
-		}
+		$option = new ilRadioOption($this->pl->txt('restricted_by_org_units'), ilReportingConfig::RESTRICTED_BY_ORG_UNITS);
+		$option->setInfo($this->pl->txt('restricted_by_org_units_description'));
+		$item->addOption($option);
 
 		$form->addItem($item);
 	}
@@ -200,11 +186,11 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 	protected function getFields() {
 		$this->fields = array(
 			'jasper_reports_templates_path' => array(
-				'type' => 'ilTextInputGUI',
+				'type' => ilTextInputGUI::class,
 				'info' => true,
 			),
-			'header_image'                  => array(
-				'type' => 'ilTextInputGUI',
+			'header_image' => array(
+				'type' => ilTextInputGUI::class,
 				'info' => true,
 			),
 		);

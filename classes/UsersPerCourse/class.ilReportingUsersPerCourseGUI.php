@@ -1,8 +1,5 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingGUI.php');
-require_once('class.ilReportingUsersPerCourseSearchTableGUI.php');
-require_once('class.ilReportingUsersPerCourseModel.php');
-require_once('class.ilReportingUsersPerCourseReportTableGUI.php');
+require_once __DIR__ . "/../../vendor/autoload.php";
 
 /**
  * GUI-Class ilReportingUsersPerCourseGUI
@@ -13,6 +10,9 @@ require_once('class.ilReportingUsersPerCourseReportTableGUI.php');
  * @ilCtrl_IsCalledBy ilReportingUsersPerCourseGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 class ilReportingUsersPerCourseGUI extends ilReportingGUI {
+
+	const CMD_SHOW_OBJECTS_IN_COURSE = 'showObjectsInCourse';
+
 
 	function __construct() {
 		parent::__construct();
@@ -29,8 +29,8 @@ class ilReportingUsersPerCourseGUI extends ilReportingGUI {
 	 * Redirect to UsersPerCourseLP report which shows objects in courses which are relevant for LP
 	 */
 	public function showObjectsInCourse() {
-		$this->ctrl->setParameterByClass("ilreportinguserspercourselpgui", "from", "ilreportinguserspercoursegui");
-		$this->ctrl->redirectByClass("ilreportinguserspercourselpgui", "report");
+		$this->ctrl->setParameterByClass(self::class, "from", self::class);
+		$this->ctrl->redirectByClass(self::class, self::CMD_REPORT);
 	}
 
 
@@ -39,7 +39,7 @@ class ilReportingUsersPerCourseGUI extends ilReportingGUI {
 	 */
 	public function search() {
 		$this->tpl->setTitle($this->pl->txt('report_users_per_course'));
-		$this->table = new ilReportingUsersPerCourseSearchTableGUI($this, 'search');
+		$this->table = new ilReportingUsersPerCourseSearchTableGUI($this, ilReportingGUI::CMD_SEARCH);
 		$this->table->setTitle($this->pl->txt('search_courses'));
 		parent::search();
 	}
@@ -54,13 +54,13 @@ class ilReportingUsersPerCourseGUI extends ilReportingGUI {
 			$this->ctrl->saveParameter($this, 'rep_crs_ref_id');
 		}
 		$this->tpl->setTitle($this->pl->txt('report_users_per_course'));
-		if ($this->table === null) {
-			$this->table = new ilReportingUsersPerCourseReportTableGUI($this, 'report');
+		if ($this->table === NULL) {
+			$this->table = new ilReportingUsersPerCourseReportTableGUI($this, ilReportingGUI::CMD_REPORT);
 		}
 		$data = $this->model->getReportData($_SESSION[self::SESSION_KEY_IDS], $this->table->getFilterNames());
 		$this->table->setData($data);
-		if ($this->ctrl->getCmd() != 'applyFilterReport'
-		    && $this->ctrl->getCmd() != 'resetFilterReport') {
+		if ($this->ctrl->getCmd() != self::CMD_APPLY_FILTER_REPORT
+			&& $this->ctrl->getCmd() != self::CMD_RESET_FILTER_REPORT) {
 			$onlyUnique = isset($_GET['pre_xpt']);
 			$this->storeIdsInSession($data, $onlyUnique);
 		}
@@ -84,7 +84,7 @@ class ilReportingUsersPerCourseGUI extends ilReportingGUI {
 		if (isset($_GET['rep_crs_ref_id'])) {
 			$this->ctrl->saveParameter($this, 'rep_crs_ref_id');
 		}
-		$this->table = new ilReportingUsersPerCourseReportTableGUI($this, 'report');
+		$this->table = new ilReportingUsersPerCourseReportTableGUI($this, ilReportingGUI::CMD_REPORT);
 		parent::applyFilterReport();
 	}
 
@@ -93,7 +93,7 @@ class ilReportingUsersPerCourseGUI extends ilReportingGUI {
 		if (isset($_GET['rep_crs_ref_id'])) {
 			$this->ctrl->saveParameter($this, 'rep_crs_ref_id');
 		}
-		$this->table = new ilReportingUsersPerCourseReportTableGUI($this, 'report');
+		$this->table = new ilReportingUsersPerCourseReportTableGUI($this, ilReportingGUI::CMD_REPORT);
 		parent::resetFilterReport();
 	}
 

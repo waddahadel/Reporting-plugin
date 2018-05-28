@@ -1,8 +1,4 @@
 <?php
-require_once('./Services/Table/classes/class.ilTable2GUI.php');
-require_once('class.ilReportingGUI.php');
-require_once('./Services/Object/classes/class.ilObject2.php');
-require_once('class.ilReportingFormatter.php');
 
 /**
  * TableGUI ilReportingReportTableGUI
@@ -33,10 +29,6 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	 */
 	protected $toolbar;
 	/**
-	 * @var ilLanguage
-	 */
-	protected $lng;
-	/**
 	 * @var ilCtrl
 	 */
 	protected $ctrl;
@@ -44,8 +36,14 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	 * @var ilReportingFormatter
 	 */
 	protected $formatter;
-	protected $filter_cmd = 'applyFilterReport';
-	protected $reset_cmd = 'resetFilterReport';
+	/**
+	 * @var string
+	 */
+	protected $filter_cmd = ilReportingGUI::CMD_APPLY_FILTER_REPORT;
+	/**
+	 * @var string
+	 */
+	protected $reset_cmd = ilReportingGUI::CMD_RESET_FILTER_REPORT;
 	protected $filter_names = array();
 
 
@@ -54,11 +52,10 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	 * @param string         $a_parent_cmd
 	 */
 	function __construct(ilReportingGUI $a_parent_obj, $a_parent_cmd) {
-		global $ilCtrl, $ilToolbar, $lng;
-		$this->pl = new ilReportingPlugin();
-		$this->toolbar = $ilToolbar;
-		$this->lng = $lng;
-		$this->ctrl = $ilCtrl;
+		global $DIC;
+		$this->pl = ilReportingPlugin::getInstance();
+		$this->toolbar = $DIC->toolbar();
+		$this->ctrl = $DIC->ctrl();
 		$this->formatter = ilReportingFormatter::getInstance();
 		$this->setId('reporting_' . $this->ctrl->getCmdClass());
 		$this->setPrefix('pre');
@@ -71,86 +68,13 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 		$this->setEnableTitle(true);
 		$this->setTopCommands(true);
 		$this->setShowRowsSelector(true);
-        $this->initColumns();
-        $this->initToolbar();
-        $this->parent_object = $a_parent_obj;
-        $this->setExportFormats(array());
-        $this->setDisableFilterHiding(true);
-        $this->initFilter();
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function numericOrdering($a_field) {
-        return true;
-    }
-
-
-    public function setExportFormats(array $formats) {
-        parent::setExportFormats(array(self::EXPORT_EXCEL, self::EXPORT_CSV));
-        foreach ($this->parent_object->getAvailableExports() as $k => $format) {
-            $this->export_formats[$k] = $this->pl->getPrefix() . '_' . $format;
-        }
-    }
-
-
-    /**
-     * Add filters for status and status changed
-     */
-    public function initFilter() {
-        $item = new ilSelectInputGUI($this->pl->txt('user_status'), 'status');
-        $states = array('' => '');
-        for ($i=1;$i<=4;$i++) {
-            $k = $i-1;
-            $states[$i] = $this->pl->txt("status$k");
-        }
-        $item->setOptions($states);
-        $this->addFilterItemWithValue($item);
-        $item = new ilDateTimeInputGUI($this->pl->txt('status_changed_from'), 'status_changed_from');
-        //$item->setMode(ilDateTimeInputGUI::MODE_INPUT);
-        $this->addFilterItemWithValue($item);
-        $item = new ilDateTimeInputGUI($this->pl->txt('status_changed_to'), 'status_changed_to');
-        //$item->setMode(ilDateTimeInputGUI::MODE_INPUT);
-        $this->addFilterItemWithValue($item);
-    }
-
-
-    /**
-     * @param array $a_set
-     */
-    public function fillRow($a_set) {
-        $this->tpl->setVariable('ID', $a_set['id']);
-        foreach ($this->getColumns() as $k => $v) {
-            if (isset($a_set[$k])) {
-                if (! in_array($k, $this->getIgnoredCols())) {
-                    if (in_array($k, $this->getDateCols())) {
-                        $value = date($this->getDateFormat(), strtotime($a_set[$k]));
-                    } else {
-                        $formatter = isset($v['formatter']) ? $v['formatter'] : null;
-                        $value = $this->formatter->format($a_set[$k], $formatter);
-                    }
-                    $this->tpl->setCurrentBlock('td');
-                    $this->tpl->setVariable('VALUE', $value);
-                    $this->tpl->parseCurrentBlock();
-                }
-            } else {
-                $this->tpl->setCurrentBlock('td');
-                $this->tpl->setVariable('VALUE', '&nbsp;');
-                $this->tpl->parseCurrentBlock();
-            }
-        }
-    }
-
-
-    /**
-     * Method each subclass must implement to handle custom exports
-     *
-     * @param int $format Format constant from ilReportingGUI EXPORT_EXCEL_FORMATTED|EXPORT_PDF
-     * @param bool $send
-     */
-    public abstract function exportDataCustom($format, $send = false);
+		$this->initColumns();
+		$this->initToolbar();
+		$this->parent_object = $a_parent_obj;
+		$this->setExportFormats(array());
+		$this->setDisableFilterHiding(true);
+		$this->initFilter();
+	}
 
 
 	/**
@@ -159,6 +83,7 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	public function numericOrdering($a_field) {
 		return true;
 	}
+
 
 	/**
 	 * @inheritdoc
@@ -203,7 +128,7 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 					if (in_array($k, $this->getDateCols())) {
 						$value = date($this->getDateFormat(), strtotime($a_set[$k]));
 					} else {
-						$formatter = isset($v['formatter']) ? $v['formatter'] : null;
+						$formatter = isset($v['formatter']) ? $v['formatter'] : NULL;
 						$value = $this->formatter->format($a_set[$k], $formatter);
 					}
 					$this->tpl->setCurrentBlock('td');
@@ -250,14 +175,17 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	 */
 	protected function initToolbar() {
 		if (isset($_GET['rep_crs_ref_id'])) {
-			$this->ctrl->setParameterByClass('ilObjCourseGUI', 'ref_id', $_GET['rep_crs_ref_id']);
-			$url = $this->ctrl->getLinkTargetByClass(array( 'ilRepositoryGUI', 'ilObjCourseGUI' ));
+			$this->ctrl->setParameterByClass(ilObjCourseGUI::class, 'ref_id', $_GET['rep_crs_ref_id']);
+			$url = $this->ctrl->getLinkTargetByClass(array( ilRepositoryGUI::class, ilObjCourseGUI::class ));
 			$txt = $this->pl->txt('back_to_course');
 		} else {
 			$url = $this->ctrl->getLinkTarget($this->parent_obj);
 			$txt = $this->pl->txt('back');
 		}
-		$this->toolbar->addButton('<b>&lt; ' . $txt . '</b>', $url);
+		$button = ilLinkButton::getInstance();
+		$button->setCaption('<b>&lt; ' . $txt . '</b>', false);
+		$button->setUrl($url);
+		$this->toolbar->addButtonInstance($button);
 	}
 
 
@@ -276,18 +204,19 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	 */
 	protected function getColumns() {
 		return array(
-			'title'          => array( 'txt' => $this->pl->txt('title') ),
-			'path'           => array( 'txt' => $this->pl->txt('path') ),
-			'firstname'      => array( 'txt' => $this->pl->txt('firstname') ),
-			'lastname'       => array( 'txt' => $this->pl->txt('lastname') ),
-			'org_units'      => array( 'txt' => $this->pl->txt('org_units'), 'default' => true ),
-			'active'         => array(
-				'txt'       => $this->pl->txt('active'),
+			'title' => array( 'txt' => $this->pl->txt('title') ),
+			'path' => array( 'txt' => $this->pl->txt('path') ),
+			'firstname' => array( 'txt' => $this->pl->txt('firstname') ),
+			'lastname' => array( 'txt' => $this->pl->txt('lastname') ),
+			'org_units' => array( 'txt' => $this->pl->txt('org_units'), 'default' => true ),
+			'active' => array(
+				'txt' => $this->pl->txt('active'),
 				'formatter' => ilReportingFormatter::FORMAT_INT_YES_NO,
 			),
 			'status_changed' => array( 'txt' => $this->pl->txt('status_changed') ),
-			'user_status'    => array( 'txt'       => $this->pl->txt('user_status'),
-			                           'formatter' => ilReportingFormatter::FORMAT_INT_STATUS,
+			'user_status' => array(
+				'txt' => $this->pl->txt('user_status'),
+				'formatter' => ilReportingFormatter::FORMAT_INT_STATUS,
 			),
 		);
 	}
@@ -324,7 +253,7 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 		$col = 0;
 
 		foreach ($this->getColumns() as $key => $column) {
-			$formatter = isset($column['formatter']) ? $column['formatter'] : null;
+			$formatter = isset($column['formatter']) ? $column['formatter'] : NULL;
 			$value = $this->formatter->format($a_set[$key], $formatter);
 
 			if (is_array($a_set[$key])) {
@@ -343,7 +272,7 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 		foreach ($this->getColumns() as $k => $v) {
 			if (!in_array($k, $this->getIgnoredCols())) {
 				if (isset($a_set[$k])) {
-					$formatter = isset($v['formatter']) ? $v['formatter'] : null;
+					$formatter = isset($v['formatter']) ? $v['formatter'] : NULL;
 					$value = $this->formatter->format($a_set[$k], $formatter);
 				} else {
 					$value = '';
@@ -388,8 +317,8 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 			case 'ilDateTimeInputGUI':
 				/** @var $item ilDateTimeInputGUI */
 				// Why is this necessary? Bug? ilDateTimeInputGUI::clearFromSession() has no effect...
-				if ($this->ctrl->getCmd() == 'resetFilterReport') {
-					$item->setDate(null);
+				if ($this->ctrl->getCmd() == ilReportingGUI::CMD_RESET_FILTER_REPORT) {
+					$item->setDate(NULL);
 				}
 				$date = $item->getDate();
 				if ($date) {

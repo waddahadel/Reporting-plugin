@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingSearchTableGUI.php');
 
 /**
  * TableGUI ilReportingUsersPerTestTableGUI
@@ -16,8 +15,8 @@ class ilReportingUsersPerTestSearchTableGUI extends ilReportingSearchTableGUI {
 	 */
 	function __construct(ilReportingGUI $a_parent_obj, $a_parent_cmd) {
 		parent::__construct($a_parent_obj, $a_parent_cmd);
-		$this->addCommandButton('report', $this->pl->txt('report_all_users_per_test'));
-		$this->addMultiCommand('report', $this->pl->txt('report_selected_users_per_test'));
+		$this->addCommandButton(ilReportingGUI::CMD_REPORT, $this->pl->txt('report_all_users_per_test'));
+		$this->addMultiCommand(ilReportingGUI::CMD_REPORT, $this->pl->txt('report_selected_users_per_test'));
 	}
 
 

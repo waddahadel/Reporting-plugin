@@ -1,7 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingReportTableGUI.php');
-require_once('class.ilReportingUsersPerTestExcelExport.php');
-require_once('class.ilReportingUsersPerTestPdfExport.php');
 
 /**
  * Report table for the report UsersPerTest

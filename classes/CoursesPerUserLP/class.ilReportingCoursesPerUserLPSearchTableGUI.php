@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingSearchTableGUI.php');
 
 /**
  * TableGUI ilReportingCoursesPerUserLPSearchTableGUI
@@ -16,8 +15,8 @@ class ilReportingCoursesPerUserLPSearchTableGUI extends ilReportingSearchTableGU
 	 */
 	function __construct(ilReportingGUI $a_parent_obj, $a_parent_cmd) {
 		parent::__construct($a_parent_obj, $a_parent_cmd);
-		$this->addMultiCommand('report', $this->pl->txt('report_selected_courses_per_user'));
-		$this->addCommandButton('report', $this->pl->txt('report_all_courses_per_user'));
+		$this->addMultiCommand(ilReportingGUI::CMD_REPORT, $this->pl->txt('report_selected_courses_per_user'));
+		$this->addCommandButton(ilReportingGUI::CMD_REPORT, $this->pl->txt('report_all_courses_per_user'));
 	}
 
 
@@ -29,9 +28,10 @@ class ilReportingCoursesPerUserLPSearchTableGUI extends ilReportingSearchTableGU
 		$cols['firstname'] = array( 'txt' => $this->pl->txt('firstname'), 'default' => true );
 		$cols['email'] = array( 'txt' => $this->pl->txt('email'), 'default' => true );
 		$cols['org_units'] = array( 'txt' => $this->pl->txt('org_units'), 'default' => true );
-		$cols['active'] = array( 'txt'       => $this->pl->txt('active'),
-		                         'default'   => true,
-		                         'formatter' => ilReportingFormatter::FORMAT_INT_YES_NO,
+		$cols['active'] = array(
+			'txt' => $this->pl->txt('active'),
+			'default' => true,
+			'formatter' => ilReportingFormatter::FORMAT_INT_YES_NO,
 		);
 
 		return $cols;

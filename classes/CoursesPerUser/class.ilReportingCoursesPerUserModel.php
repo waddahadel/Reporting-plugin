@@ -1,6 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingModel.php');
-require_once "./Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php";
 
 /**
  * Class ilReportingCoursesPerUserModel
@@ -13,7 +11,7 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
 
 	public function __construct() {
 		parent::__construct();
-		$this->pl = new ilReportingPlugin();
+		$this->pl = ilReportingPlugin::getInstance();
 	}
 
 
@@ -33,39 +31,30 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
                  WHERE usr_data.usr_id > 0 AND usr_data.login <> 'anonymous'";
 
 		if ($filters['firstname']) {
-			$sql .= ' AND usr_data.firstname LIKE ' . $this->db->quote('%'
-			                                                           . str_replace('*', '%', $filters['firstname'])
-			                                                           . '%', 'text');
+			$sql .= ' AND usr_data.firstname LIKE ' . $this->db->quote('%' . str_replace('*', '%', $filters['firstname']) . '%', 'text');
 		}
 		if ($filters['lastname']) {
-			$sql .= ' AND usr_data.lastname LIKE ' . $this->db->quote('%'
-			                                                          . str_replace('*', '%', $filters['lastname'])
-			                                                          . '%', 'text');
+			$sql .= ' AND usr_data.lastname LIKE ' . $this->db->quote('%' . str_replace('*', '%', $filters['lastname']) . '%', 'text');
 		}
 		if ($filters['email']) {
-			$sql .= ' AND usr_data.email LIKE ' . $this->db->quote('%'
-			                                                       . str_replace('*', '%', $filters['email'])
-			                                                       . '%', 'text');
+			$sql .= ' AND usr_data.email LIKE ' . $this->db->quote('%' . str_replace('*', '%', $filters['email']) . '%', 'text');
 		}
 		/*if ($filters['country']) {
 			$sql  .= ' AND usr_data.country LIKE ' . $this->db->quote('%' . str_replace('*', '%', $filters['country']) . '%', 'text');
 		}*/
 		$sql .= ($filters['include_inactive']) ? ' AND usr_data.active IN(1,0)' : ' AND usr_data.active = 1';
 
-		if ($this->pl->getConfigObject()->getValue('restricted_user_access')
-		    == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
+		if (ilReportingConfig::getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
 			$refIds = $this->getRefIdsWhereUserCanAdministrateUsers();
 			if (count($refIds)) {
 				$sql .= ' AND usr_data.time_limit_owner IN (' . implode(',', $refIds) . ')';
 			} else {
 				$sql .= ' AND usr_data.time_limit_owner IN (0)';
 			}
-		} elseif ($this->pl->getConfigObject()->getValue('restricted_user_access')
-		          == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
+		} elseif (ilReportingConfig::getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
 			//TODO: check if this is performant enough.
 			$users = $this->pl->getRestrictedByOrgUnitsUsers();
-			$sql .= count($users) ? ' AND usr_data.usr_id IN(' . implode(',', $users)
-			                        . ')' : ' AND FALSE';
+			$sql .= count($users) ? ' AND usr_data.usr_id IN(' . implode(',', $users) . ')' : ' AND FALSE';
 		}
 
 		return $this->buildRecords($sql);
@@ -73,8 +62,6 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
 
 
 	public function getReportData(array $ids, array $filters) {
-		global $ilUser;
-
 		ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
 
 		$sql = "SELECT usr.usr_id AS id, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path,
@@ -95,20 +82,17 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
 		if (count($ids)) {
 			$sql .= " AND usr.usr_id IN (" . implode(',', $ids) . ")";
 		}
-		if ($this->pl->getConfigObject()->getValue('restricted_user_access')
-		    == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
+		if (ilReportingConfig::getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
 			$refIds = $this->getRefIdsWhereUserCanAdministrateUsers();
 			if (count($refIds)) {
 				$sql .= ' AND usr.time_limit_owner IN (' . implode(',', $refIds) . ')';
 			} else {
 				$sql .= ' AND usr.time_limit_owner IN (0)';
 			}
-		} elseif ($this->pl->getConfigObject()->getValue('restricted_user_access')
-		          == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
+		} elseif (ilReportingConfig::getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
 			//TODO: check if this is performant enough.
 			$users = $this->pl->getRestrictedByOrgUnitsUsers();
-			$sql .= count($users) ? ' AND usr.usr_id IN(' . implode(',', $users)
-			                        . ') ' : ' AND FALSE ';
+			$sql .= count($users) ? ' AND usr.usr_id IN(' . implode(',', $users) . ') ' : ' AND FALSE ';
 		}
 		if (count($filters)) {
 			if ($filters['status'] != '') {

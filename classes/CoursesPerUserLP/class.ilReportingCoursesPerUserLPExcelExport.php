@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingExcelExport.php');
 
 /**
  * Class ilReportingCoursesPerUserLPExcelExport
@@ -42,8 +41,7 @@ class ilReportingCoursesPerUserLPExcelExport extends ilReportingExcelExport {
 			$this->write($worksheet, ++ $row, 0, $this->pl->txt('date_of_report'));
 			$this->write($worksheet, $row, 1, date(self::DATE_FORMAT));
 			$this->write($worksheet, ++ $row, 0, $this->pl->txt('owner_of_report'));
-			$this->write($worksheet, $row, 1, $this->user->getFirstname() . ' '
-			                                  . $this->user->getLastname());
+			$this->write($worksheet, $row, 1, $this->user->getFirstname() . ' ' . $this->user->getLastname());
 			$row += 2;
 			// List courses: Title of columns
 			$this->write($worksheet, $row, 0, $this->lng->txt('crs'), $this->h3);
@@ -53,8 +51,7 @@ class ilReportingCoursesPerUserLPExcelExport extends ilReportingExcelExport {
 			foreach ($users as $course) {
 				$this->write($worksheet, ++ $row, 0, $course['title']);
 				$this->write($worksheet, $row, 1, $course['path']);
-				$this->write($worksheet, $row, 2, $this->pl->txt('status'
-				                                                 . (int)$course['user_status']));
+				$this->write($worksheet, $row, 2, $this->pl->txt('status' . (int)$course['user_status']));
 				$date = ($course['status_changed']) ? date(self::DATE_FORMAT, strtotime($course['status_changed'])) : "";
 				$this->write($worksheet, $row, 3, $date);
 			}
@@ -76,8 +73,7 @@ class ilReportingCoursesPerUserLPExcelExport extends ilReportingExcelExport {
 						}
 						$this->write($worksheet, $row, 1, $object['object_title']);
 						$this->write($worksheet, $row, 2, (int)$object['object_percentage']);
-						$this->write($worksheet, $row, 3, $this->pl->txt('status'
-						                                                 . (int)$object['object_status']));
+						$this->write($worksheet, $row, 3, $this->pl->txt('status' . (int)$object['object_status']));
 						$type = ($object['object_type']) ? $this->lng->txt($object['object_type']) : '';
 						$this->write($worksheet, $row, 4, $type);
 						$date = ($object['object_status_changed']) ? date(self::DATE_FORMAT, strtotime($object['object_status_changed'])) : "";

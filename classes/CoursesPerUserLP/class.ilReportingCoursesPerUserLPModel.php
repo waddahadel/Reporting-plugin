@@ -1,8 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingModel.php');
-require_once(dirname(dirname(__FILE__))
-             . '/CoursesPerUser/class.ilReportingCoursesPerUserModel.php');
-require_once("Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php");
 
 /**
  * Class ilReportingCoursesPerUserLPModel
@@ -19,7 +15,7 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 	public function __construct() {
 		parent::__construct();
 		$this->modelCoursesPerUser = new ilReportingCoursesPerUserModel();
-		$this->pl = new ilReportingPlugin();
+		$this->pl = ilReportingPlugin::getInstance();
 	}
 
 
@@ -39,8 +35,7 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 
 
 		ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
-		ilObjOrgUnitTree::_getInstance()
-		                ->buildTempTableWithUsrAssignements('orgu_usr_assignements_2');
+		ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements('orgu_usr_assignements_2');
 
 		$sql = "SELECT * FROM (
                      /* Load objects with LP under a specified course */
@@ -108,8 +103,7 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 
                         /* User lp status */
                         LEFT JOIN ut_lp_marks AS ut ON (ut.obj_id = obj.obj_id AND ut.usr_id = usr.usr_id)
-                        WHERE obj.type = " . $this->db->quote('crs', 'text')
-		        . " AND ref.deleted IS NULL ";
+                        WHERE obj.type = " . $this->db->quote('crs', 'text') . " AND ref.deleted IS NULL ";
 
 		$sql .= $this->buildWhereString($ids, $filters);
 		$sql .= ") AS a ORDER BY sort_user, obj_id, object_title";
@@ -154,20 +148,17 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 		if (count($ids)) {
 			$sql .= "AND usr.usr_id IN (" . implode(',', $ids) . ") ";
 		}
-		if ($this->pl->getConfigObject()->getValue('restricted_user_access')
-		    == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
+		if (ilReportingConfig::getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
 			$refIds = $this->getRefIdsWhereUserCanAdministrateUsers();
 			if (count($refIds)) {
 				$sql .= ' AND usr.time_limit_owner IN (' . implode(',', $refIds) . ')';
 			} else {
 				$sql .= 'AND usr.time_limit_owner IN (0)';
 			}
-		} elseif ($this->pl->getConfigObject()->getValue('restricted_user_access')
-		          == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
+		} elseif (ilReportingConfig::getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
 			//TODO: check if this is performant enough.
 			$users = $this->pl->getRestrictedByOrgUnitsUsers();
-			$sql .= count($users) ? ' AND usr.usr_id IN(' . implode(',', $users)
-			                        . ') ' : ' AND FALSE ';
+			$sql .= count($users) ? ' AND usr.usr_id IN(' . implode(',', $users) . ') ' : ' AND FALSE ';
 		}
 		if (count($filters)) {
 			if ($filters['status'] != '') {

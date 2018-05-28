@@ -1,34 +1,49 @@
 <?php
-require_once './Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Reporting/classes/class.ilReportingPlugin.php';
-require_once './Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php';
+
+require_once __DIR__ . "/../vendor/autoload.php";
 
 class ilReportingAccess {
 
+	/**
+	 * @var ilReportingPlugin
+	 */
+	protected $pl;
+	/**
+	 * @var ilObjUser
+	 */
+	protected $usr;
+	/**
+	 * @var ilRbacReview
+	 */
+	protected $rbacreview;
+
+
 	public function __construct() {
-		$this->pl = new ilReportingPlugin();
+		global $DIC;
+		$this->usr = $DIC->user();
+		$this->rbacreview = $DIC->rbac()->review();
+		$this->pl = ilReportingPlugin::getInstance();
 	}
 
-	public function hasCurrentUserReportsPermission() {
-		global $ilUser, $rbacreview;
 
+	public function hasCurrentUserReportsPermission() {
 		//Reporting Access to Employees?
 		$arr_orgus_perm_empl = ilObjOrgUnitTree::_getInstance()->getOrgusWhereUserHasPermissionForOperation('view_learning_progress');
-		if(count($arr_orgus_perm_empl) > 0) {
+		if (count($arr_orgus_perm_empl) > 0) {
 			return true;
 		}
 
 		//Reporting Access Rec?
 		$arr_orgus_perm_sup = ilObjOrgUnitTree::_getInstance()->getOrgusWhereUserHasPermissionForOperation('view_learning_progress_rec');
-		if(count($arr_orgus_perm_sup) > 0) {
+		if (count($arr_orgus_perm_sup) > 0) {
 			return true;
 		}
 
-		$global_roles = $rbacreview->assignedGlobalRoles($ilUser->getId());
+		$global_roles = $this->rbacreview->assignedGlobalRoles($this->usr->getId());
 		//Administrator
-		if(in_array(2,$global_roles)) {
+		if (in_array(2, $global_roles)) {
 			return true;
 		}
-
 
 		return false;
 	}

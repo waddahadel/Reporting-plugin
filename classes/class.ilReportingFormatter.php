@@ -29,14 +29,14 @@ class ilReportingFormatter {
 
 
 	private function __construct() {
-		global $lng;
-		$this->lng = $lng;
-		$this->pl = new ilReportingPlugin();
+		global $DIC;
+		$this->lng = $DIC->language();
+		$this->pl = ilReportingPlugin::getInstance();
 	}
 
 
 	public static function getInstance() {
-		if (self::$instance === null) {
+		if (self::$instance === NULL) {
 			$instance = new self();
 			self::$instance = $instance;
 

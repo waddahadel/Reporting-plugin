@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingModel.php');
 
 /**
  * Class ilReportingUsersPerTestModel
@@ -12,7 +11,7 @@ class ilReportingUsersPerTestModel extends ilReportingModel {
 
 	public function __construct() {
 		parent::__construct();
-		$this->pl = new ilReportingPlugin();
+		$this->pl = ilReportingPlugin::getInstance();
 	}
 
 
@@ -33,9 +32,7 @@ class ilReportingUsersPerTestModel extends ilReportingModel {
                 LEFT JOIN object_reference AS ref3 ON (ref3.ref_id = t2.parent)
                 LEFT JOIN object_data AS gp ON (ref3.obj_id = gp.obj_id)
                 WHERE obj.type = " . $this->db->quote('tst', 'text') . "
-                AND obj.title LIKE " . $this->db->quote('%'
-		                                                . str_replace('*', '%', $filters['title'])
-		                                                . '%', 'text') . "
+                AND obj.title LIKE " . $this->db->quote('%' . str_replace('*', '%', $filters['title']) . '%', 'text') . "
                 AND ref1.deleted IS NULL
                 ORDER BY obj.title";
 
@@ -60,20 +57,17 @@ class ilReportingUsersPerTestModel extends ilReportingModel {
 		if (count($ids)) {
 			$sql .= "AND obj.obj_id IN (" . implode(',', $ids) . ") ";
 		}
-		if ($this->pl->getConfigObject()->getValue('restricted_user_access')
-		    == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
+		if (ilReportingConfig::getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
 			$refIds = $this->getRefIdsWhereUserCanAdministrateUsers();
 			if (count($refIds)) {
 				$sql .= ' AND usr.time_limit_owner IN (' . implode(',', $refIds) . ')';
 			} else {
 				$sql .= 'AND usr.time_limit_owner IN (0)';
 			}
-		} elseif ($this->pl->getConfigObject()->getValue('restricted_user_access')
-		          == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
+		} elseif (ilReportingConfig::getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_ORG_UNITS) {
 			//TODO: check if this is performant enough.
 			$users = $this->pl->getRestrictedByOrgUnitsUsers();
-			$sql .= count($users) ? ' AND usr.usr_id IN(' . implode(',', $users)
-			                        . ') ' : ' AND FALSE ';
+			$sql .= count($users) ? ' AND usr.usr_id IN(' . implode(',', $users) . ') ' : ' AND FALSE ';
 		}
 		if (count($filters)) {
 			if ($filters['status'] != '') {

@@ -2,178 +2,133 @@
 
 /**
  * ilReportingConfig
- *
- * @author  Timon Amstutz <timon.amstutz@ilub.unibe.ch>
- * @author  Fabian Schmid <fs@studer-raimann.ch>
- *
- * @version $Id$
  */
-class ilReportingConfig {
+class ilReportingConfig extends ActiveRecord {
 
+	const TABLE_NAME = "uihkreporting_c";
 	const RESTRICTED_NONE = 0;
 	const RESTRICTED_BY_LOCAL_READABILITY = 1;
 	const RESTRICTED_BY_ORG_UNITS = 2;
-	/**
-	 * @var string
-	 */
-	protected $table_name = '';
-
-
-	/**
-	 * @param $table_name
-	 */
-	function __construct($table_name) {
-		$this->table_name = $table_name;
-	}
-
-
-	/**
-	 * @param string $table_name
-	 */
-	public function setTableName($table_name) {
-		$this->table_name = $table_name;
-	}
 
 
 	/**
 	 * @return string
 	 */
-	public function getTableName() {
-		return $this->table_name;
+	public function getConnectorContainerName() {
+		return self::TABLE_NAME;
 	}
 
 
 	/**
-	 * @param $method
-	 * @param $params
+	 * @return string
+	 * @deprecated
+	 */
+	public static function returnDbTableName() {
+		return self::TABLE_NAME;
+	}
+
+
+	/**
+	 * @param string $key
 	 *
-	 * @return bool|null
+	 * @return ilReportingConfig|null
 	 */
-	function __call($method, $params) {
-		if (substr($method, 0, 3) == 'get') {
-			return $this->getValue(self::_fromCamelCase(substr($method, 3)));
-		} else {
-			if (substr($method, 0, 3) == 'set') {
-				$this->setValue(self::_fromCamelCase(substr($method, 3)), $params[0]);
+	protected static function getConfig($key) {
+		/**
+		 * @var ilReportingConfig|null $config
+		 */
 
-				return true;
-			} else {
-				return null;
-			}
-		}
+		$config = self::where([
+			"config_key" => $key
+		])->first();
+
+		return $config;
 	}
 
 
 	/**
-	 * @param $key
-	 * @param $value
-	 */
-	public function setValue($key, $value) {
-		global $ilDB;
-		if (!is_string($this->getValue($key))) {
-			$ilDB->insert($this->getTableName(), array(
-				"config_key"   => array(
-					"text",
-					$key,
-				),
-				"config_value" => array(
-					"text",
-					$value,
-				),
-			));
-		} else {
-			$ilDB->update($this->getTableName(), array(
-				"config_key"   => array(
-					"text",
-					$key,
-				),
-				"config_value" => array(
-					"text",
-					$value,
-				),
-			), array(
-				"config_key" => array(
-					"text",
-					$key,
-				),
-			));
-		}
-	}
-
-
-	/**
-	 * @param $key
+	 * @param string $key
 	 *
-	 * @return bool|string
+	 * @return string|false
 	 */
-	public function getValue($key) {
-		global $ilDB;
-		$result = $ilDB->query("SELECT config_value FROM " . $this->getTableName()
-		                       . " WHERE config_key = " . $ilDB->quote($key, "text"));
-		if ($result->numRows() == 0) {
+	public static function getValue($key) {
+		$config = self::getConfig($key);
+
+		if ($config !== NULL) {
+			return $config->getConfigValue();
+		} else {
 			return false;
 		}
-		$record = $ilDB->fetchAssoc($result);
-
-		return (string)$record['config_value'];
 	}
 
 
 	/**
-	 * @return bool
+	 * @param string $key
+	 * @param string $value
 	 */
-	public function initDB() {
-		global $ilDB;
-		if (!$ilDB->tableExists($this->getTableName())) {
-			$fields = array(
-				'config_key'   => array(
-					'type'    => 'text',
-					'length'  => 128,
-					'notnull' => true,
-				),
-				'config_value' => array(
-					'type'    => 'clob',
-					'notnull' => false,
-				),
-			);
-			$ilDB->createTable($this->getTableName(), $fields);
-			$ilDB->addPrimaryKey($this->getTableName(), array( "config_key" ));
+	public static function setValue($key, $value) {
+		$config = self::getConfig($key);
+
+		if ($config === NULL) {
+			$config = new self();
+
+			$config->setConfigKey($key);
 		}
 
-		return true;
-	}
+		$config->setConfigValue($value);
 
-
-	//
-	// Helper
-	//
-	/**
-	 * @param string $str
-	 *
-	 * @return string
-	 */
-	public static function _fromCamelCase($str) {
-		$str[0] = strtolower($str[0]);
-		$func = create_function('$c', 'return "_" . strtolower($c[1]);');
-
-		return preg_replace_callback('/([A-Z])/', $func, $str);
+		$config->store();
 	}
 
 
 	/**
-	 * @param string $str
-	 * @param bool   $capitalise_first_char
+	 * @var string
 	 *
+	 * @con_has_field    true
+	 * @con_fieldtype    text
+	 * @con_length       128
+	 * @con_is_notnull   true
+	 * @con_is_primary   true
+	 */
+	protected $config_key = "";
+	/**
+	 * @var string
+	 *
+	 * @con_has_field   true
+	 * @con_fieldtype   clob
+	 * @con_is_notnull  false
+	 */
+	protected $config_value = NULL;
+
+
+	/**
 	 * @return string
 	 */
-	public static function _toCamelCase($str, $capitalise_first_char = false) {
-		if ($capitalise_first_char) {
-			$str[0] = strtoupper($str[0]);
-		}
-		$func = create_function('$c', 'return strtoupper($c[1]);');
+	public function getConfigKey() {
+		return $this->config_key;
+	}
 
-		return preg_replace_callback('/-([a-z])/', $func, $str);
+
+	/**
+	 * @param string $config_key
+	 */
+	public function setConfigKey($config_key) {
+		$this->config_key = $config_key;
+	}
+
+
+	/**
+	 * @return string
+	 */
+	public function getConfigValue() {
+		return $this->config_value;
+	}
+
+
+	/**
+	 * @param string $config_value
+	 */
+	public function setConfigValue($config_value) {
+		$this->config_value = $config_value;
 	}
 }
-
-?>

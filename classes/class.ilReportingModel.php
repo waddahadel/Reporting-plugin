@@ -1,5 +1,4 @@
 <?php
-require_once('./Services/Calendar/classes/class.ilDateTime.php');
 
 /**
  * Class ilReportingModel: Each report must implement its own model which extends this class.
@@ -21,11 +20,11 @@ abstract class ilReportingModel {
 
 
 	public function __construct() {
-		global $ilDB, $ilUser, $ilAccess;
-		$this->db = $ilDB;
-		$this->pl = new ilReportingPlugin();
-		$this->user = $ilUser;
-		$this->access = $ilAccess;
+		global $DIC;
+		$this->db = $DIC->database();
+		$this->pl = ilReportingPlugin::getInstance();
+		$this->user = $DIC->user();
+		$this->access = $DIC->access();
 	}
 
 

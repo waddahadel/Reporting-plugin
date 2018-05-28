@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingExcelExport.php');
 
 /**
  * Class ilReportingUsersPerCourseExcelExport
@@ -35,8 +34,7 @@ class ilReportingUsersPerCourseLPExcelExport extends ilReportingExcelExport {
 			$this->write($worksheet, ++ $row, 0, $this->pl->txt('date_of_report'));
 			$this->write($worksheet, $row, 1, date(self::DATE_FORMAT));
 			$this->write($worksheet, ++ $row, 0, $this->pl->txt('owner_of_report'));
-			$this->write($worksheet, $row, 1, $this->user->getFirstname() . ' '
-			                                  . $this->user->getLastname());
+			$this->write($worksheet, $row, 1, $this->user->getFirstname() . ' ' . $this->user->getLastname());
 			$row += 2;
 			// List courses: Title of columns
 			$this->write($worksheet, $row, 0, $this->pl->txt('firstname'), $this->h3);
@@ -53,8 +51,7 @@ class ilReportingUsersPerCourseLPExcelExport extends ilReportingExcelExport {
 				$this->write($worksheet, $row, 3, $user['department']);
 				$active = $user['active'] ? $this->pl->txt('yes') : $this->pl->txt('no');
 				$this->write($worksheet, $row, 4, $active);
-				$this->write($worksheet, $row, 5, $this->pl->txt('status'
-				                                                 . (int)$user['user_status']));
+				$this->write($worksheet, $row, 5, $this->pl->txt('status' . (int)$user['user_status']));
 				$date = ($user['status_changed']) ? date(self::DATE_FORMAT, strtotime($user['status_changed'])) : "";
 				$this->write($worksheet, $row, 6, $date);
 			}
@@ -68,8 +65,7 @@ class ilReportingUsersPerCourseLPExcelExport extends ilReportingExcelExport {
 			$this->write($worksheet, $row, 5, $this->pl->txt('object_status_changed'), $this->h3);
 			foreach ($courses as $user) {
 				if (count($user['_objects'])) {
-					$this->write($worksheet, ++ $row, 0, $user['firstname'] . ' '
-					                                     . $user['lastname']);
+					$this->write($worksheet, ++ $row, 0, $user['firstname'] . ' ' . $user['lastname']);
 					$i = 0;
 					foreach ($user['_objects'] as $object) {
 						if ($i) {
@@ -77,8 +73,7 @@ class ilReportingUsersPerCourseLPExcelExport extends ilReportingExcelExport {
 						}
 						$this->write($worksheet, $row, 1, $object['object_title']);
 						$this->write($worksheet, $row, 2, (int)$object['object_percentage']);
-						$this->write($worksheet, $row, 3, $this->pl->txt('status'
-						                                                 . (int)$object['object_status']));
+						$this->write($worksheet, $row, 3, $this->pl->txt('status' . (int)$object['object_status']));
 						$type = ($object['object_type']) ? $this->lng->txt($object['object_type']) : '';
 						$this->write($worksheet, $row, 4, $type);
 						$date = ($object['object_status_changed']) ? date(self::DATE_FORMAT, strtotime($object['object_status_changed'])) : "";

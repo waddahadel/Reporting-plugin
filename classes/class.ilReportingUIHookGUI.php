@@ -1,9 +1,6 @@
 <?php
 
-/* Copyright (c) 1998-2010 ILIAS open source, Extended GPL, see docs/LICENSE */
-require_once('./Services/UIComponent/classes/class.ilUIHookPluginGUI.php');
-require_once('class.ilReportingGUI.php');
-require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/Reporting/classes/class.ilReportingPlugin.php');
+require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
  * User interface hook class for Reporting-Plugin
@@ -18,10 +15,9 @@ require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class ilReportingUIHookGUI extends ilUIHookPluginGUI {
 
+	const TAB_REPORTS = 'reports';
 	/** @var  ilCtrl */
 	protected $ctrl;
-	/** @var  ilTabsGUI */
-	protected $tabs;
 	/** @var  ilReportingPlugin */
 	protected $pl;
 	/** @var  ilAccessHandler */
@@ -29,15 +25,14 @@ class ilReportingUIHookGUI extends ilUIHookPluginGUI {
 
 
 	function __construct() {
-		global $ilCtrl, $ilTabs, $tpl, $ilAccess;
-		$this->ctrl = $ilCtrl;
-		$this->tabs = $ilTabs;
-		$this->pl = new ilReportingPlugin();
-		$this->access = $ilAccess;
+		global $DIC;
+		$this->ctrl = $DIC->ctrl();
+		$this->pl = ilReportingPlugin::getInstance();
+		$this->access = $DIC->access();
 		// Display error message in Administration if precondition is not valid
 		if (!ilReportingPlugin::checkPreconditions() AND $_GET['ref_id'] == 9) {
-			if (get_class($tpl) == 'ilTemplate') {
-				ilUtil::sendFailure('Reporting plugin needs CtrlMainMenu (https://svn.ilias.de/svn/ilias/branches/sr/CtrlMainMenu) and either ilRouterGUI (https://svn.ilias.de/svn/ilias/branches/sr/Router) OR ILIAS >= 4.5');
+			if (get_class($DIC->ui()->mainTemplate()) == ilTemplate::class) {
+				ilUtil::sendFailure('Reporting plugin needs CtrlMainMenu (https://svn.ilias.de/svn/ilias/branches/sr/CtrlMainMenu) and either ilRouterGUI (https://svn.ilias.de/svn/ilias/branches/sr/Router)');
 			}
 		}
 	}
@@ -56,19 +51,16 @@ class ilReportingUIHookGUI extends ilUIHookPluginGUI {
 					//check Permission "edit learning progress"
 					$refId = array_values($arr_refId);
 					if ($this->access->checkAccess("edit_learning_progress", "", $refId[0], "", $crsID)) {
-						$this->ctrl->setParameterByClass('ilReportingUsersPerCourseGUI', 'rep_crs_ref_id', $refId[0]);
+						$this->ctrl->setParameterByClass(ilReportingUsersPerCourseGUI::class, 'rep_crs_ref_id', $refId[0]);
 						$uri = $this->ctrl->getLinkTargetByClass(array(
-							ilReportingPlugin::getBaseClass(),
-							'ilReportingUsersPerCourseGUI',
-						), 'report');
+							ilUIPluginRouterGUI::class,
+							ilReportingUsersPerCourseGUI::class,
+						), ilReportingGUI::CMD_REPORT);
 						// Write the correct course ID into the session - this is used by the report table
 						$_SESSION[ilReportingGUI::SESSION_KEY_IDS] = array( $crsID );
-						/** @var  $ilTabsGUI */
+						/** @var ilTabsGUI $ilTabsGUI */
 						$ilTabsGUI = $a_par['tabs'];
-						$ilTabsGUI->addTarget($this->pl->txt('reports'), $uri, "reports", array(
-							ilReportingPlugin::getBaseClass(),
-							'ilReportingUsersPerCourseGUI',
-						), "", false, true);
+						$ilTabsGUI->addTab(self::TAB_REPORTS, $this->pl->txt('reports'), $uri, self::TAB_REPORTS);
 					}
 				}
 			}

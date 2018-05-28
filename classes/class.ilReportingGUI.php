@@ -1,8 +1,5 @@
 <?php
-require_once('class.ilReportingPlugin.php');
-require_once('class.ilReportingReportTableGUI.php');
-require_once('./Services/Object/classes/class.ilObjectGUI.php');
-require_once('./Modules/Course/classes/class.ilCourseParticipant.php');
+require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
  * Abstract GUI-Class ilReportingGUI
@@ -19,6 +16,12 @@ abstract class ilReportingGUI {
 	/** Addition exports available */
 	const EXPORT_EXCEL_FORMATTED = 18;
 	const EXPORT_PDF = 19;
+	const CMD_REPORT = 'report';
+	const CMD_SEARCH = 'search';
+	const CMD_APPLY_FILTER_SEARCH = 'applyFilterSearch';
+	const CMD_RESET_FILTER_SEARCH = 'resetFilterSearch';
+	const CMD_APPLY_FILTER_REPORT = 'applyFilterReport';
+	const CMD_RESET_FILTER_REPORT = 'resetFilterReport';
 	/** Session keys used to store the ids of courses/tests/users and filters status, last status changed */
 	const SESSION_KEY_IDS = 'reporting_ids';
 	/** @var \ilTemplate */
@@ -38,43 +41,39 @@ abstract class ilReportingGUI {
 	/**
 	 * @var ilTable2GUI Either search or report table is assigned to this variable
 	 */
-	protected $table = null;
+	protected $table = NULL;
 
 
 	public function __construct() {
-		global $tpl, $ilCtrl, $ilTabs, $ilUser, $ilPluginAdmin, $ilAccess;
-		$this->tpl = $tpl;
-		$this->pl = new ilReportingPlugin();
+		global $DIC;
+		$this->tpl = $DIC->ui()->mainTemplate();
+		$this->pl = ilReportingPlugin::getInstance();
 		$this->pl->updateLanguages();
-		$this->ctrl = $ilCtrl;
-		$this->tabs = $ilTabs;
-		$this->ilPluginAdmin = $ilPluginAdmin;
-		$this->access = $ilAccess;
+		$this->ctrl = $DIC->ctrl();
+		$this->tabs = $DIC->tabs();
+		$this->ilPluginAdmin = $DIC["ilPluginAdmin"];
+		$this->access = $DIC->access();
 
 		if (!$this->pl->isActive()) {
 			ilUtil::sendFailure($this->pl->txt("plugin_not_activated"), true);
-			$this->ctrl->redirectByClass('ilpersonaldesktopgui', 'jumpToSelectedItems');
+			$this->ctrl->redirectByClass(ilPersonalDesktopGUI::class, 'jumpToSelectedItems');
 		}
 		$this->checkAccess();
 	}
 
 
 	public function getStandardCmd() {
-		return 'search';
+		return self::CMD_SEARCH;
 	}
 
 
 	public function executeCommand() {
-
-		// needed for ILIAS >= 4.5
-		if (!(ilReportingPlugin::getBaseClass() == 'ilRouterGUI')) {
-			$this->tpl->getStandardTemplate();
-		}
+		$this->tpl->getStandardTemplate();
 
 		$next_class = $this->ctrl->getNextClass($this);
 		switch ($next_class) {
 			case '':
-				$cmd = $this->ctrl->getCmd('search');
+				$cmd = $this->ctrl->getCmd($this->getStandardCmd());
 				if (!in_array($cmd, get_class_methods($this))) {
 					$this->{$this->getStandardCmd()}();
 					if (DEBUG) {
@@ -96,10 +95,7 @@ abstract class ilReportingGUI {
 				break;
 		}
 
-		// needed for ILIAS >= 4.5
-		if (!(ilReportingPlugin::getBaseClass() == 'ilRouterGUI')) {
-			$this->tpl->show();
-		}
+		$this->tpl->show();
 
 		return true;
 	}
@@ -157,7 +153,7 @@ abstract class ilReportingGUI {
 	public function resetFilterSearch() {
 		$this->table->resetOffset();
 		$this->table->resetFilter();
-		$this->ctrl->redirect($this, 'search');
+		$this->ctrl->redirect($this, self::CMD_SEARCH);
 	}
 
 
@@ -212,7 +208,7 @@ abstract class ilReportingGUI {
 		}
 		if (!$hasAccess) {
 			ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
-			$this->ctrl->redirectByClass('ilpersonaldesktopgui', 'jumpToSelectedItems');
+			$this->ctrl->redirectByClass(ilPersonalDesktopGUI::class, 'jumpToSelectedItems');
 		}
 	}
 

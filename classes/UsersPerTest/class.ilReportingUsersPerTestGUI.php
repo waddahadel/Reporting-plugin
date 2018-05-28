@@ -1,8 +1,5 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingGUI.php');
-require_once('class.ilReportingUsersPerTestSearchTableGUI.php');
-require_once('class.ilReportingUsersPerTestModel.php');
-require_once('class.ilReportingUsersPerTestReportTableGUI.php');
+require_once __DIR__ . "/../../vendor/autoload.php";
 
 /**
  * GUI-Class ilReportingUsersPerTestGUI
@@ -30,7 +27,7 @@ class ilReportingUsersPerTestGUI extends ilReportingGUI {
 	 */
 	public function search() {
 		$this->tpl->setTitle($this->pl->txt('report_users_per_test'));
-		$this->table = new ilReportingUsersPerTestSearchTableGUI($this, 'search');
+		$this->table = new ilReportingUsersPerTestSearchTableGUI($this, ilReportingGUI::CMD_SEARCH);
 		$this->table->setTitle($this->pl->txt('search_tests'));
 		parent::search();
 	}
@@ -42,13 +39,13 @@ class ilReportingUsersPerTestGUI extends ilReportingGUI {
 	public function report() {
 		parent::report();
 		$this->tpl->setTitle($this->pl->txt('report_users_per_test'));
-		if ($this->table === null) {
-			$this->table = new ilReportingUsersPerTestReportTableGUI($this, 'report');
+		if ($this->table === NULL) {
+			$this->table = new ilReportingUsersPerTestReportTableGUI($this, ilReportingGUI::CMD_REPORT);
 		}
 		$data = $this->model->getReportData($_SESSION[self::SESSION_KEY_IDS], $this->table->getFilterNames());
 		$this->table->setData($data);
-		if ($this->ctrl->getCmd() != 'applyFilterReport'
-		    && $this->ctrl->getCmd() != 'resetFilterReport') {
+		if ($this->ctrl->getCmd() != self::CMD_APPLY_FILTER_REPORT
+			&& $this->ctrl->getCmd() != self::CMD_RESET_FILTER_REPORT) {
 			$onlyUnique = isset($_GET['pre_xpt']);
 			$this->storeIdsInSession($data, $onlyUnique);
 		}
@@ -69,13 +66,13 @@ class ilReportingUsersPerTestGUI extends ilReportingGUI {
 
 
 	public function applyFilterReport() {
-		$this->table = new ilReportingUsersPerTestReportTableGUI($this, 'report');
+		$this->table = new ilReportingUsersPerTestReportTableGUI($this, ilReportingGUI::CMD_REPORT);
 		parent::applyFilterReport();
 	}
 
 
 	public function resetFilterReport() {
-		$this->table = new ilReportingUsersPerTestReportTableGUI($this, 'report');
+		$this->table = new ilReportingUsersPerTestReportTableGUI($this, ilReportingGUI::CMD_REPORT);
 		parent::resetFilterReport();
 	}
 

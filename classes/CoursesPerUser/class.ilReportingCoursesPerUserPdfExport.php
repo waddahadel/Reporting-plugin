@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingPdfExport.php');
 
 /**
  * Class ilReportingCoursesPerUserPdfExport.

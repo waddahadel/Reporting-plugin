@@ -1,5 +1,7 @@
 reports#:#Reports
 role#:#Rolle
+yes#:#Ja
+no#:#Nein
 
 report_courses_per_user#:#Report Kurse pro Benutzer
 report_selected_courses_per_user#:#Report Kurse für ausgewählte Benutzer
@@ -19,8 +21,7 @@ back#:#zurück zur Auswahl
 back_to_course#:#zurück zum Kurs
 report_generated#:#Ein PDF Report wurde generiert
 employee_list#:#Liste Mitarbeiter
-yes#:#Ja
-no#:#Nein
+course#:#MISSING
 
 title#:#Titel
 lastname#:#Name
@@ -38,6 +39,8 @@ department#:#Abteilung
 path#:#Pfad
 incl_inactive_users#:#inkl. inaktiver Benutzer
 active#:#Aktiv
+inactive#:#MISSING
+general_status#:#MISSING
 
 object_title#:#Titel
 object_percentage#:#Prozent
@@ -45,6 +48,7 @@ object_status#:#Status
 object_type#:#Typ
 object_status_changed#:#Letzter Statuswechsel
 show_objects_in_course#:#Objekte innerhalb Kurse mit Lernfortschritt anzeigen
+assessment_title#:#MISSING
 
 status2#:#Bestanden
 status1#:#In Bearbeitung
@@ -76,7 +80,7 @@ restricted_by_local_readability#:#Einschränkung aufgrund lokaler Benutzeraccoun
 restricted_by_local_readability_description#:#Der Zugriff auf einen Benutzer ist gewährt, wenn eine Rolle das Recht "Lokale Benutzerkonten einsehen" hat.
 restricted_by_org_units#:#Einschränkung aufgrund der Organisationseinheiten
 restricted_by_org_units_description#:#Der Zugriff auf einen Benutzer ist gewährt, wenn eine Rolle das Recht "Lernfortschritt einsehen" hat.
-jasper_reports_templates_path#:#PDF Reports - Pfad templates
+jasper_reports_templates_path#:#PDF Reports - Pfad Vorlagen
 jasper_reports_templates_path_info#:#Pfad zu einem Ordner, in welchem die Jasper Report Templates gespeichert sind.<br><b>JasperReport Library wird benötigt!</b>
 conf_saved#:#Konfiguration gespeichert
 
@@ -84,3 +88,5 @@ date_of_report#:#Datum Report
 owner_of_report#:#Besitzer Report
 
 org_units#:#Organisationseinheiten
+
+save#:#MISSING

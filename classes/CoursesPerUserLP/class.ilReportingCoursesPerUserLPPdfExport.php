@@ -1,5 +1,4 @@
 <?php
-require_once(dirname(dirname(__FILE__)) . '/class.ilReportingPdfExport.php');
 
 /**
  * Class ilReportingCoursesPerUserPdfExport.
@@ -47,7 +46,7 @@ class ilReportingCoursesPerUserLPPdfExport extends ilReportingPdfExport {
 				$standard_columns[] = $data[$field];
 			}
 			foreach ($this->getCsvColumns() as $k => $v) {
-				$formatter = isset($v['formatter']) ? $v['formatter'] : null;
+				$formatter = isset($v['formatter']) ? $v['formatter'] : NULL;
 				$value = $this->formatter->format($data[$k], $formatter);
 				$csv->addColumn(strip_tags($value));
 				$standard_columns[] = strip_tags($value);
@@ -59,7 +58,7 @@ class ilReportingCoursesPerUserLPPdfExport extends ilReportingPdfExport {
 						$this->writeColumnsToCsv($csv, $standard_columns);
 					}
 					foreach ($this->getCsvObjectColumns() as $k => $v) {
-						$formatter = isset($v['formatter']) ? $v['formatter'] : null;
+						$formatter = isset($v['formatter']) ? $v['formatter'] : NULL;
 						$value = $this->formatter->format($object[$k], $formatter);
 						$csv->addColumn(strip_tags($value));
 					}

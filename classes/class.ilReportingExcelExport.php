@@ -1,7 +1,4 @@
 <?php
-//require_once('./Services/Excel/classes/class.ilExcelUtils.php');
-//require_once('./Services/Excel/classes/class.ilExcelWriterAdapter.php');
-require_once('class.ilReportingPlugin.php');
 
 /**
  * Class ilReportingExcelExport. Base class for each report that enables to generate a custom excel
@@ -31,10 +28,6 @@ abstract class ilReportingExcelExport {
 	 */
 	protected $user;
 	/**
-	 * @var ilLanguage
-	 */
-	protected $lng;
-	/**
 	 * @var array
 	 */
 	protected $column_lengths = array();
@@ -44,7 +37,7 @@ abstract class ilReportingExcelExport {
 	 * @param string $filename Excel filename
 	 */
 	public function __construct($filename = '') {
-		global $ilUser, $lng;
+		global $DIC;
 		if (!$filename) {
 			$filename = 'export_' . date('y_m_d') . '.' . self::EXCEL_FILE_TYPE;
 		}
@@ -54,13 +47,13 @@ abstract class ilReportingExcelExport {
 		$adapter = new ilExcelWriterAdapter($filename, true);
 		$this->workbook = $adapter->getWorkbook();
 		$this->h1 = $this->workbook->addFormat(array( 'Size' => 26, 'Bold' => true ));
-		$this->h3 = $this->workbook->addFormat(array( 'Bold'    => true,
-		                                              'FgColor' => self::COLOR_BLUE,
+		$this->h3 = $this->workbook->addFormat(array(
+			'Bold' => true,
+			'FgColor' => self::COLOR_BLUE,
 		));
 		$this->workbook->df = "d.m.Y";
-		$this->pl = new ilReportingPlugin();
-		$this->user = $ilUser;
-		$this->lng = $lng;
+		$this->pl = ilReportingPlugin::getInstance();
+		$this->user = $DIC->user();
 	}
 
 
