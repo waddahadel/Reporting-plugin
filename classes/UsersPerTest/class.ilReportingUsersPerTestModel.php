@@ -42,7 +42,7 @@ class ilReportingUsersPerTestModel extends ilReportingModel {
 
 	public function getReportData(array $ids, array $filters) {
 		$sql = "SELECT obj.obj_id AS id, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path,
-                 usr.firstname, usr.lastname, usr.active, usr.country, usr.department, ut.status_changed,
+                 usr.usr_id, usr.firstname, usr.lastname, usr.active, usr.country, usr.department, ut.status_changed,
                  ut.status AS user_status FROM object_data as obj
                  INNER JOIN ut_lp_marks AS ut ON (ut.obj_id = obj.obj_id)
                  INNER JOIN object_reference AS ref ON (ref.obj_id = obj.obj_id)
@@ -85,6 +85,23 @@ class ilReportingUsersPerTestModel extends ilReportingModel {
 		}
 		$sql .= "ORDER BY obj.obj_id, usr.lastname, usr.firstname";
 
-		return $this->buildRecords($sql);
+		$data = $this->buildRecords($sql);
+
+		foreach ($data as &$v) {
+			$v["grade"] = "";
+			foreach ($this->getTestEvaluation(current(ilObject::_getAllReferences($v["id"])))->getParticipants() as $participant) {
+				/**
+				 * @var ilTestEvaluationUserData $participant
+				 */
+
+				if ($participant->getUserID() == $v["usr_id"]) {
+					$v["grade"] = $participant->getReached() . "/" . $participant->getMaxpoints();
+					break;
+				}
+			}
+			$v["comments"] = "";
+		}
+
+		return $data;
 	}
 }

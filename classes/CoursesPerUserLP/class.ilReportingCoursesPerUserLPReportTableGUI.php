@@ -26,7 +26,8 @@ class ilReportingCoursesPerUserLPReportTableGUI extends ilReportingReportTableGU
 				$export->execute();
 				break;
 			case ilReportingGUI::EXPORT_EXCEL_FORMATTED:
-				$export = new ilReportingCoursesPerUserLPExcelExport('courses_per_user_' . date('Y-m-d'));
+				$export = new ilReportingCoursesPerUserLPExcelExport('courses_per_user_'
+					. $this->formatter->formatCurrentDate(ilReportingFormatter::EXPORT_FILE_DATE_FORMAT));
 				$export->execute($this->getData());
 				break;
 		}

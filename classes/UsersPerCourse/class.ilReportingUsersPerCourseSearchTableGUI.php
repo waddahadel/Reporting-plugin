@@ -40,5 +40,3 @@ class ilReportingUsersPerCourseSearchTableGUI extends ilReportingSearchTableGUI 
 		parent::initFilter();
 	}
 }
-
-?>

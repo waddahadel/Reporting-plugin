@@ -27,6 +27,8 @@ class ilReportingCoursesPerUserLPSearchTableGUI extends ilReportingSearchTableGU
 		$cols['lastname'] = array( 'txt' => $this->pl->txt('lastname'), 'default' => true );
 		$cols['firstname'] = array( 'txt' => $this->pl->txt('firstname'), 'default' => true );
 		$cols['email'] = array( 'txt' => $this->pl->txt('email'), 'default' => true );
+		$cols['department'] = array( 'txt' => $this->pl->txt('department'), 'default' => true );
+		$cols['country'] = array( 'txt' => $this->pl->txt('country'), 'default' => true );
 		$cols['org_units'] = array( 'txt' => $this->pl->txt('org_units'), 'default' => true );
 		$cols['active'] = array(
 			'txt' => $this->pl->txt('active'),
@@ -56,5 +58,3 @@ class ilReportingCoursesPerUserLPSearchTableGUI extends ilReportingSearchTableGU
 		parent::initFilter();
 	}
 }
-
-?>

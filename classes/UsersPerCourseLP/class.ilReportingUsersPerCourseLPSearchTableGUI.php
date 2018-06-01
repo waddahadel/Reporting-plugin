@@ -40,5 +40,3 @@ class ilReportingUsersPerCourseLPSearchTableGUI extends ilReportingSearchTableGU
 		parent::initFilter();
 	}
 }
-
-?>

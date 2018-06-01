@@ -73,4 +73,18 @@ abstract class ilReportingModel {
 
 		return $return;
 	}
-} 
+
+
+	/**
+	 * @param int $test_id
+	 *
+	 * @return ilTestEvaluationData
+	 */
+	public function getTestEvaluation($test_id) {
+		$test = new ilObjTest($test_id);
+
+		$evaluation = new ilTestEvaluationData($test);
+
+		return $evaluation;
+	}
+}

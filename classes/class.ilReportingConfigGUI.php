@@ -198,5 +198,3 @@ class ilReportingConfigGUI extends ilPluginConfigGUI {
 		return $this->fields;
 	}
 }
-
-?>

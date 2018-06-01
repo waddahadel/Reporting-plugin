@@ -116,7 +116,8 @@ class ilReportingUsersPerCourseLPModel extends ilReportingModel {
 				if ($k != 0) {
 					$return[count($return) - 1]['_objects'] = $objects;
 				}
-				$return[] = $v;
+				$v["grade"] = "";
+				$v["comments"] = "";
 				$objects = array();
 			} else {
 				$objects[] = array_slice($v, - 6);

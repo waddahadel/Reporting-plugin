@@ -90,3 +90,7 @@ owner_of_report#:#Besitzer Report
 org_units#:#Organisationseinheiten
 
 save#:#Speichern
+name#:#Name
+
+grade#:#Note
+comments#:#Kommentare

@@ -17,7 +17,8 @@ class ilReportingUsersPerCourseReportTableGUI extends ilReportingReportTableGUI 
 	public function exportDataCustom($format, $send = false) {
 		switch ($format) {
 			case ilReportingGUI::EXPORT_EXCEL_FORMATTED:
-				$export = new ilReportingUsersPerCourseExcelExport('users_per_course_' . date('Y-m-d'));
+				$export = new ilReportingUsersPerCourseExcelExport('users_per_course_'
+					. $this->formatter->formatCurrentDate(ilReportingFormatter::EXPORT_FILE_DATE_FORMAT));
 				$export->execute($this->getData());
 				break;
 			case ilReportingGUI::EXPORT_PDF:

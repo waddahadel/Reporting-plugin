@@ -125,6 +125,8 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 				if ($k != 0) {
 					$return[count($return) - 1]['_objects'] = $objects;
 				}
+				$v["grade"] = "";
+				$v["comments"] = "";
 				$return[] = $v;
 				$objects = array();
 			} else {

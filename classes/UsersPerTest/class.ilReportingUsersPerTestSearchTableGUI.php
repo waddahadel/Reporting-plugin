@@ -40,5 +40,3 @@ class ilReportingUsersPerTestSearchTableGUI extends ilReportingSearchTableGUI {
 		parent::initFilter();
 	}
 }
-
-?>

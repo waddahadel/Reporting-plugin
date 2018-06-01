@@ -27,6 +27,8 @@ class ilReportingCoursesPerUserSearchTableGUI extends ilReportingSearchTableGUI 
 		$cols['lastname'] = array( 'txt' => $this->pl->txt('lastname'), 'default' => true );
 		$cols['firstname'] = array( 'txt' => $this->pl->txt('firstname'), 'default' => true );
 		$cols['email'] = array( 'txt' => $this->pl->txt('email'), 'default' => true );
+		$cols['department'] = array( 'txt' => $this->pl->txt('department'), 'default' => true );
+		$cols['country'] = array( 'txt' => $this->pl->txt('country'), 'default' => true );
 		$cols['org_units'] = array( 'txt' => $this->pl->txt('org_units'), 'default' => true );
 		$cols['active'] = array(
 			'txt' => $this->pl->txt('active'),
@@ -48,13 +50,11 @@ class ilReportingCoursesPerUserSearchTableGUI extends ilReportingSearchTableGUI 
 		$this->addFilterItemWithValue($te);
 		$te = new ilTextInputGUI($this->pl->txt('email'), 'email');
 		$this->addFilterItemWithValue($te);
-		//$te = new ilTextInputGUI($this->pl->txt('country'), 'country');
-		//$this->addFilterItemWithValue($te);
+		$te = new ilTextInputGUI($this->pl->txt('country'), 'country');
+		$this->addFilterItemWithValue($te);
 		$cb = new ilCheckboxInputGUI($this->pl->txt('incl_inactive_users'), 'include_inactive');
 		$cb->setValue(1);
 		$this->addFilterItemWithValue($cb);
 		parent::initFilter();
 	}
 }
-
-?>

@@ -48,7 +48,7 @@ abstract class ilReportingGUI {
 		global $DIC;
 		$this->tpl = $DIC->ui()->mainTemplate();
 		$this->pl = ilReportingPlugin::getInstance();
-		$this->pl->updateLanguages();
+		//$this->pl->updateLanguages();
 		$this->ctrl = $DIC->ctrl();
 		$this->tabs = $DIC->tabs();
 		$this->ilPluginAdmin = $DIC["ilPluginAdmin"];
@@ -248,5 +248,3 @@ abstract class ilReportingGUI {
 		$_SESSION[self::SESSION_KEY_IDS] = array_unique($ids);
 	}
 }
-
-?>

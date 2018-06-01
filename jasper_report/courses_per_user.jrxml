@@ -53,6 +53,8 @@
 	<parameter name="lastname" class="java.lang.String" />
 	<parameter name="department" class="java.lang.String" />
 	<parameter name="country" class="java.lang.String" />
+	<parameter name="grade" class="java.lang.String" />
+	<parameter name="comments" class="java.lang.String" />
 	<parameter name="status_changed" class="java.lang.String" />
 	<parameter name="user_status" class="java.lang.String" />
 	<parameter name="path" class="java.lang.String" />
@@ -67,6 +69,8 @@
 	<field name="lastname" class="java.lang.String" />
 	<field name="country" class="java.lang.String" />
 	<field name="department" class="java.lang.String" />
+	<field name="grade" class="java.lang.String" />
+	<field name="comments" class="java.lang.String" />
 	<field name="status_changed" class="java.lang.String" />
 	<field name="user_status" class="java.lang.String" />
 	<field name="group_user" class="java.lang.String" />
@@ -202,6 +206,20 @@
 					<paragraph lineSpacing="Single" />
 				</textElement>
 				<textFieldExpression><![CDATA[$F{status_changed}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="42" width="128" height="16" uuid="9cb1559c-410f-4bcd-b933-94dc78c2edf6" />
+				<textElement>
+					<font isBold="true" />
+				</textElement>
+				<textFieldExpression><![CDATA[$P{grade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="42" width="128" height="16" uuid="9cb14f9c-410f-4bcd-b423-94dc78c2edf5" />
+				<textElement>
+					<font isBold="true" />
+				</textElement>
+				<textFieldExpression><![CDATA[$P{comments}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

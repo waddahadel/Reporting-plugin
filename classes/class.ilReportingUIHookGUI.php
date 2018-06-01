@@ -67,5 +67,3 @@ class ilReportingUIHookGUI extends ilUIHookPluginGUI {
 		}
 	}
 }
-
-?>

@@ -14,6 +14,8 @@ class ilReportingFormatter {
 	const FORMAT_STR_PERCENTAGE = 5;    // Append percentage to string
 	const FORMAT_STR_OBJECT_TYPE = 6;   // Object type to String, e.g. crs to Course
 	const DEFAULT_DATE_FORMAT = 'd.M Y, H:i';
+	const EXPORT_FILE_DATE_FORMAT = 'Y-m-d';
+	const NOW_DATE = 'now';
 	/**
 	 * @var ilReportingFormatter
 	 */
@@ -28,6 +30,9 @@ class ilReportingFormatter {
 	protected $lng;
 
 
+	/**
+	 *
+	 */
 	private function __construct() {
 		global $DIC;
 		$this->lng = $DIC->language();
@@ -35,6 +40,9 @@ class ilReportingFormatter {
 	}
 
 
+	/**
+	 * @return ilReportingFormatter
+	 */
 	public static function getInstance() {
 		if (self::$instance === NULL) {
 			$instance = new self();
@@ -53,9 +61,9 @@ class ilReportingFormatter {
 	 *  - an array: Implodes values
 	 *  - a string: Returns same value
 	 *
-	 * @param       $value
-	 * @param int   $format
-	 * @param array $options
+	 * @param string $value
+	 * @param int    $format
+	 * @param array  $options
 	 *
 	 * @return string
 	 */
@@ -71,7 +79,11 @@ class ilReportingFormatter {
 				if (!$value) {
 					return '';
 				}
-				$timestamp = strtotime($value);
+				if ($value === self::NOW_DATE) {
+					$timestamp = time();
+				} else {
+					$timestamp = strtotime($value);
+				}
 				$format = isset($options['format']) ? $options['format'] : self::DEFAULT_DATE_FORMAT;
 
 				return date($format, $timestamp);
@@ -82,5 +94,17 @@ class ilReportingFormatter {
 			default:
 				return (is_array($value)) ? implode(',', $value) : $value;
 		}
+	}
+
+
+	/**
+	 * @param string $format
+	 *
+	 * @return string
+	 */
+	public function formatCurrentDate($format = self::DEFAULT_DATE_FORMAT) {
+		return $this->format(self::NOW_DATE, self::FORMAT_STR_DATE, [
+			'format' => $format
+		]);
 	}
 }

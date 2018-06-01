@@ -11,7 +11,6 @@
 abstract class ilReportingExcelExport {
 
 	const COLOR_BLUE = 44;
-	const DATE_FORMAT = 'd.M Y, H:i';
 	const EXCEL_FILE_TYPE = 'xls';
 	/**
 	 * @var ilExcelWriterWrapper|null
@@ -31,15 +30,20 @@ abstract class ilReportingExcelExport {
 	 * @var array
 	 */
 	protected $column_lengths = array();
+	/**
+	 * @var ilReportingFormatter
+	 */
+	protected $formatter;
 
 
 	/**
 	 * @param string $filename Excel filename
 	 */
 	public function __construct($filename = '') {
+		$this->formatter = ilReportingFormatter::getInstance();
 		global $DIC;
 		if (!$filename) {
-			$filename = 'export_' . date('y_m_d') . '.' . self::EXCEL_FILE_TYPE;
+			$filename = 'export_' . $this->formatter->formatCurrentDate(ilReportingFormatter::EXPORT_FILE_DATE_FORMAT) . '.' . self::EXCEL_FILE_TYPE;
 		}
 		if (!preg_match('#.+\.xlsx?$#', $filename)) {
 			$filename .= '.' . self::EXCEL_FILE_TYPE;

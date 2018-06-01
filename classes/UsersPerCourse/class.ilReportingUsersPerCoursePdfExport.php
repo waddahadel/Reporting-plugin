@@ -13,6 +13,6 @@ class ilReportingUsersPerCoursePdfExport extends ilReportingPdfExport {
 		parent::__construct();
 		$this->report_title = $this->pl->txt('users_per_course');
 		$this->template_filename = 'users_per_course.jrxml';
-		$this->output_filename = 'users_per_course' . date('Y-m-d');
+		$this->output_filename = 'users_per_course' . $this->formatter->formatCurrentDate(ilReportingFormatter::EXPORT_FILE_DATE_FORMAT);
 	}
 }

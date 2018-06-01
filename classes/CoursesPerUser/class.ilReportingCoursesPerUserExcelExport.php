@@ -39,21 +39,24 @@ class ilReportingCoursesPerUserExcelExport extends ilReportingExcelExport {
 			$this->write($worksheet, ++ $row, 0, $this->pl->txt('department'));
 			$this->write($worksheet, $row, 1, $users[0]['department']);
 			$this->write($worksheet, ++ $row, 0, $this->pl->txt('date_of_report'));
-			$this->write($worksheet, $row, 1, date(self::DATE_FORMAT));
+			$this->write($worksheet, $row, 1, $this->formatter->formatCurrentDate());
 			$this->write($worksheet, ++ $row, 0, $this->pl->txt('owner_of_report'));
 			$this->write($worksheet, $row, 1, $this->user->getFirstname() . ' ' . $this->user->getLastname());
 			$row += 2;
 			// List courses: Title of columns
 			$this->write($worksheet, $row, 0, $this->pl->txt('title'), $this->h3);
 			$this->write($worksheet, $row, 1, $this->pl->txt('path'), $this->h3);
-			$this->write($worksheet, $row, 2, $this->pl->txt('user_status'), $this->h3);
-			$this->write($worksheet, $row, 3, $this->pl->txt('status_changed'), $this->h3);
+			$this->write($worksheet, $row, 2, $this->pl->txt('grade'), $this->h3);
+			$this->write($worksheet, $row, 3, $this->pl->txt('comments'), $this->h3);
+			$this->write($worksheet, $row, 4, $this->pl->txt('user_status'), $this->h3);
+			$this->write($worksheet, $row, 5, $this->pl->txt('status_changed'), $this->h3);
 			foreach ($users as $course) {
 				$this->write($worksheet, ++ $row, 0, $course['title']);
 				$this->write($worksheet, $row, 1, $course['path']);
-				$this->write($worksheet, $row, 2, $this->pl->txt('status' . (int)$course['user_status']));
-				$date = ($course['status_changed']) ? date(self::DATE_FORMAT, strtotime($course['status_changed'])) : "";
-				$this->write($worksheet, $row, 3, $date);
+				$this->write($worksheet, $row, 2, $course['grade']);
+				$this->write($worksheet, $row, 3, $course['comments']);
+				$this->write($worksheet, $row, 4, $this->formatter->format($course['user_status'], ilReportingFormatter::FORMAT_INT_STATUS));
+				$this->write($worksheet, $row, 5, $this->formatter->format($course['status_changed'], ilReportingFormatter::FORMAT_STR_DATE));
 			}
 			$this->autoSizeColumns($worksheet);
 		}

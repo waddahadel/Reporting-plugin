@@ -16,7 +16,8 @@ class ilReportingUsersPerTestReportTableGUI extends ilReportingReportTableGUI {
 	public function exportDataCustom($format, $send = false) {
 		switch ($format) {
 			case ilReportingGUI::EXPORT_EXCEL_FORMATTED:
-				$export = new ilReportingUsersPerTestExcelExport('users_per_test_' . date('Y-m-d'));
+				$export = new ilReportingUsersPerTestExcelExport('users_per_test_'
+					. $this->formatter->formatCurrentDate(ilReportingFormatter::EXPORT_FILE_DATE_FORMAT));
 				$export->execute($this->getData());
 				break;
 			case ilReportingGUI::EXPORT_PDF:

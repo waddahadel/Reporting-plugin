@@ -39,9 +39,9 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
 		if ($filters['email']) {
 			$sql .= ' AND usr_data.email LIKE ' . $this->db->quote('%' . str_replace('*', '%', $filters['email']) . '%', 'text');
 		}
-		/*if ($filters['country']) {
-			$sql  .= ' AND usr_data.country LIKE ' . $this->db->quote('%' . str_replace('*', '%', $filters['country']) . '%', 'text');
-		}*/
+		if ($filters['country']) {
+			$sql .= ' AND usr_data.country LIKE ' . $this->db->quote('%' . str_replace('*', '%', $filters['country']) . '%', 'text');
+		}
 		$sql .= ($filters['include_inactive']) ? ' AND usr_data.active IN(1,0)' : ' AND usr_data.active = 1';
 
 		if (ilReportingConfig::getValue('restricted_user_access') == ilReportingConfig::RESTRICTED_BY_LOCAL_READABILITY) {
@@ -110,6 +110,13 @@ class ilReportingCoursesPerUserModel extends ilReportingModel {
 		}
 		$sql .= " ORDER BY usr.usr_id, usr.lastname, usr.firstname";
 
-		return $this->buildRecords($sql);
+		$data = $this->buildRecords($sql);
+
+		foreach ($data as &$v) {
+			$v["grade"] = "";
+			$v["comments"] = "";
+		}
+
+		return $data;
 	}
 }

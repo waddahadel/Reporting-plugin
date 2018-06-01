@@ -76,7 +76,6 @@ abstract class ilReportingPdfExport {
 		$report->setCsvFieldDelimiter(';');
 		$report->setCsvFile($csv_file);
 		$params = $this->getPdfReportParameters();
-		$params['report_title'] = $this->report_title;
 		$report->setParameters($params);
 		$report->downloadFile(true);
 	}
@@ -101,12 +100,15 @@ abstract class ilReportingPdfExport {
 			'lastname' => $this->pl->txt('lastname'),
 			'department' => $this->pl->txt('department'),
 			'country' => $this->pl->txt('country'),
+			'grade' => $this->pl->txt('grade'),
+			'comments' => $this->pl->txt('comments'),
 			'status_changed' => $this->pl->txt('status_changed'),
 			'user_status' => $this->pl->txt('user_status'),
 			'title' => $this->pl->txt('title'),
 			'path' => $this->pl->txt('path'),
 			'owner_report' => $this->pl->txt('owner_of_report'),
 			'owner_name' => $this->user->getPresentationTitle(),
+			'report_title' => $this->report_title
 		);
 		// Check if a header image is specified
 		$img = ilReportingConfig::getValue('header_image');

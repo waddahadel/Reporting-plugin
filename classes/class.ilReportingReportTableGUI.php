@@ -19,7 +19,7 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	/**
 	 * @var string
 	 */
-	protected $date_format = 'd.M Y, H:i';
+	protected $date_format = ilReportingFormatter::DEFAULT_DATE_FORMAT;
 	/**
 	 * @var ilReportingPlugin
 	 */
@@ -126,7 +126,9 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 			if (isset($a_set[$k])) {
 				if (!in_array($k, $this->getIgnoredCols())) {
 					if (in_array($k, $this->getDateCols())) {
-						$value = date($this->getDateFormat(), strtotime($a_set[$k]));
+						$value = $this->formatter->format($a_set[$k], ilReportingFormatter::FORMAT_STR_DATE, [
+							'format' => $this->getDateFormat()
+						]);
 					} else {
 						$formatter = isset($v['formatter']) ? $v['formatter'] : NULL;
 						$value = $this->formatter->format($a_set[$k], $formatter);
@@ -208,7 +210,11 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 			'path' => array( 'txt' => $this->pl->txt('path') ),
 			'firstname' => array( 'txt' => $this->pl->txt('firstname') ),
 			'lastname' => array( 'txt' => $this->pl->txt('lastname') ),
+			'country' => array( 'txt' => $this->pl->txt('country') ),
+			'department' => array( 'txt' => $this->pl->txt('department') ),
 			'org_units' => array( 'txt' => $this->pl->txt('org_units'), 'default' => true ),
+			'grade' => array( 'txt' => $this->pl->txt('grade') ),
+			'comments' => array( 'txt' => $this->pl->txt('comments') ),
 			'active' => array(
 				'txt' => $this->pl->txt('active'),
 				'formatter' => ilReportingFormatter::FORMAT_INT_YES_NO,
@@ -303,18 +309,21 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	 * @return bool|object|string
 	 */
 	protected function getFilterItemValue($item) {
+		/**
+		 * @var $item ilFormPropertyGUI
+		 */
 		$value = '';
 		$item->readFromSession();
 		switch (get_class($item)) {
-			case 'ilSelectInputGUI':
+			case ilSelectInputGUI::class:
 				/** @var $item ilSelectInputGUI */
 				$value = $item->getValue();
 				break;
-			case 'ilCheckboxInputGUI':
+			case ilCheckboxInputGUI::class:
 				/** @var $item ilCheckboxInputGUI */
 				$value = $item->getChecked();
 				break;
-			case 'ilDateTimeInputGUI':
+			case ilDateTimeInputGUI::class:
 				/** @var $item ilDateTimeInputGUI */
 				// Why is this necessary? Bug? ilDateTimeInputGUI::clearFromSession() has no effect...
 				if ($this->ctrl->getCmd() == ilReportingGUI::CMD_RESET_FILTER_REPORT) {
@@ -398,5 +407,3 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 		return $this->date_format;
 	}
 }
-
-?>

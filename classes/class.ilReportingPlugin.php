@@ -255,8 +255,6 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 	protected function beforeUninstall() {
 		$this->db->dropTable(ilReportingConfig::TABLE_NAME, false);
 
-		// TODO Remove any folders?
-
 		if (self::checkPreconditions()) {
 			self::removeReportMainMenuEntries();
 		}

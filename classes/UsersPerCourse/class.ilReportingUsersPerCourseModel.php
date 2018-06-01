@@ -93,6 +93,14 @@ class ilReportingUsersPerCourseModel extends ilReportingModel {
 		$sql .= " ORDER BY obj.obj_id, usr.lastname, usr.firstname";
 
 		//        echo $sql;
-		return $this->buildRecords($sql);
+
+		$data = $this->buildRecords($sql);
+
+		foreach ($data as &$v) {
+			$v["grade"] = "";
+			$v["comments"] = "";
+		}
+
+		return $data;
 	}
 }
