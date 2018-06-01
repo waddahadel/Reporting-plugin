@@ -21,7 +21,7 @@ back#:#zurück zur Auswahl
 back_to_course#:#zurück zum Kurs
 report_generated#:#Ein PDF Report wurde generiert
 employee_list#:#Liste Mitarbeiter
-course#:#MISSING
+course#:#Kurs
 
 title#:#Titel
 lastname#:#Name
@@ -39,8 +39,8 @@ department#:#Abteilung
 path#:#Pfad
 incl_inactive_users#:#inkl. inaktiver Benutzer
 active#:#Aktiv
-inactive#:#MISSING
-general_status#:#MISSING
+inactive#:#Inaktiv
+general_status#:#Allgemeiner Status
 
 object_title#:#Titel
 object_percentage#:#Prozent
@@ -48,7 +48,7 @@ object_status#:#Status
 object_type#:#Typ
 object_status_changed#:#Letzter Statuswechsel
 show_objects_in_course#:#Objekte innerhalb Kurse mit Lernfortschritt anzeigen
-assessment_title#:#MISSING
+assessment_title#:#Bewertungstitel
 
 status2#:#Bestanden
 status1#:#In Bearbeitung
@@ -89,4 +89,4 @@ owner_of_report#:#Besitzer Report
 
 org_units#:#Organisationseinheiten
 
-save#:#MISSING
+save#:#Speichern

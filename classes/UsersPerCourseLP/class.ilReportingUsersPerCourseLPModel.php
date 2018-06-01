@@ -33,6 +33,9 @@ class ilReportingUsersPerCourseLPModel extends ilReportingModel {
 
 	public function getReportData(array $ids, array $filters) {
 		ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
+		Closure::bind(function () {
+			ilObjOrgUnitTree::$temporary_table_name = NULL;
+		}, NULL, ilObjOrgUnitTree::class)(); // Tricks stupid ilObjOrgUnitTree::buildTempTableWithUsrAssignements
 		ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements('orgu_usr_assignements_2');
 
 		$sql = "SELECT * FROM (
