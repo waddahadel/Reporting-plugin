@@ -51,13 +51,13 @@
 	<parameter name="lastname" class="java.lang.String" />
 	<parameter name="department" class="java.lang.String" />
 	<parameter name="country" class="java.lang.String" />
-	<parameter name="grade" class="java.lang.String" />
-	<parameter name="comments" class="java.lang.String" />
 	<parameter name="status_changed" class="java.lang.String" />
 	<parameter name="user_status" class="java.lang.String" />
 	<parameter name="path" class="java.lang.String" />
 	<parameter name="owner_report" class="java.lang.String" />
 	<parameter name="owner_name" class="java.lang.String" />
+	<parameter name="grade" class="java.lang.String" />
+	<parameter name="comments" class="java.lang.String" />
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -67,11 +67,11 @@
 	<field name="lastname" class="java.lang.String" />
 	<field name="country" class="java.lang.String" />
 	<field name="department" class="java.lang.String" />
-	<field name="grade" class="java.lang.String" />
-	<field name="comments" class="java.lang.String" />
 	<field name="status_changed" class="java.lang.String" />
 	<field name="user_status" class="java.lang.String" />
 	<field name="group_course" class="java.lang.String" />
+	<field name="grade" class="java.lang.String" />
+	<field name="comments" class="java.lang.String" />
 	<group name="course" isReprintHeaderOnEachPage="true" minHeightToStartNewPage="130">
 		<groupExpression><![CDATA[$F{group_course}]]></groupExpression>
 		<groupHeader>
@@ -126,6 +126,20 @@
 					<textFieldExpression><![CDATA[$P{country}]]></textFieldExpression>
 				</textField>
 				<textField>
+					<reportElement x="4" y="42" width="128" height="16" uuid="7bd8298e-5e22-4700-8faf-cadac30aaa51" />
+					<textElement>
+						<font isBold="true" />
+					</textElement>
+					<textFieldExpression><![CDATA[$P{grade}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="144" y="42" width="128" height="16" uuid="2aa90636-8d34-4625-a020-d15502804718" />
+					<textElement>
+						<font isBold="true" />
+					</textElement>
+					<textFieldExpression><![CDATA[$P{comments}]]></textFieldExpression>
+				</textField>
+				<textField>
 					<reportElement x="547" y="42" width="113" height="16" uuid="53a3c52a-3fb8-424e-848d-6298d2142ada" />
 					<textElement>
 						<font isBold="true" />
@@ -138,20 +152,6 @@
 						<font isBold="true" />
 					</textElement>
 					<textFieldExpression><![CDATA[$P{user_status}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="144" y="42" width="128" height="16" uuid="9fb14f9c-420f-4bcd-b922-94d97875edf6" />
-					<textElement>
-						<font isBold="true" />
-					</textElement>
-					<textFieldExpression><![CDATA[$P{grade}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="144" y="42" width="128" height="16" uuid="5cb36f9c-410f-4bcd-2933-94uc7232edf5" />
-					<textElement>
-						<font isBold="true" />
-					</textElement>
-					<textFieldExpression><![CDATA[$P{comments}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -188,6 +188,14 @@
 				<textFieldExpression><![CDATA[$F{firstname}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="144" y="0" width="137" height="13" uuid="abb3a035-c519-43b0-8d37-7f87e1bc9b3e" />
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="false" pdfFontName="Helvetica" />
+					<paragraph lineSpacing="Single" />
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lastname}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement style="Detail" positionType="Float" x="292" y="0" width="120" height="13" uuid="c1405697-077d-46a6-8033-1858adc4be63" />
 				<textElement>
 					<font fontName="SansSerif" size="10" isBold="false" pdfFontName="Helvetica" />
@@ -196,12 +204,28 @@
 				<textFieldExpression><![CDATA[$F{department}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="683" y="0" width="112" height="13" uuid="a1ed76d8-bd53-4628-bbeb-05e7813053d6" />
+				<reportElement style="Detail" positionType="Float" x="423" y="0" width="113" height="13" uuid="f53984fc-d4cd-42ae-9e36-cfbdc845263a" />
 				<textElement>
 					<font fontName="SansSerif" size="10" isBold="false" pdfFontName="Helvetica" />
 					<paragraph lineSpacing="Single" />
 				</textElement>
-				<textFieldExpression><![CDATA[$F{user_status}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{country}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="4" y="0" width="128" height="13" uuid="96686a9e-d45d-4966-83f4-839b5d88fc08" />
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="false" pdfFontName="Helvetica" />
+					<paragraph lineSpacing="Single" />
+				</textElement>
+				<textFieldExpression><![CDATA[$F{grade}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="144" y="0" width="137" height="13" uuid="0b71f7be-f751-498c-b0ae-f775ded049fe" />
+				<textElement>
+					<font fontName="SansSerif" size="10" isBold="false" pdfFontName="Helvetica" />
+					<paragraph lineSpacing="Single" />
+				</textElement>
+				<textFieldExpression><![CDATA[$F{comments}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement style="Detail" positionType="Float" x="547" y="0" width="113" height="13" uuid="da961d0c-8dd8-45a2-a28e-7656fbe99db5" />
@@ -212,34 +236,12 @@
 				<textFieldExpression><![CDATA[$F{status_changed}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="144" y="0" width="137" height="13" uuid="abb3a035-c519-43b0-8d37-7f87e1bc9b3e" />
+				<reportElement style="Detail" positionType="Float" x="683" y="0" width="112" height="13" uuid="a1ed76d8-bd53-4628-bbeb-05e7813053d6" />
 				<textElement>
 					<font fontName="SansSerif" size="10" isBold="false" pdfFontName="Helvetica" />
 					<paragraph lineSpacing="Single" />
 				</textElement>
-				<textFieldExpression><![CDATA[$F{lastname}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement style="Detail" positionType="Float" x="423" y="0" width="113" height="13" uuid="f53984fc-d4cd-42ae-9e36-cfbdc845263a" />
-				<textElement>
-					<font fontName="SansSerif" size="10" isBold="false" pdfFontName="Helvetica" />
-					<paragraph lineSpacing="Single" />
-				</textElement>
-				<textFieldExpression><![CDATA[$F{country}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="144" y="42" width="128" height="16" uuid="9cb1559c-410f-4bcd-b933-94dc78345df6" />
-				<textElement>
-					<font isBold="true" />
-				</textElement>
-				<textFieldExpression><![CDATA[$P{grade}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="144" y="42" width="128" height="16" uuid="9cb14f22-410f-4bcd-b423-94dc78c2edf5" />
-				<textElement>
-					<font isBold="true" />
-				</textElement>
-				<textFieldExpression><![CDATA[$P{comments}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{user_status}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

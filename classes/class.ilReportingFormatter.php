@@ -79,11 +79,11 @@ class ilReportingFormatter {
 				if (!$value) {
 					return '';
 				}
-				if ($value === self::NOW_DATE) {
+				/*if ($value === self::NOW_DATE) {
 					$timestamp = time();
-				} else {
-					$timestamp = strtotime($value);
-				}
+				} else {*/
+				$timestamp = strtotime($value); // Supports also 'now'
+				//}
 				$format = isset($options['format']) ? $options['format'] : self::DEFAULT_DATE_FORMAT;
 
 				return date($format, $timestamp);
