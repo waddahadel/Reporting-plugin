@@ -76,15 +76,22 @@ abstract class ilReportingModel {
 
 
 	/**
-	 * @param int $test_id
-	 *
-	 * @return ilTestEvaluationData
+	 * @param int $obj_id
+	 * @param int $usr_id
+	 * @param array $v
 	 */
-	public function getTestEvaluation($test_id) {
-		$test = new ilObjTest($test_id);
+	protected function getLPMark($obj_id, $usr_id, array &$v) {
+		$result = $this->db->queryF("SELECT mark,u_comment FROM ut_lp_marks WHERE obj_id=%s AND usr_id=%s", [ "integer", "integer" ], [
+			$obj_id,
+			$usr_id
+		])->fetchAssoc();
 
-		$evaluation = new ilTestEvaluationData($test);
-
-		return $evaluation;
+		if ($result) {
+			$v["grade"] = $result["mark"];
+			$v["comments"] = $result["u_comment"];
+		} else {
+			$v["grade"] = "";
+			$v["comments"] = "";
+		}
 	}
 }

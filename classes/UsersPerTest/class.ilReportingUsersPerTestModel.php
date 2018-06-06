@@ -88,18 +88,7 @@ class ilReportingUsersPerTestModel extends ilReportingModel {
 		$data = $this->buildRecords($sql);
 
 		foreach ($data as &$v) {
-			$v["grade"] = "";
-			foreach ($this->getTestEvaluation(current(ilObject::_getAllReferences($v["id"])))->getParticipants() as $participant) {
-				/**
-				 * @var ilTestEvaluationUserData $participant
-				 */
-
-				if ($participant->getUserID() == $v["usr_id"]) {
-					$v["grade"] = $participant->getReached() . "/" . $participant->getMaxpoints();
-					break;
-				}
-			}
-			$v["comments"] = "";
+			$this->getLPMark($v["id"], $v["usr_id"], $v);
 		}
 
 		return $data;

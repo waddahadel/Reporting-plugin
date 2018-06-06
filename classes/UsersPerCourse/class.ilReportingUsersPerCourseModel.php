@@ -44,7 +44,7 @@ class ilReportingUsersPerCourseModel extends ilReportingModel {
 		ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
 
 		$sql = "SELECT obj.obj_id AS id, obj.title, CONCAT_WS(' > ', gp.title, p.title) AS path,
-                 usr.firstname, usr.lastname, usr.active,  (SELECT GROUP_CONCAT(orgu_as.path SEPARATOR ', ') from orgu_usr_assignements AS orgu_as WHERE orgu_as.user_id = usr.usr_id) AS org_units, usr.country, usr.department, ut.status_changed,
+                 usr.firstname, usr.lastname, usr.active, usr.usr_id,  (SELECT GROUP_CONCAT(orgu_as.path SEPARATOR ', ') from orgu_usr_assignements AS orgu_as WHERE orgu_as.user_id = usr.usr_id) AS org_units, usr.country, usr.department, ut.status_changed,
                  ut.status AS user_status FROM object_data as obj
 				 INNER JOIN object_reference AS ref ON (ref.obj_id = obj.obj_id)
                  INNER JOIN object_data AS crs_member_role ON crs_member_role.title LIKE CONCAT('il_crs_member_', ref.ref_id)
@@ -97,8 +97,7 @@ class ilReportingUsersPerCourseModel extends ilReportingModel {
 		$data = $this->buildRecords($sql);
 
 		foreach ($data as &$v) {
-			$v["grade"] = "";
-			$v["comments"] = "";
+			$this->getLPMark($v["id"], $v["usr_id"], $v);
 		}
 
 		return $data;
