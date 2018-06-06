@@ -48,7 +48,7 @@ abstract class ilReportingExcelExport {
 		if (!preg_match('#.+\.xlsx?$#', $filename)) {
 			$filename .= '.' . self::EXCEL_FILE_TYPE;
 		}
-		$adapter = new ilExcelWriterAdapter($filename, true);
+		$adapter = new ilExcelWriterAdapter($filename, true); // TODO Migrate to ilExcel
 		$this->workbook = $adapter->getWorkbook();
 		$this->h1 = $this->workbook->addFormat(array( 'Size' => 26, 'Bold' => true ));
 		$this->h3 = $this->workbook->addFormat(array(
