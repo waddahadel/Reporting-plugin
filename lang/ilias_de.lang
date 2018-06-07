@@ -60,7 +60,6 @@ date_from_unix#:#Start
 date_to#:#Ende
 date_to_unix#:#Ende
 all#:#Alle
-export_custom_excel#:#Download als Excel (formatiert)
 permission_denied#:#Sie haben keine Berechtigung, diesen Report einzusehen
 plugin_not_activated#:#Reporting Plugin ist zur Zeit nicht aktiviert
 

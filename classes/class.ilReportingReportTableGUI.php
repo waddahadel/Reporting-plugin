@@ -149,7 +149,7 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	/**
 	 * Method each subclass must implement to handle custom exports
 	 *
-	 * @param int  $format Format constant from ilReportingGUI EXPORT_EXCEL_FORMATTED|EXPORT_PDF
+	 * @param int  $format Format constant from ilReportingGUI EXPORT_PDF
 	 * @param bool $send
 	 */
 	public abstract function exportDataCustom($format, $send = false);

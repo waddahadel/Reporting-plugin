@@ -25,11 +25,6 @@ class ilReportingCoursesPerUserLPReportTableGUI extends ilReportingReportTableGU
 				$export->setReportGroups(array( 'id' => 'group_user', 'obj_id' => 'group_course' ));
 				$export->execute();
 				break;
-			case ilReportingGUI::EXPORT_EXCEL_FORMATTED:
-				$export = new ilReportingCoursesPerUserLPExcelExport('courses_per_user_'
-					. $this->formatter->formatCurrentDate(ilReportingFormatter::EXPORT_FILE_DATE_FORMAT));
-				$export->execute($this->getData());
-				break;
 		}
 	}
 

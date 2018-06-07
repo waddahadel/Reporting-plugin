@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbc1b9cbf9a67e93dca827eb044129ee5
+class ComposerStaticInitb991cd2aee83bdc338dc1b2d78ab0519
 {
     public static $classMap = array (
         'ActiveRecord' => __DIR__ . '/../..' . '/../../../../../../../Services/ActiveRecord/class.ActiveRecord.php',
@@ -24,9 +24,7 @@ class ComposerStaticInitbc1b9cbf9a67e93dca827eb044129ee5
         'ilReportingAdjustPermissionCron' => __DIR__ . '/../..' . '/classes/class.ilReportingAdjustPermissionCron.php',
         'ilReportingConfig' => __DIR__ . '/../..' . '/classes/class.ilReportingConfig.php',
         'ilReportingConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilReportingConfigGUI.php',
-        'ilReportingCoursesPerUserExcelExport' => __DIR__ . '/../..' . '/classes/CoursesPerUser/class.ilReportingCoursesPerUserExcelExport.php',
         'ilReportingCoursesPerUserGUI' => __DIR__ . '/../..' . '/classes/CoursesPerUser/class.ilReportingCoursesPerUserGUI.php',
-        'ilReportingCoursesPerUserLPExcelExport' => __DIR__ . '/../..' . '/classes/CoursesPerUserLP/class.ilReportingCoursesPerUserLPExcelExport.php',
         'ilReportingCoursesPerUserLPGUI' => __DIR__ . '/../..' . '/classes/CoursesPerUserLP/class.ilReportingCoursesPerUserLPGUI.php',
         'ilReportingCoursesPerUserLPModel' => __DIR__ . '/../..' . '/classes/CoursesPerUserLP/class.ilReportingCoursesPerUserLPModel.php',
         'ilReportingCoursesPerUserLPPdfExport' => __DIR__ . '/../..' . '/classes/CoursesPerUserLP/class.ilReportingCoursesPerUserLPPdfExport.php',
@@ -36,7 +34,6 @@ class ComposerStaticInitbc1b9cbf9a67e93dca827eb044129ee5
         'ilReportingCoursesPerUserPdfExport' => __DIR__ . '/../..' . '/classes/CoursesPerUser/class.ilReportingCoursesPerUserPdfExport.php',
         'ilReportingCoursesPerUserReportTableGUI' => __DIR__ . '/../..' . '/classes/CoursesPerUser/class.ilReportingCoursesPerUserReportTableGUI.php',
         'ilReportingCoursesPerUserSearchTableGUI' => __DIR__ . '/../..' . '/classes/CoursesPerUser/class.ilReportingCoursesPerUserSearchTableGUI.php',
-        'ilReportingExcelExport' => __DIR__ . '/../..' . '/classes/class.ilReportingExcelExport.php',
         'ilReportingFormatter' => __DIR__ . '/../..' . '/classes/class.ilReportingFormatter.php',
         'ilReportingGUI' => __DIR__ . '/../..' . '/classes/class.ilReportingGUI.php',
         'ilReportingModel' => __DIR__ . '/../..' . '/classes/class.ilReportingModel.php',
@@ -45,9 +42,7 @@ class ComposerStaticInitbc1b9cbf9a67e93dca827eb044129ee5
         'ilReportingReportTableGUI' => __DIR__ . '/../..' . '/classes/class.ilReportingReportTableGUI.php',
         'ilReportingSearchTableGUI' => __DIR__ . '/../..' . '/classes/class.ilReportingSearchTableGUI.php',
         'ilReportingUIHookGUI' => __DIR__ . '/../..' . '/classes/class.ilReportingUIHookGUI.php',
-        'ilReportingUsersPerCourseExcelExport' => __DIR__ . '/../..' . '/classes/UsersPerCourse/class.ilReportingUsersPerCourseExcelExport.php',
         'ilReportingUsersPerCourseGUI' => __DIR__ . '/../..' . '/classes/UsersPerCourse/class.ilReportingUsersPerCourseGUI.php',
-        'ilReportingUsersPerCourseLPExcelExport' => __DIR__ . '/../..' . '/classes/UsersPerCourseLP/class.ilReportingUsersPerCourseLPExcelExport.php',
         'ilReportingUsersPerCourseLPGUI' => __DIR__ . '/../..' . '/classes/UsersPerCourseLP/class.ilReportingUsersPerCourseLPGUI.php',
         'ilReportingUsersPerCourseLPModel' => __DIR__ . '/../..' . '/classes/UsersPerCourseLP/class.ilReportingUsersPerCourseLPModel.php',
         'ilReportingUsersPerCourseLPPdfExport' => __DIR__ . '/../..' . '/classes/UsersPerCourseLP/class.ilReportingUsersPerCourseLPPdfExport.php',
@@ -57,7 +52,6 @@ class ComposerStaticInitbc1b9cbf9a67e93dca827eb044129ee5
         'ilReportingUsersPerCoursePdfExport' => __DIR__ . '/../..' . '/classes/UsersPerCourse/class.ilReportingUsersPerCoursePdfExport.php',
         'ilReportingUsersPerCourseReportTableGUI' => __DIR__ . '/../..' . '/classes/UsersPerCourse/class.ilReportingUsersPerCourseReportTableGUI.php',
         'ilReportingUsersPerCourseSearchTableGUI' => __DIR__ . '/../..' . '/classes/UsersPerCourse/class.ilReportingUsersPerCourseSearchTableGUI.php',
-        'ilReportingUsersPerTestExcelExport' => __DIR__ . '/../..' . '/classes/UsersPerTest/class.ilReportingUsersPerTestExcelExport.php',
         'ilReportingUsersPerTestGUI' => __DIR__ . '/../..' . '/classes/UsersPerTest/class.ilReportingUsersPerTestGUI.php',
         'ilReportingUsersPerTestModel' => __DIR__ . '/../..' . '/classes/UsersPerTest/class.ilReportingUsersPerTestModel.php',
         'ilReportingUsersPerTestPdfExport' => __DIR__ . '/../..' . '/classes/UsersPerTest/class.ilReportingUsersPerTestPdfExport.php',
@@ -74,7 +68,7 @@ class ComposerStaticInitbc1b9cbf9a67e93dca827eb044129ee5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInitbc1b9cbf9a67e93dca827eb044129ee5::$classMap;
+            $loader->classMap = ComposerStaticInitb991cd2aee83bdc338dc1b2d78ab0519::$classMap;
 
         }, null, ClassLoader::class);
     }

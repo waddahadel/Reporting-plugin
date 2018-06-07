@@ -25,11 +25,6 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
 				$export->setCsvData($this->getData());
 				$export->execute();
 				break;
-			case ilReportingGUI::EXPORT_EXCEL_FORMATTED:
-				$export = new ilReportingUsersPerCourseLPExcelExport('users_per_course_'
-					. $this->formatter->formatCurrentDate(ilReportingFormatter::EXPORT_FILE_DATE_FORMAT));
-				$export->execute($this->getData());
-				break;
 		}
 	}
 
@@ -141,7 +136,6 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
 		}
 	}
 
-
 	/**
 	 * @param object $a_worksheet
 	 * @param int    $a_row
@@ -204,7 +198,6 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
 		}
 		$a_csv->addRow();
 	}
-
 
 	/**
 	 * Excel Version of Fill Row. Likely to

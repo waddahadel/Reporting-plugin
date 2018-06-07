@@ -60,7 +60,6 @@ date_from_unix#:#Start
 date_to#:#Einde
 date_to_unix#:#Einde
 all#:#Alle
-export_custom_excel#:#Download geformatteerde Excel
 permission_denied#:#J ehebt geen rechten voor dit rapport
 plugin_not_activated#:#Reportage plugin is niet actief
 

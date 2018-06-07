@@ -14,7 +14,6 @@ require_once __DIR__ . "/../vendor/autoload.php";
 abstract class ilReportingGUI {
 
 	/** Addition exports available */
-	const EXPORT_EXCEL_FORMATTED = 18;
 	const EXPORT_PDF = 19;
 	const CMD_REPORT = 'report';
 	const CMD_SEARCH = 'search';

@@ -90,9 +90,6 @@ class ilReportingCoursesPerUserGUI extends ilReportingGUI {
 
 
 	public function getAvailableExports() {
-		$exports = array(
-			self::EXPORT_EXCEL_FORMATTED => 'export_custom_excel',
-		);
 		if ($this->isActiveJasperReports()) {
 			$exports[self::EXPORT_PDF] = 'export_pdf';
 		}

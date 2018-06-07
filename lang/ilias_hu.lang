@@ -60,7 +60,6 @@ date_from_unix#:#Kezdete
 date_to#:#Záró időpont
 date_to_unix#:#Vége
 all#:#Összes
-export_custom_excel#:#Formázott Excel letöltése
 permission_denied#:#Nincs jogosultsága elérni ezt a riportot
 plugin_not_activated#:#Riport bővítmény jelenleg nem aktív
 

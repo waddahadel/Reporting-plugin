@@ -76,8 +76,8 @@ abstract class ilReportingModel {
 
 
 	/**
-	 * @param int $obj_id
-	 * @param int $usr_id
+	 * @param int   $obj_id
+	 * @param int   $usr_id
 	 * @param array $v
 	 */
 	protected function getLPMark($obj_id, $usr_id, array &$v) {
