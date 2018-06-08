@@ -32,13 +32,8 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 
 
 	public function getReportData(array $ids, array $filters) {
-
-
-		ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements();
-		Closure::bind(function () {
-			ilObjOrgUnitTree::$temporary_table_name = NULL;
-		}, NULL, ilObjOrgUnitTree::class)(); // Tricks stupid ilObjOrgUnitTree::buildTempTableWithUsrAssignements
-		ilObjOrgUnitTree::_getInstance()->buildTempTableWithUsrAssignements('orgu_usr_assignements_2');
+        $this->buildTempTableWithUserAssignments('orgu_usr_assignements');
+        $this->buildTempTableWithUserAssignments('orgu_usr_assignements_2');
 
 		$sql = "SELECT * FROM (
                      /* Load objects with LP under a specified course */
@@ -182,4 +177,20 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 
 		return $sql;
 	}
+
+    protected function buildTempTableWithUserAssignments($table_name) {
+        $q = "DROP TABLE IF EXISTS $table_name";
+        $this->db->manipulate($q);
+
+        $q = "CREATE TEMPORARY TABLE IF NOT EXISTS $table_name AS (
+				SELECT DISTINCT object_reference.ref_id AS ref_id, rbac_ua.usr_id AS user_id, orgu_path_storage.path AS path
+					FROM rbac_ua
+					JOIN  rbac_fa ON rbac_fa.rol_id = rbac_ua.rol_id
+					JOIN object_reference ON rbac_fa.parent = object_reference.ref_id
+					JOIN object_data ON object_data.obj_id = object_reference.obj_id
+					JOIN orgu_path_storage ON orgu_path_storage.ref_id = object_reference.ref_id
+				WHERE object_data.type = 'orgu' AND object_reference.deleted IS NULL
+			);";
+        $this->db->manipulate($q);
+    }
 }
