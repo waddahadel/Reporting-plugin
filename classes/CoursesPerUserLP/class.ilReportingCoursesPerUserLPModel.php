@@ -125,7 +125,7 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 				$return[] = $v;
 				$objects = array();
 			} else {
-				$objects[] = array_slice($v, - 6);
+				$objects[] = array_slice($v, - 8);
 			}
 		}
 		$return[count($return) - 1]['_objects'] = $objects;
