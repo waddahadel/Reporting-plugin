@@ -116,16 +116,16 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 		 */
 
 		foreach ($data as $k => $v) {
-			$this->getLPMark($v["obj_id"], $v["id"], $v);
-
-			if (is_null($v['object_title'])) {
-				if ($k != 0) {
+            if (is_null($v['object_title'])) {
+                $this->getLPMark($v["obj_id"], $v["id"], $v);
+                if ($k != 0) {
 					$return[count($return) - 1]['_objects'] = $objects;
 				}
 				$return[] = $v;
 				$objects = array();
 			} else {
-				$objects[] = array_slice($v, - 8);
+                $this->getLPMark($v["object_id"], $v["id"], $v);
+                $objects[] = array_slice($v, - 8);
 			}
 		}
 		$return[count($return) - 1]['_objects'] = $objects;
