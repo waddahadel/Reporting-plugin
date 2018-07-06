@@ -116,16 +116,16 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 		 */
 
 		foreach ($data as $k => $v) {
-			$this->getLPMark($v["obj_id"], $v["id"], $v);
-
-			if (is_null($v['object_title'])) {
-				if ($k != 0) {
+            if (is_null($v['object_title'])) {
+                $this->getLPMark($v["obj_id"], $v["id"], $v);
+                if ($k != 0) {
 					$return[count($return) - 1]['_objects'] = $objects;
 				}
 				$return[] = $v;
 				$objects = array();
 			} else {
-				$objects[] = array_slice($v, - 8);
+                $this->getLPMark($v["object_id"], $v["id"], $v);
+                $objects[] = array_slice($v, - 8);
 			}
 		}
 		$return[count($return) - 1]['_objects'] = $objects;
@@ -177,20 +177,4 @@ class ilReportingCoursesPerUserLPModel extends ilReportingModel {
 
 		return $sql;
 	}
-
-    protected function buildTempTableWithUserAssignments($table_name) {
-        $q = "DROP TABLE IF EXISTS $table_name";
-        $this->db->manipulate($q);
-
-        $q = "CREATE TEMPORARY TABLE IF NOT EXISTS $table_name AS (
-				SELECT DISTINCT object_reference.ref_id AS ref_id, rbac_ua.usr_id AS user_id, orgu_path_storage.path AS path
-					FROM rbac_ua
-					JOIN  rbac_fa ON rbac_fa.rol_id = rbac_ua.rol_id
-					JOIN object_reference ON rbac_fa.parent = object_reference.ref_id
-					JOIN object_data ON object_data.obj_id = object_reference.obj_id
-					JOIN orgu_path_storage ON orgu_path_storage.ref_id = object_reference.ref_id
-				WHERE object_data.type = 'orgu' AND object_reference.deleted IS NULL
-			);";
-        $this->db->manipulate($q);
-    }
 }
