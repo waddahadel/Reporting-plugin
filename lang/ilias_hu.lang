@@ -47,6 +47,8 @@ object_percentage#:#Százalék
 object_status#:#Állapot
 object_type#:#Típus
 object_status_changed#:#Utolsó állapotmódosítás
+object_grade#:#Grade
+object_comments#:#Commentz
 show_objects_in_course#:#Objektumok tanulási haladásának megjelenítése a kurzusokban
 assessment_title#:#Hozzárendelt cím
 

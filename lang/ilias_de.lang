@@ -47,6 +47,8 @@ object_percentage#:#Prozent
 object_status#:#Status
 object_type#:#Typ
 object_status_changed#:#Letzter Statuswechsel
+object_grade#:#Note
+object_comments#:#Kommentar
 show_objects_in_course#:#Objekte innerhalb Kurse mit Lernfortschritt anzeigen
 assessment_title#:#Bewertungstitel
 

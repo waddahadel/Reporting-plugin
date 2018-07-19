@@ -75,23 +75,26 @@ abstract class ilReportingModel {
 	}
 
 
-	/**
-	 * @param int   $obj_id
-	 * @param int   $usr_id
-	 * @param array $v
-	 */
-	protected function getLPMark($obj_id, $usr_id, array &$v) {
+    /**
+     * @param int $obj_id
+     * @param int $usr_id
+     * @param array $
+     * @param bool $for_sub_objects - flag if it should say object_grade or just grade
+     */
+	protected function getLPMark($obj_id, $usr_id, array &$v, $for_sub_objects = false) {
 		$result = $this->db->queryF("SELECT mark,u_comment FROM ut_lp_marks WHERE obj_id=%s AND usr_id=%s", [ "integer", "integer" ], [
 			$obj_id,
 			$usr_id
 		])->fetchAssoc();
 
+		$prefix = $for_sub_objects ? 'object_' : '';
+
 		if ($result) {
-			$v["grade"] = $result["mark"];
-			$v["comments"] = $result["u_comment"];
+			$v[$prefix . "grade"] = $result["mark"];
+			$v[$prefix . "comments"] = $result["u_comment"];
 		} else {
-			$v["grade"] = "";
-			$v["comments"] = "";
+			$v[$prefix . "grade"] = "";
+			$v[$prefix . "comments"] = "";
 		}
 	}
 

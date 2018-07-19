@@ -88,6 +88,12 @@ class ilReportingUsersPerCourseLPReportTableGUI extends ilReportingReportTableGU
 				'txt' => $this->pl->txt('object_status_changed'),
 				'formatter' => ilReportingFormatter::FORMAT_STR_DATE,
 			),
+            'object_grade' => array(
+                'txt' => $this->pl->txt('object_grade'),
+            ),
+            'object_comments' => array(
+                'txt' => $this->pl->txt('object_comments'),
+            ),
 		);
 	}
 

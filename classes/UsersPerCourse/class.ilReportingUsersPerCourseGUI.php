@@ -29,8 +29,8 @@ class ilReportingUsersPerCourseGUI extends ilReportingGUI {
 	 * Redirect to UsersPerCourseLP report which shows objects in courses which are relevant for LP
 	 */
 	public function showObjectsInCourse() {
-		$this->ctrl->setParameterByClass(self::class, "from", self::class);
-		$this->ctrl->redirectByClass(self::class, self::CMD_REPORT);
+		$this->ctrl->setParameterByClass(ilReportingUsersPerCourseLPGUI::class, "from", self::class);
+		$this->ctrl->redirectByClass(ilReportingUsersPerCourseLPGUI::class, ilReportingUsersPerCourseLPGUI::CMD_REPORT);
 	}
 
 

@@ -109,14 +109,16 @@ class ilReportingUsersPerCourseLPModel extends ilReportingModel {
 		$objects = array();
 		$data = $this->buildRecords($sql);
 		foreach ($data as $k => $v) {
-			$this->getLPMark($v["id"], $v["usr_id"], $v);
-			if (is_null($v['object_title'])) {
-				if ($k != 0) {
+            if (is_null($v['object_title'])) {
+                $this->getLPMark($v["id"], $v["usr_id"], $v, false);
+                if ($k != 0) {
 					$return[count($return) - 1]['_objects'] = $objects;
 				}
-				$objects = array();
+                $return[] = $v;
+                $objects = array();
 			} else {
-				$objects[] = array_slice($v, - 6);
+                $this->getLPMark($v["object_id"], $v["usr_id"], $v, true);
+				$objects[] = array_slice($v, - 8);
 			}
 		}
 		$return[count($return) - 1]['_objects'] = $objects;

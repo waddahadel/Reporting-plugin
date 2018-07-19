@@ -71,7 +71,9 @@ class ilReportingCoursesPerUserLPReportTableGUI extends ilReportingReportTableGU
 	 */
 	protected function getAdditionalColumns() {
 		return array(
-			'object_title' => array( 'txt' => $this->pl->txt('object_title') ),
+			'object_title' => array(
+			    'txt' => $this->pl->txt('object_title')
+            ),
 			'object_percentage' => array(
 				'txt' => $this->pl->txt('object_percentage'),
 				'formatter' => ilReportingFormatter::FORMAT_STR_PERCENTAGE,
@@ -87,6 +89,12 @@ class ilReportingCoursesPerUserLPReportTableGUI extends ilReportingReportTableGU
 			'object_status_changed' => array(
 				'txt' => $this->pl->txt('object_status_changed'),
 				'formatter' => ilReportingFormatter::FORMAT_STR_DATE,
+			),
+			'object_grade' => array(
+				'txt' => $this->pl->txt('object_grade'),
+			),
+			'object_comments' => array(
+				'txt' => $this->pl->txt('object_comments'),
 			),
 		);
 	}

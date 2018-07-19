@@ -47,6 +47,8 @@ object_percentage#:#Percentage
 object_status#:#Status
 object_type#:#Type
 object_status_changed#:#Laatste statusverandering
+object_grade#:#Cijfer
+object_comments#:#Commentaar
 show_objects_in_course#:#Toon voortgang van objecten in cursus
 assessment_title#:#Titel van toets
 
@@ -91,5 +93,5 @@ org_units#:#MISSING
 save#:#MISSING
 name#:#MISSING
 
-grade#:#MISSING
-comments#:#MISSING
+grade#:#Cijfer
+comments#:#Commentaar
