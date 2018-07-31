@@ -77,7 +77,7 @@ class ilReportingUsersPerTestModel extends ilReportingModel {
 				$sql .= ' AND ut.status_changed >= ' . $this->db->quote($date, 'date');
 			}
 			if ($date = $filters['status_changed_to']) {
-				/** @var $date ilDateTime */
+				/** @var ilDateTime $date */
 				$date->increment(ilDateTime::DAY, 1);
 				$sql .= ' AND ut.status_changed <= ' . $this->db->quote($date, 'date');
 				$date->increment(ilDateTime::DAY, - 1);

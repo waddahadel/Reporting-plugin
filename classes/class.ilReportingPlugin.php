@@ -193,9 +193,9 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 	/**
 	 * Create a Report Entry in MainMenu
 	 *
-	 * @param array $trans
-	 * @param       $gui_class
-	 * @param int   $dropdown_id
+	 * @param array  $trans
+	 * @param string $gui_class
+	 * @param int    $dropdown_id
 	 */
 	private static function createMainMenuEntry(array $trans, $gui_class, $dropdown_id) {
 		$entry = new ctrlmmEntryCtrl();

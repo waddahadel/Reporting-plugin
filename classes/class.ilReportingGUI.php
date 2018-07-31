@@ -23,19 +23,19 @@ abstract class ilReportingGUI {
 	const CMD_RESET_FILTER_REPORT = 'resetFilterReport';
 	/** Session keys used to store the ids of courses/tests/users and filters status, last status changed */
 	const SESSION_KEY_IDS = 'reporting_ids';
-	/** @var \ilTemplate */
+	/** @var ilTemplate */
 	protected $tpl;
-	/** @var \ilReportingPlugin */
+	/** @var ilReportingPlugin */
 	protected $pl;
-	/** @var \ilCtrl */
+	/** @var ilCtrl */
 	protected $ctrl;
-	/** @var \ilTabsGUI */
+	/** @var ilTabsGUI */
 	protected $tabs;
-	/** @var  ilPluginAdmin */
+	/** @var ilPluginAdmin */
 	protected $ilPluginAdmin;
-	/** @var  ilReportingModel */
+	/** @var ilReportingModel */
 	protected $model;
-	/** @var  ilAccessHandler */
+	/** @var ilAccessHandler */
 	protected $access;
 	/**
 	 * @var ilTable2GUI Either search or report table is assigned to this variable
@@ -197,7 +197,7 @@ abstract class ilReportingGUI {
 		// Still no access? Check for permissions defined in MainMenu plugin
 		if (!$hasAccess) {
 			$entries = ctrlmmEntry::getEntriesByCmdClass($this->ctrl->getCmdClass());
-			/** @var $entry ctrlmmEntry */
+			/** @var ctrlmmEntry $entry */
 			foreach ($entries as $entry) {
 				if ($entry->checkPermission()) {
 					$hasAccess = true;
@@ -232,7 +232,7 @@ abstract class ilReportingGUI {
 	/**
 	 * Store IDs from data array in session
 	 *
-	 * @param $data
+	 * @param array $data
 	 */
 	protected function storeIdsInSession($data) {
 		if (!count($data)) {
