@@ -11,9 +11,6 @@ Available reports:
 **IMPORTANT NOTE**: This plugin has dependencies on other plugins and services which must be installed before the Reporting plugin:
 * [CtrlMainMenu Plugin](https://github.com/studer-raimann/CtrlMainMenu)
 
-Optionally, to create PDF reports
-* [JasperReport Library](https://github.com/studer-raimann/JasperReport)
-
 Please read the install instructions in the documentation here:
 http://www.ilias.de/docu/goto_docu_wiki_1357_Reporting_Plugin.html
 

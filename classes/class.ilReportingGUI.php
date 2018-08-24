@@ -213,19 +213,12 @@ abstract class ilReportingGUI {
 
 
 	/**
-	 * Check if the JasperReport library is available
+	 * Set if the JasperReport library is available
 	 *
 	 * @return bool
 	 */
 	protected function isActiveJasperReports() {
-		$file = './Customizing/global/plugins/Libraries/JasperReport/classes/class.JasperReport.php';
-		if (is_file($file)) {
-			require_once($file);
-
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 

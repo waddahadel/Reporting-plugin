@@ -23,6 +23,9 @@
       "../../../../../../../Services/Utilities/classes/class.ilCSVWriter.php"
     ]
   },
+  "require": {
+    "srag/jasperreport": "^2.0.2"
+  },
   "config": {
     "optimize-autoloader": true,
     "sort-packages": true,
