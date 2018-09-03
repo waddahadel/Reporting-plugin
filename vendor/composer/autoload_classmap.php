@@ -106,7 +106,6 @@ return array(
     'setasign\\Fpdi\\PdfReader\\PdfReaderException' => $vendorDir . '/setasign/fpdi/src/PdfReader/PdfReaderException.php',
     'setasign\\Fpdi\\TcpdfFpdi' => $vendorDir . '/setasign/fpdi/src/TcpdfFpdi.php',
     'srag\\DIC\\AbstractDIC' => $vendorDir . '/srag/dic/src/AbstractDIC.php',
-    'srag\\DIC\\DICCache' => $vendorDir . '/srag/dic/src/DICCache.php',
     'srag\\DIC\\DICException' => $vendorDir . '/srag/dic/src/DICException.php',
     'srag\\DIC\\DICInterface' => $vendorDir . '/srag/dic/src/DICInterface.php',
     'srag\\DIC\\DICStatic' => $vendorDir . '/srag/dic/src/DICStatic.php',
