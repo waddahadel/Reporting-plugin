@@ -1,5 +1,11 @@
 <?php
+
 require_once __DIR__ . "/../vendor/autoload.php";
+
+use srag\Plugins\CtrlMainMenu\Entry\ctrlmmEntry;
+use srag\Plugins\CtrlMainMenu\EntryTypes\Ctrl\ctrlmmEntryCtrl;
+use srag\Plugins\CtrlMainMenu\EntryTypes\Dropdown\ctrlmmEntryDropdown;
+use srag\Plugins\CtrlMainMenu\Menu\ctrlmmMenu;
 
 /**
  * Reporting Plugin
@@ -111,8 +117,8 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 	 * Abort if they were already created before...
 	 */
 	public static function createReportMainMenuEntries() {
-		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu/classes/Menu/class.ctrlmmMenu.php');
-		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu/classes/Entry/class.ctrlmmEntry.php');
+		require_once __DIR__ . "/../../CtrlMainMenu/vendor/autoload.php";
+
 		global $DIC;
 		$ilUser = $DIC->user();
 
@@ -213,8 +219,7 @@ class ilReportingPlugin extends ilUserInterfaceHookPlugin {
 	 *
 	 */
 	public static function removeReportMainMenuEntries() {
-		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu/classes/Menu/class.ctrlmmMenu.php');
-		require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/CtrlMainMenu/classes/Entry/class.ctrlmmEntry.php');
+		require_once __DIR__ . "/../../CtrlMainMenu/vendor/autoload.php";
 
 		foreach (array_merge(ctrlmmEntry::getEntriesByCmdClass(ilReportingCoursesPerUserGUI::class), ctrlmmEntry::getEntriesByCmdClass(ilReportingUsersPerCourseGUI::class), ctrlmmEntry::getEntriesByCmdClass(ilReportingUsersPerTestGUI::class), ctrlmmEntry::getEntriesByCmdClass(ilReportingCoursesPerUserLPGUI::class), ctrlmmEntry::getEntriesByCmdClass(ilReportingUsersPerCourseLPGUI::class)) as $entry) {
 			/**
