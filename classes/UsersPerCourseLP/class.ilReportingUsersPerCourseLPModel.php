@@ -32,8 +32,8 @@ class ilReportingUsersPerCourseLPModel extends ilReportingModel {
 
 
 	public function getReportData(array $ids, array $filters) {
-        $this->buildTempTableWithUserAssignments('orgu_usr_assignements');
-        $this->buildTempTableWithUserAssignments('orgu_usr_assignements_2');
+		$this->buildTempTableWithUserAssignments('orgu_usr_assignements');
+		$this->buildTempTableWithUserAssignments('orgu_usr_assignements_2');
 
 		$sql = "SELECT * FROM (
                      /* Load objects with LP under a specified course */
@@ -109,15 +109,15 @@ class ilReportingUsersPerCourseLPModel extends ilReportingModel {
 		$objects = array();
 		$data = $this->buildRecords($sql);
 		foreach ($data as $k => $v) {
-            if (is_null($v['object_title'])) {
-                $this->getLPMark($v["id"], $v["usr_id"], $v, false);
-                if ($k != 0) {
+			if (is_null($v['object_title'])) {
+				$this->getLPMark($v["id"], $v["usr_id"], $v, false);
+				if ($k != 0) {
 					$return[count($return) - 1]['_objects'] = $objects;
 				}
-                $return[] = $v;
-                $objects = array();
+				$return[] = $v;
+				$objects = array();
 			} else {
-                $this->getLPMark($v["object_id"], $v["usr_id"], $v, true);
+				$this->getLPMark($v["object_id"], $v["usr_id"], $v, true);
 				$objects[] = array_slice($v, - 8);
 			}
 		}
@@ -161,7 +161,7 @@ class ilReportingUsersPerCourseLPModel extends ilReportingModel {
 				$sql .= ' AND ut.status_changed >= ' . $this->db->quote($date, 'date');
 			}
 			if ($date = $filters['status_changed_to']) {
-				/** @var $date ilDateTime */
+				/** @var ilDateTime $date */
 				$date->increment(ilDateTime::DAY, 1);
 				$sql .= ' AND ut.status_changed <= ' . $this->db->quote($date, 'date');
 				$date->increment(ilDateTime::DAY, - 1);
@@ -170,5 +170,4 @@ class ilReportingUsersPerCourseLPModel extends ilReportingModel {
 
 		return $sql;
 	}
-
 }

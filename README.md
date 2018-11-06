@@ -11,9 +11,6 @@ Available reports:
 **IMPORTANT NOTE**: This plugin has dependencies on other plugins and services which must be installed before the Reporting plugin:
 * [CtrlMainMenu Plugin](https://github.com/studer-raimann/CtrlMainMenu)
 
-Optionally, to create PDF reports
-* [JasperReport Library](https://github.com/studer-raimann/JasperReport)
-
 Please read the install instructions in the documentation here:
 http://www.ilias.de/docu/goto_docu_wiki_1357_Reporting_Plugin.html
 
@@ -27,6 +24,13 @@ git clone https://github.com/studer-raimann/Reporting.git
 ```
 As ILIAS administrator go to "Administration->Plugins" and install/activate the plugin.
 
+### Dependencies
+* ILIAS 5.2 or ILIAS 5.3
+* PHP >=5.6
+* [composer](https://getcomposer.org)
+* [srag/jasperreport](https://packagist.org/packages/srag/jasperreport)
+
+Please use it for further development!
 
 ### ILIAS Plugin SLA
 
@@ -37,5 +41,5 @@ Setzen Sie eines unserer Plugins professionell ein? Sichern Sie sich mittels SLA
 Bitte beachten Sie, dass wir nur Institutionen, welche ein SLA abschliessen Unterstützung und Release-Pflege garantieren.
 
 ### Contact
-info@studer-raimann.ch  
+support-custom1@studer-raimann.ch  
 https://studer-raimann.ch  

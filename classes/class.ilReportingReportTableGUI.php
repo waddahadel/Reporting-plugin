@@ -232,8 +232,8 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	 * Excel Version of Fill Header. Likely to
 	 * be overwritten by derived class.
 	 *
-	 * @param    ilExcel $a_excel excel wrapper
-	 * @param    int     $a_row   row counter
+	 * @param ilExcel $a_excel excel wrapper
+	 * @param int     $a_row   row counter
 	 */
 	protected function fillHeaderExcel(ilExcel $a_excel, &$a_row) {
 		$col = 0;
@@ -251,9 +251,9 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	 * Excel Version of Fill Row. Most likely to
 	 * be overwritten by derived class.
 	 *
-	 * @param    ilExcel $a_excel excel wrapper
-	 * @param    int     $a_row   row counter
-	 * @param    array   $a_set   data array
+	 * @param ilExcel $a_excel excel wrapper
+	 * @param int     $a_row   row counter
+	 * @param array   $a_set   data array
 	 */
 	protected function fillRowExcel(ilExcel $a_excel, &$a_row, $a_set) {
 		$col = 0;
@@ -291,8 +291,8 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 
 
 	/**
-	 * @param      $item
-	 * @param bool $optional
+	 * @param ilFormPropertyGUI $item
+	 * @param bool              $optional
 	 */
 	protected function addFilterItemWithValue($item, $optional = false) {
 		$this->addFilterItem($item, $optional);
@@ -304,27 +304,27 @@ abstract class ilReportingReportTableGUI extends ilTable2GUI {
 	/**
 	 * Return value of a filter depending on the InputGUI class
 	 *
-	 * @param $item
+	 * @param ilFormPropertyGUI $item
 	 *
 	 * @return bool|object|string
 	 */
 	protected function getFilterItemValue($item) {
 		/**
-		 * @var $item ilFormPropertyGUI
+		 * @var ilFormPropertyGUI $item
 		 */
 		$value = '';
 		$item->readFromSession();
 		switch (get_class($item)) {
 			case ilSelectInputGUI::class:
-				/** @var $item ilSelectInputGUI */
+				/** @var ilSelectInputGUI $item */
 				$value = $item->getValue();
 				break;
 			case ilCheckboxInputGUI::class:
-				/** @var $item ilCheckboxInputGUI */
+				/** @var ilCheckboxInputGUI $item */
 				$value = $item->getChecked();
 				break;
 			case ilDateTimeInputGUI::class:
-				/** @var $item ilDateTimeInputGUI */
+				/** @var ilDateTimeInputGUI $item */
 				// Why is this necessary? Bug? ilDateTimeInputGUI::clearFromSession() has no effect...
 				if ($this->ctrl->getCmd() == ilReportingGUI::CMD_RESET_FILTER_REPORT) {
 					$item->setDate(NULL);

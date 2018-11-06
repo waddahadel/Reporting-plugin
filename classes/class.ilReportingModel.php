@@ -9,13 +9,13 @@
  */
 abstract class ilReportingModel {
 
-	/** @var  ilDB */
+	/** @var ilDB */
 	protected $db;
-	/** @var \ilReportingPlugin */
+	/** @var ilReportingPlugin */
 	protected $pl;
-	/** @var  ilObjUser */
+	/** @var ilObjUser */
 	protected $user;
-	/** @var  ilAccess */
+	/** @var ilAccess */
 	protected $access;
 
 
@@ -59,7 +59,7 @@ abstract class ilReportingModel {
 	/**
 	 * Build records from SQL Query string
 	 *
-	 * @param $sql SQL String
+	 * @param string $sql SQL String
 	 *
 	 * @return array
 	 */
@@ -75,12 +75,12 @@ abstract class ilReportingModel {
 	}
 
 
-    /**
-     * @param int $obj_id
-     * @param int $usr_id
-     * @param array $
-     * @param bool $for_sub_objects - flag if it should say object_grade or just grade
-     */
+	/**
+	 * @param int  $obj_id
+	 * @param int  $usr_id
+	 * @param array $
+	 * @param bool $for_sub_objects - flag if it should say object_grade or just grade
+	 */
 	protected function getLPMark($obj_id, $usr_id, array &$v, $for_sub_objects = false) {
 		$result = $this->db->queryF("SELECT mark,u_comment FROM ut_lp_marks WHERE obj_id=%s AND usr_id=%s", [ "integer", "integer" ], [
 			$obj_id,
@@ -99,14 +99,14 @@ abstract class ilReportingModel {
 	}
 
 
-    /**
-     * @param $table_name
-     */
-    protected function buildTempTableWithUserAssignments($table_name) {
-        $q = "DROP TABLE IF EXISTS $table_name";
-        $this->db->manipulate($q);
+	/**
+	 * @param string $table_name
+	 */
+	protected function buildTempTableWithUserAssignments($table_name) {
+		$q = "DROP TABLE IF EXISTS $table_name";
+		$this->db->manipulate($q);
 
-        $q = "CREATE TEMPORARY TABLE IF NOT EXISTS $table_name AS (
+		$q = "CREATE TEMPORARY TABLE IF NOT EXISTS $table_name AS (
 				SELECT DISTINCT object_reference.ref_id AS ref_id, rbac_ua.usr_id AS user_id, orgu_path_storage.path AS path
 					FROM rbac_ua
 					JOIN  rbac_fa ON rbac_fa.rol_id = rbac_ua.rol_id
@@ -115,6 +115,6 @@ abstract class ilReportingModel {
 					JOIN orgu_path_storage ON orgu_path_storage.ref_id = object_reference.ref_id
 				WHERE object_data.type = 'orgu' AND object_reference.deleted IS NULL
 			);";
-        $this->db->manipulate($q);
-    }
+		$this->db->manipulate($q);
+	}
 }

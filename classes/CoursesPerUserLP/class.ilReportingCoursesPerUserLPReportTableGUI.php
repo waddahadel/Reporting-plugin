@@ -104,8 +104,8 @@ class ilReportingCoursesPerUserLPReportTableGUI extends ilReportingReportTableGU
 	 * Excel Version of Fill Header. Likely to
 	 * be overwritten by derived class.
 	 *
-	 * @param    ilExcel $a_excel excel wrapper
-	 * @param    int     $a_row   row counter
+	 * @param ilExcel $a_excel excel wrapper
+	 * @param int     $a_row   row counter
 	 */
 	protected function fillHeaderExcel(ilExcel $a_excel, &$a_row) {
 		$col = 0;
@@ -124,9 +124,9 @@ class ilReportingCoursesPerUserLPReportTableGUI extends ilReportingReportTableGU
 	 * Excel Version of Fill Row. Most likely to
 	 * be overwritten by derived class.
 	 *
-	 * @param    ilExcel $a_excel excel wrapper
-	 * @param    int     $a_row   row counter
-	 * @param    array   $a_set   data array
+	 * @param ilExcel $a_excel excel wrapper
+	 * @param int     $a_row   row counter
+	 * @param array   $a_set   data array
 	 */
 	protected function fillRowExcel(ilExcel $a_excel, &$a_row, $a_set) {
 		parent::fillRowExcel($a_excel, $a_row, $a_set);
@@ -175,7 +175,7 @@ class ilReportingCoursesPerUserLPReportTableGUI extends ilReportingReportTableGU
 	 * CSV Version of Fill Header. Likely to
 	 * be overwritten by derived class.
 	 *
-	 * @param   object $a_csv current file
+	 * @param object $a_csv current file
 	 */
 	protected function fillHeaderCSV($a_csv) {
 		$all_columns = array_merge($this->getColumns(), $this->getAdditionalColumns());

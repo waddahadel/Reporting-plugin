@@ -19,7 +19,7 @@ abstract class ilReportingSearchTableGUI extends ilTable2GUI {
 	 */
 	protected $ctrl;
 	/**
-	 * @var \ilToolbarGUI
+	 * @var ilToolbarGUI
 	 */
 	protected $toolbar;
 	/**
@@ -69,26 +69,26 @@ abstract class ilReportingSearchTableGUI extends ilTable2GUI {
 
 
 	/**
-	 * @param      $item
-	 * @param bool $optional
+	 * @param ilFormPropertyGUI $item
+	 * @param bool              $optional
 	 */
 	protected function addFilterItemWithValue($item, $optional = false) {
 		/**
-		 * @var $item ilFormPropertyGUI
+		 * @var ilFormPropertyGUI $item
 		 */
 		$this->addFilterItem($item, $optional);
 		$item->readFromSession();
 		switch (get_class($item)) {
 			case ilSelectInputGUI::class:
-				/** @var $item ilSelectInputGUI */
+				/** @var ilSelectInputGUI $item */
 				$value = $item->getValue();
 				break;
 			case ilCheckboxInputGUI::class:
-				/** @var $item ilCheckboxInputGUI */
+				/** @var ilCheckboxInputGUI $item */
 				$value = $item->getChecked();
 				break;
 			case ilDateTimeInputGUI::class:
-				/** @var $item ilDateTimeInputGUI */
+				/** @var ilDateTimeInputGUI $item */
 				$value = $item->getDate();
 				break;
 			default:

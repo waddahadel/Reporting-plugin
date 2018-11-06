@@ -16,11 +16,11 @@ require_once __DIR__ . "/../vendor/autoload.php";
 class ilReportingUIHookGUI extends ilUIHookPluginGUI {
 
 	const TAB_REPORTS = 'reports';
-	/** @var  ilCtrl */
+	/** @var ilCtrl */
 	protected $ctrl;
-	/** @var  ilReportingPlugin */
+	/** @var ilReportingPlugin */
 	protected $pl;
-	/** @var  ilAccessHandler */
+	/** @var ilAccessHandler */
 	protected $access;
 
 

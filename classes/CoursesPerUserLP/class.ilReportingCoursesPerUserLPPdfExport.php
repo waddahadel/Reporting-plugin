@@ -76,8 +76,8 @@ class ilReportingCoursesPerUserLPPdfExport extends ilReportingPdfExport {
 
 
 	/**
-	 * @param       $csv
-	 * @param array $columns
+	 * @param ilCSVWriter $csv
+	 * @param array       $columns
 	 */
 	protected function writeColumnsToCsv($csv, array $columns) {
 		foreach ($columns as $column) {
