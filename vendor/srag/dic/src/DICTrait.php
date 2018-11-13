@@ -1,16 +1,16 @@
 <?php
 
-namespace srag\DIC;
+namespace srag\DIC\Reporting;
 
-use srag\DIC\DIC\DICInterface;
-use srag\DIC\Exception\DICException;
-use srag\DIC\Plugin\PluginInterface;
-use srag\DIC\Version\VersionInterface;
+use srag\DIC\Reporting\DIC\DICInterface;
+use srag\DIC\Reporting\Exception\DICException;
+use srag\DIC\Reporting\Plugin\PluginInterface;
+use srag\DIC\Reporting\Version\VersionInterface;
 
 /**
  * Trait DICTrait
  *
- * @package srag\DIC
+ * @package srag\DIC\Reporting
  *
  * @author  studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  */

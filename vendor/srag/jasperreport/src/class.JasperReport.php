@@ -1,15 +1,15 @@
 <?php
 
-namespace srag\JasperReport;
+namespace srag\JasperReport\Reporting;
 
 use Exception;
 use ilUtil;
-use srag\DIC\DICTrait;
+use srag\DIC\Reporting\DICTrait;
 
 /**
  * Class JasperReport
  *
- * @package srag\JasperReport
+ * @package srag\JasperReport\Reporting
  *
  * @author  studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  * @author  Fabian Schmid <fs@studer-raimann.ch>

@@ -4,11 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb991cd2aee83bdc338dc1b2d78ab0519
+class ComposerStaticInit02dc563a3da9c1edb4efc32501634306
 {
     public static $prefixLengthsPsr4 = array (
         's' => 
         array (
+            'srag\\LibrariesNamespaceChanger\\' => 31,
             'srag\\JasperReport\\' => 18,
             'srag\\DIC\\' => 9,
             'setasign\\Fpdi\\' => 14,
@@ -16,6 +17,10 @@ class ComposerStaticInitb991cd2aee83bdc338dc1b2d78ab0519
     );
 
     public static $prefixDirsPsr4 = array (
+        'srag\\LibrariesNamespaceChanger\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/srag/librariesnamespacechanger/src',
+        ),
         'srag\\JasperReport\\' => 
         array (
             0 => __DIR__ . '/..' . '/srag/jasperreport/src',
@@ -134,29 +139,30 @@ class ComposerStaticInitb991cd2aee83bdc338dc1b2d78ab0519
         'setasign\\Fpdi\\Tcpdf\\Fpdi' => __DIR__ . '/..' . '/setasign/fpdi/src/Tcpdf/Fpdi.php',
         'setasign\\Fpdi\\Tfpdf\\FpdfTpl' => __DIR__ . '/..' . '/setasign/fpdi/src/Tfpdf/FpdfTpl.php',
         'setasign\\Fpdi\\Tfpdf\\Fpdi' => __DIR__ . '/..' . '/setasign/fpdi/src/Tfpdf/Fpdi.php',
-        'srag\\DIC\\DICStatic' => __DIR__ . '/..' . '/srag/dic/src/DICStatic.php',
-        'srag\\DIC\\DICStaticInterface' => __DIR__ . '/..' . '/srag/dic/src/DICStaticInterface.php',
-        'srag\\DIC\\DICTrait' => __DIR__ . '/..' . '/srag/dic/src/DICTrait.php',
-        'srag\\DIC\\DIC\\AbstractDIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/AbstractDIC.php',
-        'srag\\DIC\\DIC\\DICInterface' => __DIR__ . '/..' . '/srag/dic/src/DIC/DICInterface.php',
-        'srag\\DIC\\DIC\\LegacyDIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/LegacyDIC.php',
-        'srag\\DIC\\DIC\\NewDIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/NewDIC.php',
-        'srag\\DIC\\Exception\\DICException' => __DIR__ . '/..' . '/srag/dic/src/Exception/DICException.php',
-        'srag\\DIC\\Plugin\\Plugin' => __DIR__ . '/..' . '/srag/dic/src/Plugin/Plugin.php',
-        'srag\\DIC\\Plugin\\PluginInterface' => __DIR__ . '/..' . '/srag/dic/src/Plugin/PluginInterface.php',
-        'srag\\DIC\\Plugin\\Pluginable' => __DIR__ . '/..' . '/srag/dic/src/Plugin/Pluginable.php',
-        'srag\\DIC\\Version\\Version' => __DIR__ . '/..' . '/srag/dic/src/Version/Version.php',
-        'srag\\DIC\\Version\\VersionInterface' => __DIR__ . '/..' . '/srag/dic/src/Version/VersionInterface.php',
-        'srag\\JasperReport\\JasperReport' => __DIR__ . '/..' . '/srag/jasperreport/src/class.JasperReport.php',
-        'srag\\JasperReport\\JasperReportException' => __DIR__ . '/..' . '/srag/jasperreport/src/class.JasperReportException.php',
+        'srag\\DIC\\Reporting\\DICStatic' => __DIR__ . '/..' . '/srag/dic/src/DICStatic.php',
+        'srag\\DIC\\Reporting\\DICStaticInterface' => __DIR__ . '/..' . '/srag/dic/src/DICStaticInterface.php',
+        'srag\\DIC\\Reporting\\DICTrait' => __DIR__ . '/..' . '/srag/dic/src/DICTrait.php',
+        'srag\\DIC\\Reporting\\DIC\\AbstractDIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/AbstractDIC.php',
+        'srag\\DIC\\Reporting\\DIC\\DICInterface' => __DIR__ . '/..' . '/srag/dic/src/DIC/DICInterface.php',
+        'srag\\DIC\\Reporting\\DIC\\LegacyDIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/LegacyDIC.php',
+        'srag\\DIC\\Reporting\\DIC\\NewDIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/NewDIC.php',
+        'srag\\DIC\\Reporting\\Exception\\DICException' => __DIR__ . '/..' . '/srag/dic/src/Exception/DICException.php',
+        'srag\\DIC\\Reporting\\Plugin\\Plugin' => __DIR__ . '/..' . '/srag/dic/src/Plugin/Plugin.php',
+        'srag\\DIC\\Reporting\\Plugin\\PluginInterface' => __DIR__ . '/..' . '/srag/dic/src/Plugin/PluginInterface.php',
+        'srag\\DIC\\Reporting\\Plugin\\Pluginable' => __DIR__ . '/..' . '/srag/dic/src/Plugin/Pluginable.php',
+        'srag\\DIC\\Reporting\\Version\\Version' => __DIR__ . '/..' . '/srag/dic/src/Version/Version.php',
+        'srag\\DIC\\Reporting\\Version\\VersionInterface' => __DIR__ . '/..' . '/srag/dic/src/Version/VersionInterface.php',
+        'srag\\JasperReport\\Reporting\\JasperReport' => __DIR__ . '/..' . '/srag/jasperreport/src/class.JasperReport.php',
+        'srag\\JasperReport\\Reporting\\JasperReportException' => __DIR__ . '/..' . '/srag/jasperreport/src/class.JasperReportException.php',
+        'srag\\LibrariesNamespaceChanger\\LibrariesNamespaceChanger' => __DIR__ . '/..' . '/srag/librariesnamespacechanger/src/LibrariesNamespaceChanger.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb991cd2aee83bdc338dc1b2d78ab0519::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb991cd2aee83bdc338dc1b2d78ab0519::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb991cd2aee83bdc338dc1b2d78ab0519::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit02dc563a3da9c1edb4efc32501634306::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit02dc563a3da9c1edb4efc32501634306::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit02dc563a3da9c1edb4efc32501634306::$classMap;
 
         }, null, ClassLoader::class);
     }

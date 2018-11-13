@@ -1,14 +1,14 @@
 <?php
 
-namespace srag\DIC\DIC;
+namespace srag\DIC\Reporting\DIC;
 
 use ilLoggerFactory;
-use srag\DIC\Exception\DICException;
+use srag\DIC\Reporting\Exception\DICException;
 
 /**
  * Class LegacyDIC
  *
- * @package srag\DIC\DIC
+ * @package srag\DIC\Reporting\DIC
  *
  * @author  studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  */
