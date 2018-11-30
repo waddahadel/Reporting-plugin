@@ -4,6 +4,7 @@ namespace srag\DIC\Reporting;
 
 use srag\DIC\Reporting\DIC\DICInterface;
 use srag\DIC\Reporting\Exception\DICException;
+use srag\DIC\Reporting\Output\OutputInterface;
 use srag\DIC\Reporting\Plugin\PluginInterface;
 use srag\DIC\Reporting\Version\VersionInterface;
 
@@ -32,6 +33,16 @@ trait DICTrait {
 	 */
 	protected static final function dic()/*: DICInterface*/ {
 		return DICStatic::dic();
+	}
+
+
+	/**
+	 * Get output interface
+	 *
+	 * @return OutputInterface Output interface
+	 */
+	protected static final function output()/*: OutputInterface*/ {
+		return DICStatic::output();
 	}
 
 

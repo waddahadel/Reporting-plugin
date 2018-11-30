@@ -4,6 +4,7 @@ namespace srag\DIC\Reporting;
 
 use srag\DIC\Reporting\DIC\DICInterface;
 use srag\DIC\Reporting\Exception\DICException;
+use srag\DIC\Reporting\Output\OutputInterface;
 use srag\DIC\Reporting\Plugin\PluginInterface;
 use srag\DIC\Reporting\Version\VersionInterface;
 
@@ -17,11 +18,27 @@ use srag\DIC\Reporting\Version\VersionInterface;
 interface DICStaticInterface {
 
 	/**
+	 * Clear cache. Needed for instance in unit tests
+	 */
+	public static function clearCache()/*: void*/
+	;
+
+
+	/**
 	 * Get DIC interface
 	 *
 	 * @return DICInterface DIC interface
 	 */
 	public static function dic()/*: DICInterface*/
+	;
+
+
+	/**
+	 * Get output interface
+	 *
+	 * @return OutputInterface Output interface
+	 */
+	public static function output()/*: OutputInterface*/
 	;
 
 
