@@ -28,6 +28,7 @@ As ILIAS administrator go to "Administration->Plugins" and install/activate the 
 * ILIAS 5.2 or ILIAS 5.3
 * PHP >=5.6
 * [composer](https://getcomposer.org)
+* [srag/dic](https://packagist.org/packages/srag/dic)
 * [srag/jasperreport](https://packagist.org/packages/srag/jasperreport)
 * [srag/librariesnamespacechanger](https://packagist.org/packages/srag/librariesnamespacechanger)
 
