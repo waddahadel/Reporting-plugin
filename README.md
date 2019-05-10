@@ -24,15 +24,9 @@ git clone https://github.com/studer-raimann/Reporting.git
 ```
 As ILIAS administrator go to "Administration->Plugins" and install/activate the plugin.
 
-### Dependencies
+### Requirements
 * ILIAS 5.2 or ILIAS 5.3
 * PHP >=5.6
-* [composer](https://getcomposer.org)
-* [srag/dic](https://packagist.org/packages/srag/dic)
-* [srag/jasperreport](https://packagist.org/packages/srag/jasperreport)
-* [srag/librariesnamespacechanger](https://packagist.org/packages/srag/librariesnamespacechanger)
-
-Please use it for further development!
 
 ### Adjustment suggestions
 * Adjustment suggestions by pull requests
