@@ -28,8 +28,6 @@ As ILIAS administrator go to "Administration->Plugins" and install/activate the 
 * ILIAS 5.2 or ILIAS 5.3
 * PHP >=5.6
 
-Please use it for further development!
-
 ### Adjustment suggestions
 * Adjustment suggestions by pull requests
 * Adjustment suggestions which are not yet worked out in detail by Jira tasks under https://jira.studer-raimann.ch/projects/PLREPORT
