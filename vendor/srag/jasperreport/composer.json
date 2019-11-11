@@ -29,7 +29,7 @@
   },
   "autoload": {
     "psr-4": {
-      "srag\\JasperReport\\": "src/"
+      "srag\\JasperReport\\Reporting\\": "src/"
     }
   }
 }

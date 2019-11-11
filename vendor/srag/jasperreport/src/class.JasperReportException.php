@@ -1,13 +1,13 @@
 <?php
 
-namespace srag\JasperReport;
+namespace srag\JasperReport\Reporting;
 
 use Exception;
 
 /**
  * Class JasperReportException
  *
- * @package srag\JasperReport
+ * @package srag\JasperReport\Reporting
  *
  * @author  studer + raimann ag - Team Custom 1 <support-custom1@studer-raimann.ch>
  * @author  Stefan Wanzenried <sw@studer-raimann.ch>

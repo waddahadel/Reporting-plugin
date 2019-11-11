@@ -1,6 +1,6 @@
 <?php
 
-use srag\JasperReport\JasperReport;
+use srag\JasperReport\Reporting\JasperReport;
 
 /**
  * Class ilReportingPdfExport
