@@ -1,6 +1,6 @@
 # Changelog
 
-## [x]
+## [1.5.0]
 - ILIAS 6 support
 - Core main menu
 - Java 8 hint
