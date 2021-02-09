@@ -66,7 +66,9 @@ permission_denied#:#Nincs jogosultsága elérni ezt a riportot
 plugin_not_activated#:#Riport bővítmény jelenleg nem aktív
 
 courses_per_user#:#Kurzusok felhasználónként
+courses_per_user_detailed#:#MISSING courses_per_user_detailed
 users_per_course#:#Felhasználók kurzusonként
+users_per_course_detailed#:#MISSING users_per_course_detailed
 users_per_test#:#Felhasználók tesztenként
 search_users#:#Felhasználók keresése
 search_courses#:#Kurzusok keresése
@@ -74,7 +76,7 @@ search_tests#:#Tesztek keresése
 
 configuration#:#Beállítások
 header_image#:#PDF riportok - Fejléc képe
-header_image_info#:#PDF riportok fejlécében megjelenő kép elérési útvonala.<br><b>JasperReport Library szükséges!</b>
+header_image_info#:#PDF riportok fejlécében megjelenő kép elérési útvonala.<br><b>Java 8 szükséges!</b>
 restricted_user_access#:#Hozzáférés korlátozása
 no_restriction#:#Nincs korlátozás
 restricted_by_local_readability#:#Hozzáférés korlátozása helyi olvasási jogosultság alapján
@@ -82,7 +84,7 @@ restricted_by_local_readability_description#:#Azok a szerepek kapnak hozzáfér�
 restricted_by_org_units#:#Hozzáférés korlátozása szervezeti egységek alapján
 restricted_by_org_units_description#:#A hozzáférés a szervezeti egység 'Tanulási haladás megtekintése' jogosultságától függ.
 jasper_reports_templates_path#:#PDF riportok - Útvonalsablonok
-jasper_reports_templates_path_info#:#JasperReport sablonok elérési útvonala.<br><b>JasperReport Library szükséges!</b>
+jasper_reports_templates_path_info#:#JasperReport sablonok elérési útvonala.<br><b>Java 8 szükséges!</b>
 conf_saved#:#Beállításokat sikeren mentette
 
 date_of_report#:#Riport készítésének dátuma

@@ -66,7 +66,9 @@ permission_denied#:#You don't have permission to access this report
 plugin_not_activated#:#Reporting plugin is currently not activated
 
 courses_per_user#:#Courses per User
+courses_per_user_detailed#:#Courses per User, detailed
 users_per_course#:#Users per Course
+users_per_course_detailed#:#Users per Course, detailed
 users_per_test#:#Users per Test
 search_users#:#Search Users
 search_courses#:#Search Courses
@@ -74,7 +76,7 @@ search_tests#:#Search Tests
 
 configuration#:#Configuration
 header_image#:#PDF Reports - Header image
-header_image_info#:#Path to an image which is displayed in the header of the PDF reports.<br><b>Requires JasperReport Library!</b>
+header_image_info#:#Path to an image which is displayed in the header of the PDF reports.<br><b>Requires Java 8!</b>
 restricted_user_access#:#Restrict Access
 no_restriction#:#No Restriction
 restricted_by_local_readability#:#Restrict to local readability
@@ -82,7 +84,7 @@ restricted_by_local_readability_description#:#Access is granted based on whether
 restricted_by_org_units#:#Restrict Access based on organisational units
 restricted_by_org_units_description#:#Access is granted depending on the Organisational Unit permission "View Learning Progress".
 jasper_reports_templates_path#:#PDF Reports - Path templates
-jasper_reports_templates_path_info#:#Path to folder where the Jasper Report templates are stored.<br><b>Requires JasperReport Library!</b>
+jasper_reports_templates_path_info#:#Path to folder where the Jasper Report templates are stored.<br><b>Requires Java 8!</b>
 conf_saved#:#Configuration saved
 
 date_of_report#:#Date of report

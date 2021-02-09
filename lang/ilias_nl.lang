@@ -66,7 +66,9 @@ permission_denied#:#J ehebt geen rechten voor dit rapport
 plugin_not_activated#:#Reportage plugin is niet actief
 
 courses_per_user#:#Cursussen per Gebruiker
+courses_per_user_detailed#:#MISSING courses_per_user_detailed
 users_per_course#:#Gebruikers per Cursus
+users_per_course_detailed#:#MISSING users_per_course_detailed
 users_per_test#:#Gebruikers per Toets
 search_users#:#Zoek Gebruikers
 search_courses#:#Zoek Cursussen
@@ -74,7 +76,7 @@ search_tests#:#Zoek Toetsen
 
 configuration#:#Configuratie
 header_image#:#PDF Rapportage - Header Image
-header_image_info#:#Pas naar PDF Logo. <br><b>JasperReport Library is vereist!</b>
+header_image_info#:#Pas naar PDF Logo. <br><b>Java 8 is vereist!</b>
 restricted_user_access#:#Beperk Toegang
 no_restriction#:#Geen beperkingen
 restricted_by_local_readability#:#Beperk tot lokaal lezen
@@ -82,7 +84,7 @@ restricted_by_local_readability_description#:#Toegang is toegewezen aan de rolpe
 restricted_by_org_units#:#Beperk toegang gebaseerd op organisatorisch eenheden
 restricted_by_org_units_description#:#Toegang is afhankelijk van de rechten van de organisatorische eenheid permissue "Toon leervoortgang".
 jasper_reports_templates_path#:#PDF Rapporten - Pad templates
-jasper_reports_templates_path_info#:#Pad naar map waar de Jasper Rapporten templates worden opgeeslagen. <br><b>JasperReport Library vereist!</b>
+jasper_reports_templates_path_info#:#Pad naar map waar de Jasper Rapporten templates worden opgeeslagen. <br><b>Java 8 vereist!</b>
 conf_saved#:#Configuratie opgeslagen
 
 date_of_report#:#Rapportdatum
