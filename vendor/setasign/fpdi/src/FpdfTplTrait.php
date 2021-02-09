@@ -1,11 +1,12 @@
 <?php
+
 /**
  * This file is part of FPDI
  *
  * @package   setasign\Fpdi
- * @copyright Copyright (c) 2018 Setasign - Jan Slabon (https://www.setasign.com)
+ * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
-  */
+ */
 
 namespace setasign\Fpdi;
 
@@ -13,8 +14,6 @@ namespace setasign\Fpdi;
  * Trait FpdfTplTrait
  *
  * This class adds a templating feature to tFPDF.
- *
- * @package setasign\Fpdi
  */
 trait FpdfTplTrait
 {
@@ -61,7 +60,8 @@ trait FpdfTplTrait
 
         $size = $this->_getpagesize($size);
 
-        if ($orientation != $this->CurOrientation
+        if (
+            $orientation != $this->CurOrientation
             || $size[0] != $this->CurPageSize[0]
             || $size[1] != $this->CurPageSize[1]
         ) {
@@ -86,8 +86,8 @@ trait FpdfTplTrait
     /**
      * Draws a template onto the page or another template.
      *
-     * Omit one of the size parameters (width, height) to calculate the other one automatically in view to the aspect
-     * ratio.
+     * Give only one of the size parameters (width, height) to calculate the other one automatically in view to the
+     * aspect ratio.
      *
      * @param mixed $tpl The template id
      * @param array|float|int $x The abscissa of upper-left corner. Alternatively you could use an assoc array
@@ -109,7 +109,7 @@ trait FpdfTplTrait
             unset($x['tpl']);
             \extract($x, EXTR_IF_EXISTS);
             /** @noinspection NotOptimalIfConditionsInspection */
-            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            /** @noinspection PhpConditionAlreadyCheckedInspection */
             if (\is_array($x)) {
                 $x = 0;
             }
@@ -141,8 +141,8 @@ trait FpdfTplTrait
     /**
      * Get the size of a template.
      *
-     * Omit one of the size parameters (width, height) to calculate the other one automatically in view to the aspect
-     * ratio.
+     * Give only one of the size parameters (width, height) to calculate the other one automatically in view to the
+     * aspect ratio.
      *
      * @param mixed $tpl The template id
      * @param float|int|null $width The width.
@@ -266,7 +266,7 @@ trait FpdfTplTrait
      */
     public function endTemplate()
     {
-        if (null === $this->currentTemplateId) {
+        if ($this->currentTemplateId === null) {
             return false;
         }
 
@@ -418,7 +418,11 @@ trait FpdfTplTrait
             $this->templates[$key]['objectNumber'] = $this->n;
 
             $this->_put('<</Type /XObject /Subtype /Form /FormType 1');
-            $this->_put(\sprintf('/BBox[0 0 %.2F %.2F]', $template['width'] * $this->k, $template['height'] * $this->k));
+            $this->_put(\sprintf(
+                '/BBox[0 0 %.2F %.2F]',
+                $template['width'] * $this->k,
+                $template['height'] * $this->k
+            ));
             $this->_put('/Resources 2 0 R'); // default resources dictionary of FPDF
 
             if ($this->compress) {

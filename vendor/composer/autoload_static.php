@@ -9,19 +9,24 @@ class ComposerStaticInit02dc563a3da9c1edb4efc32501634306
     public static $prefixLengthsPsr4 = array (
         's' => 
         array (
+            'srag\\Plugins\\Reporting\\' => 23,
             'srag\\LibrariesNamespaceChanger\\' => 31,
-            'srag\\JasperReport\\Reporting\\' => 28,
+            'srag\\JasperReport\\' => 18,
             'srag\\DIC\\' => 9,
             'setasign\\Fpdi\\' => 14,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'srag\\Plugins\\Reporting\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
         'srag\\LibrariesNamespaceChanger\\' => 
         array (
             0 => __DIR__ . '/..' . '/srag/librariesnamespacechanger/src',
         ),
-        'srag\\JasperReport\\Reporting\\' => 
+        'srag\\JasperReport\\' => 
         array (
             0 => __DIR__ . '/..' . '/srag/jasperreport/src',
         ),
@@ -36,19 +41,6 @@ class ComposerStaticInit02dc563a3da9c1edb4efc32501634306
     );
 
     public static $classMap = array (
-        'ActiveRecord' => __DIR__ . '/../..' . '/../../../../../../../Services/ActiveRecord/class.ActiveRecord.php',
-        'ilCSVWriter' => __DIR__ . '/../..' . '/../../../../../../../Services/Utilities/classes/class.ilCSVWriter.php',
-        'ilCheckboxInputGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Form/classes/class.ilCheckboxInputGUI.php',
-        'ilComponent' => __DIR__ . '/../..' . '/../../../../../../../Services/Component/classes/class.ilComponent.php',
-        'ilCourseParticipant' => __DIR__ . '/../..' . '/../../../../../../../Modules/Course/classes/class.ilCourseParticipant.php',
-        'ilDateTime' => __DIR__ . '/../..' . '/../../../../../../../Services/Calendar/classes/class.ilDateTime.php',
-        'ilDateTimeInputGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Form/classes/class.ilDateTimeInputGUI.php',
-        'ilObjOrgUnit' => __DIR__ . '/../..' . '/../../../../../../../Modules/OrgUnit/classes/class.ilObjOrgUnit.php',
-        'ilObjOrgUnitTree' => __DIR__ . '/../..' . '/../../../../../../../Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php',
-        'ilObject2' => __DIR__ . '/../..' . '/../../../../../../../Services/Object/classes/class.ilObject2.php',
-        'ilObjectGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Object/classes/class.ilObjectGUI.php',
-        'ilPluginConfigGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Component/classes/class.ilPluginConfigGUI.php',
-        'ilPropertyFormGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Form/classes/class.ilPropertyFormGUI.php',
         'ilReportingAccess' => __DIR__ . '/../..' . '/classes/class.ilReportingAccess.php',
         'ilReportingAdjustPermissionCron' => __DIR__ . '/../..' . '/classes/class.ilReportingAdjustPermissionCron.php',
         'ilReportingConfig' => __DIR__ . '/../..' . '/classes/class.ilReportingConfig.php',
@@ -86,12 +78,6 @@ class ComposerStaticInit02dc563a3da9c1edb4efc32501634306
         'ilReportingUsersPerTestPdfExport' => __DIR__ . '/../..' . '/classes/UsersPerTest/class.ilReportingUsersPerTestPdfExport.php',
         'ilReportingUsersPerTestReportTableGUI' => __DIR__ . '/../..' . '/classes/UsersPerTest/class.ilReportingUsersPerTestReportTableGUI.php',
         'ilReportingUsersPerTestSearchTableGUI' => __DIR__ . '/../..' . '/classes/UsersPerTest/class.ilReportingUsersPerTestSearchTableGUI.php',
-        'ilSelectInputGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Form/classes/class.ilSelectInputGUI.php',
-        'ilTable2GUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Table/classes/class.ilTable2GUI.php',
-        'ilTextInputGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/Form/classes/class.ilTextInputGUI.php',
-        'ilUIHookPluginGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/UIComponent/classes/class.ilUIHookPluginGUI.php',
-        'ilUIPluginRouterGUI' => __DIR__ . '/../..' . '/../../../../../../../Services/UIComponent/classes/class.ilUIPluginRouterGUI.php',
-        'ilUserInterfaceHookPlugin' => __DIR__ . '/../..' . '/../../../../../../../Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php',
         'setasign\\Fpdi\\FpdfTpl' => __DIR__ . '/..' . '/setasign/fpdi/src/FpdfTpl.php',
         'setasign\\Fpdi\\FpdfTplTrait' => __DIR__ . '/..' . '/setasign/fpdi/src/FpdfTplTrait.php',
         'setasign\\Fpdi\\Fpdi' => __DIR__ . '/..' . '/setasign/fpdi/src/Fpdi.php',
@@ -139,16 +125,21 @@ class ComposerStaticInit02dc563a3da9c1edb4efc32501634306
         'setasign\\Fpdi\\Tcpdf\\Fpdi' => __DIR__ . '/..' . '/setasign/fpdi/src/Tcpdf/Fpdi.php',
         'setasign\\Fpdi\\Tfpdf\\FpdfTpl' => __DIR__ . '/..' . '/setasign/fpdi/src/Tfpdf/FpdfTpl.php',
         'setasign\\Fpdi\\Tfpdf\\Fpdi' => __DIR__ . '/..' . '/setasign/fpdi/src/Tfpdf/Fpdi.php',
+        'srag\\DIC\\Reporting\\Cron\\FixUITemplateInCronContext' => __DIR__ . '/..' . '/srag/dic/src/Cron/FixUITemplateInCronContext.php',
         'srag\\DIC\\Reporting\\DICStatic' => __DIR__ . '/..' . '/srag/dic/src/DICStatic.php',
         'srag\\DIC\\Reporting\\DICStaticInterface' => __DIR__ . '/..' . '/srag/dic/src/DICStaticInterface.php',
         'srag\\DIC\\Reporting\\DICTrait' => __DIR__ . '/..' . '/srag/dic/src/DICTrait.php',
         'srag\\DIC\\Reporting\\DIC\\AbstractDIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/AbstractDIC.php',
         'srag\\DIC\\Reporting\\DIC\\DICInterface' => __DIR__ . '/..' . '/srag/dic/src/DIC/DICInterface.php',
-        'srag\\DIC\\Reporting\\DIC\\Implementation\\ILIAS52DIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/Implementation/ILIAS52DIC.php',
-        'srag\\DIC\\Reporting\\DIC\\Implementation\\ILIAS53DIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/Implementation/ILIAS53DIC.php',
         'srag\\DIC\\Reporting\\DIC\\Implementation\\ILIAS54DIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/Implementation/ILIAS54DIC.php',
-        'srag\\DIC\\Reporting\\DIC\\Implementation\\LegacyDIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/Implementation/LegacyDIC.php',
+        'srag\\DIC\\Reporting\\DIC\\Implementation\\ILIAS60DIC' => __DIR__ . '/..' . '/srag/dic/src/DIC/Implementation/ILIAS60DIC.php',
+        'srag\\DIC\\Reporting\\Database\\AbstractILIASDatabaseDetector' => __DIR__ . '/..' . '/srag/dic/src/Database/AbstractILIASDatabaseDetector.php',
+        'srag\\DIC\\Reporting\\Database\\DatabaseDetector' => __DIR__ . '/..' . '/srag/dic/src/Database/DatabaseDetector.php',
+        'srag\\DIC\\Reporting\\Database\\DatabaseInterface' => __DIR__ . '/..' . '/srag/dic/src/Database/DatabaseInterface.php',
+        'srag\\DIC\\Reporting\\Database\\PdoContextHelper' => __DIR__ . '/..' . '/srag/dic/src/Database/PdoContextHelper.php',
+        'srag\\DIC\\Reporting\\Database\\PdoStatementContextHelper' => __DIR__ . '/..' . '/srag/dic/src/Database/PdoStatementContextHelper.php',
         'srag\\DIC\\Reporting\\Exception\\DICException' => __DIR__ . '/..' . '/srag/dic/src/Exception/DICException.php',
+        'srag\\DIC\\Reporting\\Loader\\AbstractLoaderDetector' => __DIR__ . '/..' . '/srag/dic/src/Loader/AbstractLoaderDetector.php',
         'srag\\DIC\\Reporting\\Output\\Output' => __DIR__ . '/..' . '/srag/dic/src/Output/Output.php',
         'srag\\DIC\\Reporting\\Output\\OutputInterface' => __DIR__ . '/..' . '/srag/dic/src/Output/OutputInterface.php',
         'srag\\DIC\\Reporting\\PHPVersionChecker' => __DIR__ . '/..' . '/srag/dic/src/PHPVersionChecker.php',
@@ -157,9 +148,13 @@ class ComposerStaticInit02dc563a3da9c1edb4efc32501634306
         'srag\\DIC\\Reporting\\Plugin\\Pluginable' => __DIR__ . '/..' . '/srag/dic/src/Plugin/Pluginable.php',
         'srag\\DIC\\Reporting\\Version\\Version' => __DIR__ . '/..' . '/srag/dic/src/Version/Version.php',
         'srag\\DIC\\Reporting\\Version\\VersionInterface' => __DIR__ . '/..' . '/srag/dic/src/Version/VersionInterface.php',
-        'srag\\JasperReport\\Reporting\\JasperReport' => __DIR__ . '/..' . '/srag/jasperreport/src/class.JasperReport.php',
-        'srag\\JasperReport\\Reporting\\JasperReportException' => __DIR__ . '/..' . '/srag/jasperreport/src/class.JasperReportException.php',
+        'srag\\JasperReport\\Reporting\\JasperReport' => __DIR__ . '/..' . '/srag/jasperreport/src/JasperReport.php',
+        'srag\\JasperReport\\Reporting\\JasperReportException' => __DIR__ . '/..' . '/srag/jasperreport/src/JasperReportException.php',
         'srag\\LibrariesNamespaceChanger\\LibrariesNamespaceChanger' => __DIR__ . '/..' . '/srag/librariesnamespacechanger/src/LibrariesNamespaceChanger.php',
+        'srag\\LibrariesNamespaceChanger\\PHP72Backport' => __DIR__ . '/..' . '/srag/librariesnamespacechanger/src/PHP72Backport.php',
+        'srag\\LibrariesNamespaceChanger\\PHP7Backport' => __DIR__ . '/..' . '/srag/librariesnamespacechanger/src/PHP7Backport.php',
+        'srag\\LibrariesNamespaceChanger\\RemovePHP72Backport' => __DIR__ . '/..' . '/srag/librariesnamespacechanger/src/RemovePHP72Backport.php',
+        'srag\\Plugins\\Reporting\\Menu\\Menu' => __DIR__ . '/../..' . '/src/Menu/Menu.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
