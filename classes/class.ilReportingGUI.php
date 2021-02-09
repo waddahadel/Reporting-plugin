@@ -2,7 +2,7 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use srag\Plugins\CtrlMainMenu\Entry\ctrlmmEntry;
+use srag\DIC\Reporting\DICTrait;
 
 /**
  * Abstract GUI-Class ilReportingGUI
@@ -15,7 +15,7 @@ use srag\Plugins\CtrlMainMenu\Entry\ctrlmmEntry;
  * @ilCtrl_IsCalledBy ilReportingGUI: ilRouterGUI, ilUIPluginRouterGUI
  */
 abstract class ilReportingGUI {
-
+    use DICTrait;
 	/** Addition exports available */
 	const EXPORT_PDF = 19;
 	const CMD_REPORT = 'report';
@@ -58,7 +58,11 @@ abstract class ilReportingGUI {
 
 		if (!$this->pl->isActive()) {
 			ilUtil::sendFailure($this->pl->txt("plugin_not_activated"), true);
+			if (self::version()->is6()) {
+                $this->ctrl->redirectByClass(ilDashboardGUI::class, 'jumpToSelectedItems');
+            } else {
 			$this->ctrl->redirectByClass(ilPersonalDesktopGUI::class, 'jumpToSelectedItems');
+			}
 		}
 		$this->checkAccess();
 	}
@@ -70,7 +74,11 @@ abstract class ilReportingGUI {
 
 
 	public function executeCommand() {
+	    if (self::version()->is6()) {
+            $this->tpl->loadStandardTemplate();
+        } else {
 		$this->tpl->getStandardTemplate();
+		}
 
 		$next_class = $this->ctrl->getNextClass($this);
 		switch ($next_class) {
@@ -97,7 +105,11 @@ abstract class ilReportingGUI {
 				break;
 		}
 
+        if (self::version()->is6()) {
+            $this->tpl->printToStdout();
+        } else {
 		$this->tpl->show();
+}
 
 		return true;
 	}
@@ -184,6 +196,25 @@ abstract class ilReportingGUI {
 	}
 
 
+    /**
+     * @return bool
+     */
+	public static function hasAccess() : bool {
+        $hasAccess = false;
+
+        // Coming from a course?
+        if (isset($_GET['rep_crs_ref_id'])) {
+            $hasAccess = self::dic()->access()->checkAccess("edit_learning_progress", "", $_GET['rep_crs_ref_id'], '', $_SESSION[self::SESSION_KEY_IDS][0]);
+        }
+
+        if (!$hasAccess) {
+            $hasAccess = self::dic()->rbac()->review()->isAssigned(self::dic()->user()->getId(), SYSTEM_ROLE_ID);
+        }
+
+        return $hasAccess;
+    }
+
+
 	/**
 	 * Check read permission for the report of current request defined in MainMenu plugin.
 	 * If the user is coming from a course, he can also view the reports if he/she has permission
@@ -191,26 +222,15 @@ abstract class ilReportingGUI {
 	 *
 	 */
 	protected function checkAccess() {
-		$hasAccess = false;
+		$hasAccess = static::hasAccess();
 
-		// Coming from a course?
-		if (isset($_GET['rep_crs_ref_id'])) {
-			$hasAccess = $this->access->checkAccess("edit_learning_progress", "", $_GET['rep_crs_ref_id'], '', $_SESSION[self::SESSION_KEY_IDS][0]);
-		}
-		// Still no access? Check for permissions defined in MainMenu plugin
-		if (!$hasAccess) {
-			$entries = ctrlmmEntry::getEntriesByCmdClass($this->ctrl->getCmdClass());
-			/** @var ctrlmmEntry $entry */
-			foreach ($entries as $entry) {
-				if ($entry->checkPermission()) {
-					$hasAccess = true;
-					break;
-				}
-			}
-		}
 		if (!$hasAccess) {
 			ilUtil::sendFailure($this->pl->txt("permission_denied"), true);
+            if (self::version()->is6()) {
+                $this->ctrl->redirectByClass(ilDashboardGUI::class, 'jumpToSelectedItems');
+            } else {
 			$this->ctrl->redirectByClass(ilPersonalDesktopGUI::class, 'jumpToSelectedItems');
+			}
 		}
 	}
 

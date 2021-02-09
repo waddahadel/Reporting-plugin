@@ -8,9 +8,6 @@ Available reports:
 - Users per Course
 - Users per Test
 
-**IMPORTANT NOTE**: This plugin has dependencies on other plugins and services which must be installed before the Reporting plugin:
-* [CtrlMainMenu Plugin](https://github.com/studer-raimann/CtrlMainMenu)
-
 Please read the install instructions in the documentation here:
 http://www.ilias.de/docu/goto_docu_wiki_1357_Reporting_Plugin.html
 
@@ -25,8 +22,9 @@ git clone https://github.com/studer-raimann/Reporting.git
 As ILIAS administrator go to "Administration->Plugins" and install/activate the plugin.
 
 ### Requirements
-* ILIAS 5.2 or ILIAS 5.3
-* PHP >=5.6
+* ILIAS 5.4 or ILIAS 6
+* PHP >=7.0
+* Java 8 (Using JasperReport for PDF export)
 
 ### Adjustment suggestions
 * Adjustment suggestions by pull requests
