@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * This file is part of FPDI
+ *
+ * @package   setasign\Fpdi
+ * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
+ * @license   http://opensource.org/licenses/mit-license The MIT License
+ */
+
 namespace setasign\Fpdi\Tcpdf;
 
 use setasign\Fpdi\FpdiTrait;
@@ -20,7 +28,7 @@ use setasign\Fpdi\PdfParser\Type\PdfTypeException;
  *
  * This class let you import pages of existing PDF documents into a reusable structure for TCPDF.
  *
- * @package setasign\Fpdi
+ * @method _encrypt_data(int $n, string $s) string
  */
 class Fpdi extends \TCPDF
 {
@@ -34,7 +42,7 @@ class Fpdi extends \TCPDF
      *
      * @string
      */
-    const VERSION = '2.1.1';
+    const VERSION = '2.3.5';
 
     /**
      * A counter for template ids.
@@ -46,9 +54,15 @@ class Fpdi extends \TCPDF
     /**
      * The currently used object number.
      *
-     * @var int
+     * @var int|null
      */
     protected $currentObjectNumber;
+
+    protected function _enddoc()
+    {
+        parent::_enddoc();
+        $this->cleanUp();
+    }
 
     /**
      * Get the next template id.
@@ -63,8 +77,8 @@ class Fpdi extends \TCPDF
     /**
      * Draws an imported page onto the page or another template.
      *
-     * Omit one of the size parameters (width, height) to calculate the other one automatically in view to the aspect
-     * ratio.
+     * Give only one of the size parameters (width, height) to calculate the other one automatically in view to the
+     * aspect ratio.
      *
      * @param mixed $tpl The template id
      * @param float|int|array $x The abscissa of upper-left corner. Alternatively you could use an assoc array
@@ -84,8 +98,8 @@ class Fpdi extends \TCPDF
     /**
      * Draws an imported page onto the page.
      *
-     * Omit one of the size parameters (width, height) to calculate the other one automatically in view to the aspect
-     * ratio.
+     * Give only one of the size parameters (width, height) to calculate the other one automatically in view to the
+     * aspect ratio.
      *
      * @param mixed $pageId The page id
      * @param float|int|array $x The abscissa of upper-left corner. Alternatively you could use an assoc array
@@ -111,8 +125,8 @@ class Fpdi extends \TCPDF
     /**
      * Get the size of an imported page.
      *
-     * Omit one of the size parameters (width, height) to calculate the other one automatically in view to the aspect
-     * ratio.
+     * Give only one of the size parameters (width, height) to calculate the other one automatically in view to the
+     * aspect ratio.
      *
      * @param mixed $tpl The template id
      * @param float|int|null $width The width.
@@ -160,7 +174,6 @@ class Fpdi extends \TCPDF
             while (($objectNumber = \array_pop($this->objectsToCopy[$readerId])) !== null) {
                 try {
                     $object = $parser->getIndirectObject($objectNumber);
-
                 } catch (CrossReferenceException $e) {
                     if ($e->getCode() === CrossReferenceException::OBJECT_NOT_FOUND) {
                         $object = PdfIndirectObject::create($objectNumber, 0, new PdfNull());
@@ -234,23 +247,20 @@ class Fpdi extends \TCPDF
             $string = PdfString::unescape($value->value);
             $string = $this->_encrypt_data($this->currentObjectNumber, $string);
             $value->value = \TCPDF_STATIC::_escape($string);
-
         } elseif ($value instanceof PdfHexString) {
             $filter = new AsciiHex();
             $string = $filter->decode($value->value);
             $string = $this->_encrypt_data($this->currentObjectNumber, $string);
             $value->value = $filter->encode($string, true);
-
         } elseif ($value instanceof PdfStream) {
             $stream = $value->getStream();
             $stream = $this->_encrypt_data($this->currentObjectNumber, $stream);
             $dictionary = $value->value;
             $dictionary->value['Length'] = PdfNumeric::create(\strlen($stream));
             $value = PdfStream::create($dictionary, $stream);
-
         } elseif ($value instanceof PdfIndirectObject) {
             /**
-             * @var $value PdfIndirectObject
+             * @var PdfIndirectObject $value
              */
             $this->currentObjectNumber = $this->objectMap[$this->currentReaderId][$value->objectNumber];
         }

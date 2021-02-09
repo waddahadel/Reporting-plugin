@@ -1,11 +1,12 @@
 <?php
+
 /**
  * This file is part of FPDI
  *
  * @package   setasign\Fpdi
- * @copyright Copyright (c) 2018 Setasign - Jan Slabon (https://www.setasign.com)
+ * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
-  */
+ */
 
 namespace setasign\Fpdi\Tfpdf;
 
@@ -19,8 +20,6 @@ use setasign\Fpdi\PdfParser\Type\PdfNull;
  * Class Fpdi
  *
  * This class let you import pages of existing PDF documents into a reusable structure for tFPDF.
- *
- * @package setasign\Fpdi
  */
 class Fpdi extends FpdfTpl
 {
@@ -31,13 +30,19 @@ class Fpdi extends FpdfTpl
      *
      * @string
      */
-    const VERSION = '2.1.1';
+    const VERSION = '2.3.5';
+
+    public function _enddoc()
+    {
+        parent::_enddoc();
+        $this->cleanUp();
+    }
 
     /**
      * Draws an imported page or a template onto the page or another template.
      *
-     * Omit one of the size parameters (width, height) to calculate the other one automatically in view to the aspect
-     * ratio.
+     * Give only one of the size parameters (width, height) to calculate the other one automatically in view to the
+     * aspect ratio.
      *
      * @param mixed $tpl The template id
      * @param float|int|array $x The abscissa of upper-left corner. Alternatively you could use an assoc array
@@ -65,8 +70,8 @@ class Fpdi extends FpdfTpl
     /**
      * Get the size of an imported page or template.
      *
-     * Omit one of the size parameters (width, height) to calculate the other one automatically in view to the aspect
-     * ratio.
+     * Give only one of the size parameters (width, height) to calculate the other one automatically in view to the
+     * aspect ratio.
      *
      * @param mixed $tpl The template id
      * @param float|int|null $width The width.
@@ -108,7 +113,6 @@ class Fpdi extends FpdfTpl
             while (($objectNumber = \array_pop($this->objectsToCopy[$readerId])) !== null) {
                 try {
                     $object = $parser->getIndirectObject($objectNumber);
-
                 } catch (CrossReferenceException $e) {
                     if ($e->getCode() === CrossReferenceException::OBJECT_NOT_FOUND) {
                         $object = PdfIndirectObject::create($objectNumber, 0, new PdfNull());
@@ -127,7 +131,7 @@ class Fpdi extends FpdfTpl
     /**
      * @inheritdoc
      */
-    public function _putxobjectdict()
+    protected function _putxobjectdict()
     {
         foreach ($this->importedPages as $key => $pageData) {
             $this->_put('/' . $pageData['id'] . ' ' . $pageData['objectNumber'] . ' 0 R');
@@ -139,20 +143,12 @@ class Fpdi extends FpdfTpl
     /**
      * @inheritdoc
      */
-    public function _newobj($n = null)
+    protected function _put($s, $newLine = true)
     {
-        // Begin a new object
-        if($n === null)
-            $n = ++$this->n;
-        $this->offsets[$n] = $this->_getoffset();
-        $this->_put($n.' 0 obj');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function _getoffset()
-    {
-        return strlen($this->buffer);
+        if ($newLine) {
+            $this->buffer .= $s . "\n";
+        } else {
+            $this->buffer .= $s;
+        }
     }
 }

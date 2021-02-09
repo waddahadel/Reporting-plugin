@@ -1,11 +1,12 @@
 <?php
+
 /**
  * This file is part of FPDI
  *
  * @package   setasign\Fpdi
- * @copyright Copyright (c) 2018 Setasign - Jan Slabon (https://www.setasign.com)
+ * @copyright Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
  * @license   http://opensource.org/licenses/mit-license The MIT License
-  */
+ */
 
 namespace setasign\Fpdi\PdfParser\Type;
 
@@ -15,8 +16,6 @@ use setasign\Fpdi\PdfParser\Tokenizer;
 
 /**
  * Class representing an indirect object
- *
- * @package setasign\Fpdi\PdfParser\Type
  */
 class PdfIndirectObject extends PdfType
 {
@@ -45,12 +44,12 @@ class PdfIndirectObject extends PdfType
 
         $nextToken = $tokenizer->getNextToken();
         if ($nextToken === 'stream') {
-            $value = PdfStream::parse($value, $reader);
+            $value = PdfStream::parse($value, $reader, $parser);
         } elseif ($nextToken !== false) {
             $tokenizer->pushStack($nextToken);
         }
 
-        $v = new self;
+        $v = new self();
         $v->objectNumber = (int) $objectNumberToken;
         $v->generationNumber = (int) $objectGenerationNumberToken;
         $v->value = $value;
@@ -68,7 +67,7 @@ class PdfIndirectObject extends PdfType
      */
     public static function create($objectNumber, $generationNumber, PdfType $value)
     {
-        $v = new self;
+        $v = new self();
         $v->objectNumber = (int) $objectNumber;
         $v->generationNumber = (int) $generationNumber;
         $v->value = $value;
