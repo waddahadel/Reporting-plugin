@@ -29,12 +29,6 @@ class ilReportingUIHookGUI extends ilUIHookPluginGUI {
 		$this->ctrl = $DIC->ctrl();
 		$this->pl = ilReportingPlugin::getInstance();
 		$this->access = $DIC->access();
-		// Display error message in Administration if precondition is not valid
-		if (!ilReportingPlugin::checkPreconditions() AND $_GET['ref_id'] == 9) {
-			if (get_class($DIC->ui()->mainTemplate()) == ilTemplate::class) {
-				ilUtil::sendFailure('Reporting plugin needs CtrlMainMenu (https://svn.ilias.de/svn/ilias/branches/sr/CtrlMainMenu) and either ilRouterGUI (https://svn.ilias.de/svn/ilias/branches/sr/Router)');
-			}
-		}
 	}
 
 

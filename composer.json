@@ -20,31 +20,15 @@
     "email": "support-custom1@studer-raimann.ch"
   },
   "autoload": {
+    "psr-4": {
+      "srag\\Plugins\\Reporting\\": "src/"
+    },
     "classmap": [
-      "classes/",
-      "../../../../../../../Modules/Course/classes/class.ilCourseParticipant.php",
-      "../../../../../../../Modules/OrgUnit/classes/class.ilObjOrgUnit.php",
-      "../../../../../../../Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php",
-      "../../../../../../../Services/ActiveRecord/class.ActiveRecord.php",
-      "../../../../../../../Services/Calendar/classes/class.ilDateTime.php",
-      "../../../../../../../Services/Component/classes/class.ilComponent.php",
-      "../../../../../../../Services/Component/classes/class.ilPluginConfigGUI.php",
-      "../../../../../../../Services/Form/classes/class.ilCheckboxInputGUI.php",
-      "../../../../../../../Services/Form/classes/class.ilDateTimeInputGUI.php",
-      "../../../../../../../Services/Form/classes/class.ilPropertyFormGUI.php",
-      "../../../../../../../Services/Form/classes/class.ilSelectInputGUI.php",
-      "../../../../../../../Services/Form/classes/class.ilTextInputGUI.php",
-      "../../../../../../../Services/Object/classes/class.ilObject2.php",
-      "../../../../../../../Services/Object/classes/class.ilObjectGUI.php",
-      "../../../../../../../Services/Table/classes/class.ilTable2GUI.php",
-      "../../../../../../../Services/UIComponent/classes/class.ilUIHookPluginGUI.php",
-      "../../../../../../../Services/UIComponent/classes/class.ilUIPluginRouterGUI.php",
-      "../../../../../../../Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php",
-      "../../../../../../../Services/Utilities/classes/class.ilCSVWriter.php"
+      "classes/"
     ]
   },
   "require": {
-    "php": ">=5.6",
+    "php": ">=7.0",
     "srag/dic": ">=0.1.0",
     "srag/jasperreport": ">=0.1.0",
     "srag/librariesnamespacechanger": ">=0.1.0"
@@ -55,6 +39,9 @@
     "classmap-authoritative": true
   },
   "scripts": {
-    "pre-autoload-dump": "srag\\LibrariesNamespaceChanger\\LibrariesNamespaceChanger::rewriteLibrariesNamespaces"
+    "pre-autoload-dump": [
+      "srag\\LibrariesNamespaceChanger\\LibrariesNamespaceChanger::rewriteLibrariesNamespaces",
+      "srag\\LibrariesNamespaceChanger\\PHP72Backport::PHP72Backport"
+    ]
   }
 }
